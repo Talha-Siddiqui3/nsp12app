@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">Nixor Student Application</string>
+//MainActivity
+    <string name="notsupported">Your device is not supported. Please try updating Google Play Services</string>
+
+    //Authentication
+                        //XML
+    <string name="text_phone_entry">Enter phone number</string>
+    <string name="code_timer">Time: </string>
+    <string name="send_code">Verify</string>
+    <string name="code_display">Enter code</string>
+    <string name="code_entry">0000</string>
+    <string name="verify_code">Next</string>
+    <string name="phone_entry">+92348484334</string>
+
+
+
+
+
+
+
+
+
+
 </resources>
