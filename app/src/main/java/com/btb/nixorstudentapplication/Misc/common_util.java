@@ -174,7 +174,7 @@ public class common_util {
         SharedPreferences.Editor editor = pref.edit();
         editor.putString("email", studentDetails.getStudent_email()); // Storing Email
         editor.putString("username", username); // Storing Username
-        editor.putString("student_id", studentDetails.getStudent_ID()); // Storing studentID
+        editor.putString("student_id", studentDetails.getStudent_id()); // Storing studentID
         editor.putString("nsp_photo", studentDetails.getStudent_profileUrl()); // Storing NspPhoto
         editor.apply();
     }
@@ -201,7 +201,7 @@ public class common_util {
         student.setStudent_house(map.get("student_house").toString());
         student.setStudent_name(map.get("student_name").toString());
         student.setStudent_year(map.get("student_year").toString());
-        student.setStudent_ID(map.get("student_ID").toString());
+        student.setStudent_id(map.get("student_ID").toString());
         student.setStudent_house(map.get("student_house").toString());
         student.setStudent_profileUrl(map.get("student_profileUrl").toString());
 return student;

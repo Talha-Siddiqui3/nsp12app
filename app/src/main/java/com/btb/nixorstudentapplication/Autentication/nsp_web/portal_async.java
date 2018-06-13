@@ -186,7 +186,7 @@ public class portal_async extends AsyncTask<String,String,String> {
     public void postStudentDetails(final StudentDetails studentObj, final  Context context){
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         common_util= new common_util();
-        final String username = common_util.extractUsername(context,studentObj.Student_email);
+        final String username = common_util.extractUsername(context,studentObj.student_email);
         database.getReference().child("users").child(username).setValue(studentObj).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
