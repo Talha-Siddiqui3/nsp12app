@@ -1,5 +1,7 @@
 package com.btb.nixorstudentapplication.Autentication;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,7 +12,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -43,7 +47,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-public class login_screen extends AppCompatActivity implements View.OnClickListener {
+public class login_screen extends Activity implements View.OnClickListener {
     String TAG = "login_screen";
     FirebaseUser FbUser;
     StudentDetails studentDetails;
@@ -413,7 +417,25 @@ send_code.setEnabled(false);
         super.onResume();
     }
 
+//Card Flip animatation
+public static class phoneNumberCard extends Fragment {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.phone_number_entry_layout, container, false);
+    }
+}
 
+    /**
+     * A fragment representing the back of the card.
+     */
+    public static class codeEntryCard extends Fragment {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.code_entry_layout, container, false);
+        }
+    }
 
 
 }

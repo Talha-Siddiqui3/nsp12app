@@ -1,5 +1,6 @@
 package com.btb.nixorstudentapplication;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,7 +8,7 @@ import android.os.Bundle;
 import com.btb.nixorstudentapplication.Autentication.login_screen;
 import com.btb.nixorstudentapplication.Misc.common_util;
 
-public class welcome_screen extends AppCompatActivity {
+public class welcome_screen extends Activity {
 common_util common_util;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

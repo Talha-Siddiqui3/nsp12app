@@ -26,7 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class portal_login extends AppCompatActivity implements View.OnClickListener {
+public class portal_login extends Activity implements View.OnClickListener {
 //XML
 EditText email_editText;
 EditText password_editText;
