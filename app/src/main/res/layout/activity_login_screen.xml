@@ -94,10 +94,10 @@
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="71dp"
         android:src="@drawable/shark_image" />
 
     <TextView
