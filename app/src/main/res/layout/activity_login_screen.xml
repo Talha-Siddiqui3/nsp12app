@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/loginlayout"
     tools:context=".Autentication.login_screen">
 
     <EditText
@@ -67,5 +66,14 @@
         android:layout_centerHorizontal="true"
         android:text="@string/verify_code"
         android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="#273043"
+        android:src="@drawable/vvp2" />
 
 </RelativeLayout>
