@@ -11,23 +11,22 @@
         android:id="@+id/phone_entry"
 
         android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:layout_below="@+id/imageView2"
+        android:layout_height="50dp"
 
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="202dp"
         android:drawablePadding="5dp"
         android:drawableRight="@drawable/phone"
         android:ems="10"
-        android:fontFamily="@font/assistant_extralight"
+        android:fontFamily="@font/assistant"
         android:gravity="left"
         android:hint="@string/text_phone_entry"
         android:inputType="phone"
         android:padding="5dp"
         android:paddingBottom="8sp"
         android:paddingTop="8sp"
+        android:textColorHint="#ced3d7"
         android:textSize="15dp" />
 
     <TextView
@@ -44,21 +43,21 @@
         android:id="@+id/send_code"
         android:layout_width="250dp"
         android:layout_height="55dp"
-        android:layout_below="@+id/phone_entry"
+        android:layout_above="@+id/code_display"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:background="#f1f5f9"
+        android:background="@color/main_header"
         android:enabled="false"
-        android:fontFamily="@font/assistant_extralight"
+        android:fontFamily="@font/assistant"
         android:text="@string/send_code"
-        android:textColor="#000"
-        android:textSize="16sp" />
+        android:textColor="#a1aebb"
+        android:textSize="15sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/code_display"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/send_code"
+        android:layout_above="@+id/code_entry"
         android:layout_centerHorizontal="true"
         android:text="@string/code_display"
         android:visibility="invisible" />
@@ -67,7 +66,7 @@
         android:id="@+id/code_entry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/code_display"
+        android:layout_above="@+id/verify_code"
         android:layout_centerHorizontal="true"
         android:ems="10"
         android:hint="@string/code_entry"
@@ -79,19 +78,36 @@
         android:id="@+id/verify_code"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/code_entry"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="@string/verify_code"
         android:visibility="invisible" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imageView3"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="150dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:background="#0285d7"
-        android:padding="60dp"
-        android:src="@drawable/shark_black" />
+        android:background="#203e5f" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp"
+        android:src="@drawable/shark_image" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:fontFamily="@font/allerta"
+        android:text="VERIFY PHONE NUMBER"
+        android:textColor="#000"
+        android:textSize="25sp" />
 
 </RelativeLayout>
