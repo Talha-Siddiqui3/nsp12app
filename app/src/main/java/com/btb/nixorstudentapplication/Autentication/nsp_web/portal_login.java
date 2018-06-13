@@ -1,0 +1,127 @@
+package com.btb.nixorstudentapplication.Autentication.nsp_web;
+
+import android.content.Context;
+import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.btb.nixorstudentapplication.Misc.common_util;
+import com.btb.nixorstudentapplication.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+
+public class portal_login extends AppCompatActivity implements View.OnClickListener {
+//XML
+EditText email_editText;
+EditText password_editText;
+TextView password_textView;
+TextView email_textView;
+Button login_button;
+common_util common_util;
+
+String TAG = "portal_login";
+private String email;
+private String password;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_portal_login);
+        common_util= new common_util();
+
+        email_editText=findViewById(R.id.email_editText);
+        password_editText=findViewById(R.id.password_editText);
+        email_textView=findViewById(R.id.email_textView);
+        password_textView=findViewById(R.id.password_textView);
+        login_button=findViewById(R.id.login_button);
+        login_button.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.login_button: initiatelogin();
+                break;
+        }
+    }
+
+    private void initiatelogin() {
+        if(email_editText.getText()!=null&&password_editText.getText()!=null){
+          email=  email_editText.getText().toString();
+          email += getString(R.string.domain_textView);
+            Log.i(TAG,email);
+          password=  password_editText.getText().toString();
+          String[] creds={email,password};
+            portal_async login = new portal_async(this);
+            login.execute(creds);
+        }
+    }
+
+    public void postStudentDetails(String uid, StudentDetails studentObj, final  Context context){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        database.getReference().child("users").child(uid).setValue(studentObj).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                common_util= new common_util();
+                common_util.ToasterShort(context,"User Account Created");
+
+            }
+        });
+
+    }
+
+    public void invalidCredentials(Context context){
+       String errorMessage = context.getString(R.string.invalidCreds);
+        common_util= new common_util();
+        common_util.ToasterShort(context,errorMessage);
+
+    }
+
+    public void siteDown(Context context){
+        String errorMessage = context.getString(R.string.portalLoginDown);
+        common_util= new common_util();
+        common_util.ToasterShort(context,errorMessage);
+    }
+    public void unknownError(Context context){
+        String errorMessage = context.getString(R.string.unknownPortalLoginError);
+        common_util= new common_util();
+        common_util.ToasterShort(context,errorMessage);
+
+    }
+
+    public void connectUserEmail(FirebaseAuth mAuth, AuthCredential credential, final Context context){
+        mAuth.getCurrentUser().linkWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "linkWithCredential:success");
+                            FirebaseUser user = task.getResult().getUser();
+                            // updateUI(user);
+                        } else {
+                            Log.w(TAG, "linkWithCredential:failure", task.getException());
+                            common_util.ToasterShort(context,"Authentication failed.");
+
+                        }
+
+                        // ...
+                    }
+                });
+
+    }
+
+
+}

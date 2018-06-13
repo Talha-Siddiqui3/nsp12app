@@ -24,8 +24,8 @@
         android:layout_below="@+id/text_phone_entry"
         android:layout_centerHorizontal="true"
         android:ems="10"
-        android:inputType="phone"
-        android:text="@string/phone_entry" />
+        android:hint="@string/phone_entry"
+        android:inputType="phone" />
 
     <TextView
         android:id="@+id/code_timer"
@@ -34,7 +34,8 @@
         android:layout_below="@+id/phone_entry"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="@string/code_timer" />
+        android:text="@string/code_timer"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/send_code"
@@ -42,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/code_timer"
         android:layout_centerHorizontal="true"
+        android:enabled="false"
         android:text="@string/send_code" />
 
     <TextView
@@ -50,7 +52,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/send_code"
         android:layout_centerHorizontal="true"
-        android:text="@string/code_display" />
+        android:text="@string/code_display"
+        android:visibility="invisible" />
 
     <EditText
         android:id="@+id/code_entry"
@@ -59,15 +62,17 @@
         android:layout_below="@+id/code_display"
         android:layout_centerHorizontal="true"
         android:ems="10"
+        android:hint="@string/code_entry"
         android:inputType="phone"
-        android:text="@string/code_entry"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/verify_code"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="@string/verify_code" />
+        android:text="@string/verify_code"
+        android:visibility="invisible" />
 
 </RelativeLayout>

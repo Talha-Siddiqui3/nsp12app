@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">Nixor Student Application</string>
-//MainActivity
+    //welcome_screen
+    //Java
     <string name="notsupported">Your device is not supported. Please try updating Google Play Services</string>
 
     //Authentication
-                        //XML
+    //XML
     <string name="text_phone_entry">Enter phone number</string>
     <string name="code_timer">Time: </string>
     <string name="send_code">Verify</string>
@@ -12,11 +13,28 @@
     <string name="code_entry">0000</string>
     <string name="verify_code">Next</string>
     <string name="phone_entry">+92348484334</string>
+    //Java
+    <string name="unabletosendcode">There seems to be a problem sending the code</string>
+    <string name="phoneAuthSendCodeLoadingText">Sending code</string>
+    <string name="phoneAuthVerifyCodeLoadingText">Verifying code</string>
+    <string name="phoneAuthSuccess">Login Successful</string>
 
 
-
-
-
+    //Portal Login
+    //XML
+    <string name="email_textView">Enter your Nixor Email</string>
+    <string name="email_editText">first-name.last-name</string>
+    <string name="password_textView">Enter your portal password</string>
+    <string name="login_button">Next</string>
+    <string name="domain_textView">&#064;nixorcollege.edu.pk</string>
+    //Java
+    <string name="base_url">https://nsp.braincrop.net</string>
+    <string name="login_url">https://nsp.braincrop.net/Account/Login</string>
+    <string name="logout_url">https://nsp.braincrop.net/Account/LogOff</string>
+    <string name="invalidCreds">The username or password for your portal account is incorrect</string>
+    <string name="portalLoginDown">The portal site is down. Please try again later</string>
+    <string name="unknownPortalLoginError">An unknown error occured.</string>
+    <string name="portalLoginLoadingText">Signing in.</string>
 
 
 
