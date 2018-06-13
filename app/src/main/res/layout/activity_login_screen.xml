@@ -38,7 +38,7 @@
         android:layout_below="@+id/code_timer"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
+        android:background="@drawable/button_outline"
         android:enabled="false"
         android:fontFamily="@font/assistant_extralight"
         android:text="@string/send_code"
