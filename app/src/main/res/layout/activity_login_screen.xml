@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fff"
     tools:context=".Autentication.login_screen">
 
     <EditText
@@ -70,10 +71,11 @@
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:background="#273043"
-        android:src="@drawable/vvp2" />
+        android:padding="30dp"
+        android:src="@drawable/shark_image" />
 
 </RelativeLayout>
