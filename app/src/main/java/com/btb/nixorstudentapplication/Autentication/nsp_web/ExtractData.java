@@ -63,6 +63,10 @@ public class ExtractData {
     public static StudentDetails getStudentObject(Document logged_user_data){
         StudentDetails student = Extract_Basic_Information(logged_user_data);
         student.setStudent_profileUrl(Extract_Display_Photo(logged_user_data));
+
+
+
+
         return student;
     }
 

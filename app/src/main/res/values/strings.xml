@@ -37,7 +37,18 @@
     <string name="portalLoginLoadingText">Signing in.</string>
 
 
+    //common_utils
+    //Java
+    <string name="SharedPref">NixorSharedPref</string>
+    <string name="notActivatedAlertTitle">Account not activated</string>
+    <string name="notActivatedAlertMessage">It seems like your account is not activated. Please contact Nixor Administration.
+    Thank you</string>
 
 
+    //AccountType
+    //XML
+    <string name="selecttype_textView">Select Account Mode</string>
+    <string name="parentmode_button">Parent Mode</string>
+    <string name="studentmode_button">Student Mode</string>
 
 </resources>

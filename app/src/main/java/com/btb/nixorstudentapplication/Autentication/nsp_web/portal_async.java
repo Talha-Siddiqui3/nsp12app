@@ -1,14 +1,23 @@
 package com.btb.nixorstudentapplication.Autentication.nsp_web;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+
+import com.btb.nixorstudentapplication.Autentication.User.AccountType;
 import com.btb.nixorstudentapplication.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import com.btb.nixorstudentapplication.Misc.common_util;
+import com.google.firebase.database.FirebaseDatabase;
+
 import static com.btb.nixorstudentapplication.Autentication.nsp_web.ExtractData.getStudentObject;
 
 public class portal_async extends AsyncTask<String,String,String> {
@@ -55,16 +64,7 @@ public class portal_async extends AsyncTask<String,String,String> {
             e.printStackTrace(); }
 
         common_util.encode_text(result);
-        portal_login superObj = new portal_login();
-        switch(result){
-            case "logged":
-                String FirebaseUID = FirebaseAuth.getInstance().getCurrentUser().getUid().toString();
-                superObj.postStudentDetails(FirebaseUID,Student_Profile,context);break;
-            case "invalidcreds":superObj.invalidCredentials(context); break;
-            case "sitedown":superObj.siteDown(context); break;
-            default:superObj.unknownError(context); break;
-
-        }
+        resultResponse(result);
         super.onPostExecute(result);
     }
 
@@ -171,6 +171,52 @@ public class portal_async extends AsyncTask<String,String,String> {
         }catch(Exception e){
             e.printStackTrace();
         }
+    }
+    public void resultResponse(String result){
+
+        switch(result){
+            case "logged":
+                postStudentDetails(Student_Profile,context);break;
+            case "invalidcreds":invalidCredentials(context); break;
+            case "sitedown":siteDown(context); break;
+            default:unknownError(context); break;
+
+        }
+    }
+    public void postStudentDetails(final StudentDetails studentObj, final  Context context){
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        common_util= new common_util();
+        final String username = common_util.extractUsername(context,studentObj.Student_email);
+        database.getReference().child("users").child(username).setValue(studentObj).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                common_util.ToasterShort(context,"User Account Created");
+                common_util.saveUserDataLocally(context,studentObj);
+                context.startActivity(new Intent(context, AccountType.class));
+                ((Activity)context).finish();
+
+            }
+        });
+
+    }
+
+    public void invalidCredentials(Context context){
+        String errorMessage = context.getString(R.string.invalidCreds);
+        common_util= new common_util();
+        common_util.ToasterShort(context,errorMessage);
+
+    }
+
+    public void siteDown(Context context){
+        String errorMessage = context.getString(R.string.portalLoginDown);
+        common_util= new common_util();
+        common_util.ToasterShort(context,errorMessage);
+    }
+    public void unknownError(Context context){
+        String errorMessage = context.getString(R.string.unknownPortalLoginError);
+        common_util= new common_util();
+        common_util.ToasterShort(context,errorMessage);
+
     }
 
 

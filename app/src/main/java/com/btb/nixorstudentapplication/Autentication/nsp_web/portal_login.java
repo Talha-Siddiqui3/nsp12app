@@ -1,6 +1,8 @@
 package com.btb.nixorstudentapplication.Autentication.nsp_web;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.btb.nixorstudentapplication.Autentication.User.AccountType;
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,6 +34,8 @@ TextView password_textView;
 TextView email_textView;
 Button login_button;
 common_util common_util;
+public static String result="";
+public static StudentDetails Student_Profile=null;
 
 String TAG = "portal_login";
 private String email;
@@ -67,40 +72,11 @@ private String password;
           String[] creds={email,password};
             portal_async login = new portal_async(this);
             login.execute(creds);
+
+
         }
     }
 
-    public void postStudentDetails(String uid, StudentDetails studentObj, final  Context context){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        database.getReference().child("users").child(uid).setValue(studentObj).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                common_util= new common_util();
-                common_util.ToasterShort(context,"User Account Created");
-
-            }
-        });
-
-    }
-
-    public void invalidCredentials(Context context){
-       String errorMessage = context.getString(R.string.invalidCreds);
-        common_util= new common_util();
-        common_util.ToasterShort(context,errorMessage);
-
-    }
-
-    public void siteDown(Context context){
-        String errorMessage = context.getString(R.string.portalLoginDown);
-        common_util= new common_util();
-        common_util.ToasterShort(context,errorMessage);
-    }
-    public void unknownError(Context context){
-        String errorMessage = context.getString(R.string.unknownPortalLoginError);
-        common_util= new common_util();
-        common_util.ToasterShort(context,errorMessage);
-
-    }
 
     public void connectUserEmail(FirebaseAuth mAuth, AuthCredential credential, final Context context){
         mAuth.getCurrentUser().linkWithCredential(credential)

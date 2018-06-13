@@ -1,6 +1,5 @@
 package com.btb.nixorstudentapplication.Autentication;
 
-import android.Manifest;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,18 +14,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.btb.nixorstudentapplication.Application_Home.home_screen;
+import com.btb.nixorstudentapplication.Autentication.User.accountTypeGetSet;
+import com.btb.nixorstudentapplication.Autentication.nsp_web.StudentDetails;
 import com.btb.nixorstudentapplication.Autentication.nsp_web.portal_login;
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.Misc.permission_util;
 import com.btb.nixorstudentapplication.Misc.sms_broadcast.SmsListener;
 import com.btb.nixorstudentapplication.Misc.sms_broadcast.SmsReceiver;
 import com.btb.nixorstudentapplication.R;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -43,11 +40,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 public class login_screen extends AppCompatActivity implements View.OnClickListener {
     String TAG = "login_screen";
     FirebaseUser FbUser;
+    StudentDetails studentDetails;
     PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
     permission_util permission_util;
     common_util common_util = new common_util();
@@ -212,16 +211,21 @@ send_code.setEnabled(false);
         checkUserHistory(FbUser.getUid());
     }
     private void checkUserHistory(final String uid){
-        DatabaseReference node_users_uid = FirebaseDatabase.getInstance().getReference().child("users");
-        node_users_uid.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        String userPhoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+       userPhoneNumber= common_util.formatNumbers(userPhoneNumber);
+        DatabaseReference node_users_uid = FirebaseDatabase.getInstance().getReference().child("account_link");
+        node_users_uid.child(userPhoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue()!=null){
+                    accountTypeGetSet accountTypeGetSet = new accountTypeGetSet();
+                        HashMap account =(HashMap) dataSnapshot.getValue();
+                        accountTypeGetSet.setMode(account.get("mode").toString());
+                        accountTypeGetSet.setUsername(account.get("username").toString());
                   Log.i(TAG,"User account exists");
-                  checkAccountType();
-
+                  checkAccountType(accountTypeGetSet.getMode(), accountTypeGetSet.getUsername());
                 }else{
-                    Log.i(TAG,"User account does not exists");
+                    Log.i(TAG,"User account does not exist");
                     startActivity(new Intent(login_screen.this,portal_login.class));
                     finish();
                 }
@@ -234,11 +238,24 @@ send_code.setEnabled(false);
 
         });
     }
-    private void checkAccountType(){
-        //Checks if account belongs to admin / teacher / student
+    private void checkAccountType(final String mode, final String username){
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    database.getReference().child("users").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) {
+        HashMap map = (HashMap) dataSnapshot.getValue();
+       studentDetails= common_util.hashMapStudentDetails(map);
+        common_util.saveUserDataLocally(login_screen.this,studentDetails);
+        common_util.saveUserDataLocally(login_screen.this,"Mode",mode);
+        startActivity(new Intent(login_screen.this, home_screen.class));
+        finish();
+    }
 
-        //Student
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
 
+    }
+    });
 
     }
 
@@ -395,4 +412,8 @@ send_code.setEnabled(false);
                 PackageManager.DONT_KILL_APP);
         super.onResume();
     }
+
+
+
+
 }
