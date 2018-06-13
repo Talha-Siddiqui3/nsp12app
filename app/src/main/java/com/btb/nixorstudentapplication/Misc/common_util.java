@@ -201,7 +201,7 @@ public class common_util {
         student.setStudent_house(map.get("student_house").toString());
         student.setStudent_name(map.get("student_name").toString());
         student.setStudent_year(map.get("student_year").toString());
-        student.setStudent_id(map.get("student_ID").toString());
+        student.setStudent_id(map.get("student_id").toString());
         student.setStudent_house(map.get("student_house").toString());
         student.setStudent_profileUrl(map.get("student_profileUrl").toString());
 return student;
