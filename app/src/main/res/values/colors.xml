@@ -4,4 +4,8 @@
     <color name="colorPrimaryDark">#203e5f</color>
     <color name="colorAccent">#ff3636</color>
     <color name="main_header">#203e5f</color>
+    <color name="main_blue">#203e5f</color>
+    <color name="button_textColor">#fff</color>
+
+    <color name="van_footercolor">#f1f1f1</color>
 </resources>

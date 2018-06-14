@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    //Authentication
+    <dimen name="padding_linearLayout">20dp</dimen>
+    <dimen name="header_size">130dp</dimen>
+    <dimen name="shark_height">120dp</dimen>
+    <dimen name="shark_width">200dp</dimen>
+    <dimen name="pass_extry_width">140dp</dimen>
+
+
+
+    <dimen name="main_studentphoto">80dp</dimen>
+    <dimen name="van_footerHeight">60dp</dimen>
+
+</resources>

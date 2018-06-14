@@ -7,107 +7,115 @@
     android:background="#fff"
     tools:context=".Autentication.login_screen">
 
-    <EditText
-        android:id="@+id/phone_entry"
-
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="202dp"
-        android:drawablePadding="5dp"
-        android:drawableRight="@drawable/phone"
-        android:ems="10"
-        android:fontFamily="@font/assistant"
-        android:gravity="left"
-        android:hint="@string/text_phone_entry"
-        android:inputType="phone"
-        android:padding="5dp"
-        android:paddingBottom="8sp"
-        android:paddingTop="8sp"
-        android:textColorHint="#ced3d7"
-        android:textSize="15dp" />
-
-    <TextView
-        android:id="@+id/code_timer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/phone_entry"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:text="@string/code_timer"
-        android:visibility="gone" />
-
-    <Button
-        android:id="@+id/send_code"
-        android:layout_width="250dp"
-        android:layout_height="55dp"
-        android:layout_above="@+id/code_display"
-        android:layout_centerHorizontal="true"
-        android:background="@color/main_header"
-        android:enabled="false"
-        android:fontFamily="@font/assistant"
-        android:text="@string/send_code"
-        android:textColor="#a1aebb"
-        android:textSize="15sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/code_display"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/code_entry"
-        android:layout_centerHorizontal="true"
-        android:text="@string/code_display"
-        android:visibility="invisible" />
-
-    <EditText
-        android:id="@+id/code_entry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/verify_code"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:hint="@string/code_entry"
-        android:inputType="phone"
-        android:textAlignment="center"
-        android:visibility="invisible" />
-
-    <Button
-        android:id="@+id/verify_code"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/verify_code"
-        android:visibility="invisible" />
-
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/blue_header"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="@dimen/header_size"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:background="#203e5f" />
+        android:background="@color/main_header" />
 
     <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="200dp"
-        android:layout_height="150dp"
+        android:id="@+id/shark"
+        android:layout_width="@dimen/shark_width"
+        android:layout_height="@dimen/shark_height"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="71dp"
+        android:layout_marginTop="68dp"
         android:src="@drawable/shark_image" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:fontFamily="@font/allerta"
-        android:text="VERIFY PHONE NUMBER"
-        android:textColor="#000"
-        android:textSize="25sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/shark"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_linearLayout">
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/headings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="5dp"
+            android:text="@string/auth_heading"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/phone_entry"
+
+            style="@style/text_entry"
+            android:layout_width="match_parent"
+
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textView"
+            android:layout_marginBottom="5dp"
+            android:drawablePadding="5dp"
+            android:drawableRight="@drawable/phone"
+            android:ems="10"
+            android:gravity="left"
+            android:hint="@string/text_phone_entry"
+            android:inputType="phone"
+            android:textColorHint="#080808"
+            android:textSize="15dp" />
+
+        <Button
+            android:id="@+id/send_code"
+
+            style="@style/auth_buttons"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+
+            android:layout_above="@+id/code_display"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
+            android:enabled="false"
+            android:text="@string/send_code" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/code_entry"
+                style="@style/text_entry"
+                android:layout_width="@dimen/pass_extry_width"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/verify_code"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="5dp"
+                android:ems="10"
+                android:hint="@string/code_entry"
+                android:inputType="phone"
+                android:textAlignment="center"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/code_timer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/phone_entry"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
+            android:text="@string/code_timer"
+            android:textColor="#000"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/verify_code"
+            style="@style/auth_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/verify_code"
+            android:visibility="invisible" />
+
+    </LinearLayout>
 
 </RelativeLayout>

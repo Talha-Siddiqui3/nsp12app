@@ -67,7 +67,7 @@ public class login_screen extends Activity implements View.OnClickListener {
     EditText phone_entry;
     Button send_code;
     Button verify_code;
-    TextView code_display;
+
     TextView code_timer;
     //Permission
     private static String[] PERMISSIONS = {
@@ -86,7 +86,7 @@ public class login_screen extends Activity implements View.OnClickListener {
         phone_entry =(EditText) findViewById(R.id.phone_entry);
         send_code = (Button) findViewById(R.id.send_code);
         verify_code =(Button) findViewById(R.id.verify_code);
-        code_display = (TextView) findViewById(R.id.code_display);
+
         code_timer = (TextView) findViewById(R.id.code_timer);
 
         send_code.setOnClickListener(this);
@@ -155,7 +155,7 @@ public class login_screen extends Activity implements View.OnClickListener {
         }       // OnVerificationStateChangedCallbacks
     }
     private void updateUICodeSent(){
-code_display.setVisibility(View.VISIBLE);
+
 code_entry.setVisibility(View.VISIBLE);
 verify_code.setVisibility(View.VISIBLE);
 send_code.setEnabled(false);
@@ -379,7 +379,7 @@ send_code.setEnabled(false);
         }else{
             if(beingverified){
                 sendCode();
-                code_display.setVisibility(View.VISIBLE);
+
                 code_entry.setVisibility(View.VISIBLE);
                 verify_code.setVisibility(View.VISIBLE);
             }

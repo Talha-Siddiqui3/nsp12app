@@ -13,6 +13,7 @@
     <string name="code_entry">0000</string>
     <string name="verify_code">Next</string>
     <string name="phone_entry">+92348484334</string>
+    <string name="auth_heading">Verify phone number</string>
     //Java
     <string name="unabletosendcode">There seems to be a problem sending the code</string>
     <string name="phoneAuthSendCodeLoadingText">Sending code</string>
@@ -47,7 +48,7 @@
 
     //AccountType
     //XML
-    <string name="selecttype_textView">Select Account Mode</string>
+    <string name="selecttype_textView">Select account type</string>
     <string name="parentmode_button">Parent Mode</string>
     <string name="studentmode_button">Student Mode</string>
 

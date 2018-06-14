@@ -8,29 +8,51 @@
 
     <Button
         android:id="@+id/parentmode_button"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/studentmode_button"
-        android:layout_margin="10dp"
-        android:text="@string/parentmode_button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/parent_mode"
         tools:layout_editor_absoluteX="112dp"
         tools:layout_editor_absoluteY="75dp" />
 
     <TextView
         android:id="@+id/selecttype_textView"
-        android:layout_width="wrap_content"
+        style="@style/headings"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/selecttype_textView" />
+        android:text="@string/selecttype_textView"
+        android:textAlignment="center" />
 
     <Button
         android:id="@+id/studentmode_button"
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
+        android:layout_height="180dp"
+        android:layout_below="@+id/textView3"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/student_mode" />
+
+    <TextView
+        android:id="@+id/textView2"
+        style="@style/sub_headings"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/selecttype_textView"
-        android:layout_margin="10dp"
-        android:text="@string/studentmode_button" />
+        android:layout_above="@+id/parentmode_button"
+        android:layout_centerHorizontal="true"
+        android:text="@string/parentmode_button"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/textView3"
+        style="@style/sub_headings"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="46dp"
+        android:text="@string/studentmode_button"
+        android:textAlignment="center" />
 </RelativeLayout>
