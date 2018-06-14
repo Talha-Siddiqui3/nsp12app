@@ -25,7 +25,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Autentication.login_screen" />
+        <activity android:name=".Autentication.phone_verification.login_screen" />
         <activity android:name=".Autentication.nsp_web.portal_login" />
         <activity android:name=".Application_Home.home_screen" />
         <activity android:name=".Autentication.User.AccountType"></activity>

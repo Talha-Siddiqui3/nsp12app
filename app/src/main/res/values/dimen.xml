@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    //Authentication
+    <dimen name="blue_banner_height">100dp</dimen>
+    <dimen name="blue_banner_height_CE">80dp</dimen>
+    <dimen name="pink_shark_height">150dp</dimen>
+    <dimen name="pink_shark_width">200dp</dimen>
+    <dimen name="back_button_height">50dp</dimen>
+    <dimen name="pink_shark_marginTop">20dp</dimen>
+
+</resources>

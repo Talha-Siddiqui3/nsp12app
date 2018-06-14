@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     //Authentication Card Flip Animation Time
-    <integer name="card_flip_time_half">250</integer>
-    <integer name="card_flip_time_full">500</integer>
+    <integer name="card_flip_time_half">400</integer>
+    <integer name="card_flip_time_full">800</integer>
 
 </resources>
