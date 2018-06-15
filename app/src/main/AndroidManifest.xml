@@ -28,11 +28,13 @@
         <activity android:name=".Autentication.login_screen" />
         <activity android:name=".Autentication.nsp_web.portal_login" />
         <activity android:name=".Application_Home.home_screen" />
-        <activity android:name=".Autentication.User.AccountType"></activity>
+        <activity android:name=".Autentication.User.AccountType" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <activity android:name=".PastPapers.DisplayPapers.load_papers"></activity>
     </application>
 
 </manifest>
