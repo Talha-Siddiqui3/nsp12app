@@ -11,12 +11,11 @@ import com.btb.nixorstudentapplication.Autentication.User.AccountType;
 import com.btb.nixorstudentapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import com.btb.nixorstudentapplication.Misc.common_util;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import static com.btb.nixorstudentapplication.Autentication.nsp_web.ExtractData.getStudentObject;
 
@@ -165,7 +164,6 @@ public class portal_async extends AsyncTask<String,String,String> {
                     .data("form-control", "Log Out")
                     .followRedirects(true)
                     .execute();
-            Document userid = logged.parse();
             encode_text("Logout Successful");
             // System.out.println(userid);
         }catch(Exception e){
@@ -184,7 +182,26 @@ public class portal_async extends AsyncTask<String,String,String> {
         }
     }
     public void postStudentDetails(final StudentDetails studentObj, final  Context context){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        common_util= new common_util();
+        final String username = common_util.extractUsername(context,studentObj.student_email);
+        db.collection("users").document(username).set(studentObj).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                common_util.ToasterShort(context,"User Account Created");
+                common_util.saveUserDataLocally(context,studentObj);
+                context.startActivity(new Intent(context, AccountType.class));
+                ((Activity)context).finish();
+
+            }
+        });
+    }
+
+    //Retired Method
+    /*
+    public void postStudentDetailsOLD(final StudentDetails studentObj, final  Context context){
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
         common_util= new common_util();
         final String username = common_util.extractUsername(context,studentObj.student_email);
         database.getReference().child("users").child(username).setValue(studentObj).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -199,6 +216,7 @@ public class portal_async extends AsyncTask<String,String,String> {
         });
 
     }
+    */
 
     public void invalidCredentials(Context context){
         String errorMessage = context.getString(R.string.invalidCreds);

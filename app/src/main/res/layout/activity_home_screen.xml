@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
-        android:layout_height="155dp"
+        android:layout_height="150dp"
         android:layout_alignParentTop="true"
         android:background="@color/main_header"
         android:src="@drawable/nav_header" />
@@ -23,7 +23,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="12dp"
-        android:src="@drawable/sample" />
+        android:src="@drawable/student_mode" />
 
     <TextView
         android:id="@+id/nameStudent_textView"
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/photoStudent_circleView"
         android:layout_centerHorizontal="true"
-        android:text="Hassan Anjum Abbasi"
+        android:text="Student Name"
         android:textColor="#fff" />
 
     <TextView
@@ -42,9 +42,20 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/nameStudent_textView"
         android:layout_centerHorizontal="true"
-        android:text="TextView"
+        android:text="Student ID"
         android:textColor="#fff"
         android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/nixorpoints_textView"
+        style="@style/sub_headings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/nixorpoints_textView"
+        android:textColor="#fff"
+        android:textSize="14sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,11 +65,4 @@
         android:background="@color/van_footercolor"
         android:orientation="horizontal"></LinearLayout>
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:text="TextView" />
 </RelativeLayout>

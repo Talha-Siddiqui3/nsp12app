@@ -6,14 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-
 import com.btb.nixorstudentapplication.Application_Home.home_screen;
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AccountType extends AppCompatActivity implements View.OnClickListener {
 private Button studentmode_button;
@@ -43,8 +42,9 @@ public void setAccountLink(final String mode){
     username = common_util.getUserDataLocally(AccountType.this,"username");
     phoneNumber = common_util.formatNumbers(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
     accountTypeGetSet account = new accountTypeGetSet(username,mode);
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    database.getReference().child("account_link").child(phoneNumber).setValue(account).addOnCompleteListener(new OnCompleteListener<Void>() {
+  //  FirebaseDatabase database = FirebaseDatabase.getInstance();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    db.collection("account_link").document(phoneNumber).set(account).addOnCompleteListener(new OnCompleteListener<Void>() {
         @Override
         public void onComplete(@NonNull Task<Void> task) {
         common_util.saveUserDataLocally(AccountType.this,"Mode",mode);

@@ -52,4 +52,8 @@
     <string name="parentmode_button">Parent Mode</string>
     <string name="studentmode_button">Student Mode</string>
 
+    //home_screen
+    //XML
+    <string name="nixorpoints_textView">Nixor points: </string>
+
 </resources>

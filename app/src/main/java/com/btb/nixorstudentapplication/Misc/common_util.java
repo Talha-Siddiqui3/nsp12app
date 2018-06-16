@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.btb.nixorstudentapplication.Autentication.nsp_web.StudentDetails;
@@ -22,6 +23,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 
@@ -97,6 +103,7 @@ public class common_util {
         return  email.replaceAll(domain,"").replace(".","-");
     }
 
+
     public void checkActivation(final Activity activity, final String username){
         final FirebaseDatabase da = FirebaseDatabase.getInstance();
         da.getReference().child("activated").addValueEventListener(new ValueEventListener() {
@@ -167,6 +174,10 @@ public class common_util {
         });
     }
 
+
+
+
+
     public void saveUserDataLocally(Context context ,StudentDetails studentDetails){
         String sharedPrefName= context.getString(R.string.SharedPref);
         String username = extractUsername(context,studentDetails.getStudent_email());
@@ -174,6 +185,7 @@ public class common_util {
         SharedPreferences.Editor editor = pref.edit();
         editor.putString("email", studentDetails.getStudent_email()); // Storing Email
         editor.putString("username", username); // Storing Username
+        editor.putString("name", studentDetails.getStudent_name()); // Storing Name
         editor.putString("student_id", studentDetails.getStudent_id()); // Storing studentID
         editor.putString("nsp_photo", studentDetails.getStudent_profileUrl()); // Storing NspPhoto
         editor.apply();

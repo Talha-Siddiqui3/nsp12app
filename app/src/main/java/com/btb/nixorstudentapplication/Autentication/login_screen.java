@@ -43,6 +43,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -217,49 +219,50 @@ send_code.setEnabled(false);
     private void checkUserHistory(final String uid){
         String userPhoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
        userPhoneNumber= common_util.formatNumbers(userPhoneNumber);
-        DatabaseReference node_users_uid = FirebaseDatabase.getInstance().getReference().child("account_link");
-        node_users_uid.child(userPhoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
+       Log.i(TAG,"Checking if account exists");
+        //DatabaseReference node_users_uid = FirebaseDatabase.getInstance().getReference().child("account_link");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("account_link").document(userPhoneNumber).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getValue()!=null){
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+           DocumentSnapshot documentSnapshot = task.getResult();
+                if(documentSnapshot.exists()){
                     accountTypeGetSet accountTypeGetSet = new accountTypeGetSet();
-                        HashMap account =(HashMap) dataSnapshot.getValue();
-                        accountTypeGetSet.setMode(account.get("mode").toString());
-                        accountTypeGetSet.setUsername(account.get("username").toString());
-                  Log.i(TAG,"User account exists");
-                  checkAccountType(accountTypeGetSet.getMode(), accountTypeGetSet.getUsername());
+                    HashMap account =(HashMap) documentSnapshot.getData();
+                    accountTypeGetSet.setMode(account.get("mode").toString());
+                    accountTypeGetSet.setUsername(account.get("username").toString());
+                    Log.i(TAG,"User account exists");
+                    checkAccountType(accountTypeGetSet.getMode(), accountTypeGetSet.getUsername());
                 }else{
+
                     Log.i(TAG,"User account does not exist");
+                    common_util.progressDialogHide();
                     startActivity(new Intent(login_screen.this,portal_login.class));
+
                     finish();
                 }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
 
             }
-
         });
+
     }
     private void checkAccountType(final String mode, final String username){
-    final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    database.getReference().child("users").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
-    @Override
-    public void onDataChange(DataSnapshot dataSnapshot) {
-        HashMap map = (HashMap) dataSnapshot.getValue();
-       studentDetails= common_util.hashMapStudentDetails(map);
-        common_util.saveUserDataLocally(login_screen.this,studentDetails);
-        common_util.saveUserDataLocally(login_screen.this,"Mode",mode);
-        startActivity(new Intent(login_screen.this, home_screen.class));
-        finish();
-    }
+    //final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot document = task.getResult();
+                 HashMap map = (HashMap) document.getData();
+                studentDetails= common_util.hashMapStudentDetails(map);
+                common_util.saveUserDataLocally(login_screen.this,studentDetails);
+                common_util.saveUserDataLocally(login_screen.this,"Mode",mode);
+                common_util.progressDialogHide();
+                startActivity(new Intent(login_screen.this, home_screen.class));
+                finish();
 
-    @Override
-    public void onCancelled(DatabaseError databaseError) {
-
-    }
-    });
+            }
+        });
 
     }
 
@@ -287,7 +290,6 @@ send_code.setEnabled(false);
 
         @Override
         public void onVerificationCompleted(PhoneAuthCredential credential) {
-            common_util.progressDialogHide();
             beingverified=false;
             updateInstanceState();
             Log.d(TAG, "onVerificationCompleted:" + credential);
@@ -330,7 +332,6 @@ send_code.setEnabled(false);
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            common_util.progressDialogHide();
                             Log.d(TAG, "signInWithCredential:success");
                             signInComplete();
                              FbUser = task.getResult().getUser();
@@ -416,26 +417,5 @@ send_code.setEnabled(false);
                 PackageManager.DONT_KILL_APP);
         super.onResume();
     }
-
-//Card Flip animatation
-public static class phoneNumberCard extends Fragment {
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.phone_number_entry_layout, container, false);
-    }
-}
-
-    /**
-     * A fragment representing the back of the card.
-     */
-    public static class codeEntryCard extends Fragment {
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.code_entry_layout, container, false);
-        }
-    }
-
 
 }
