@@ -218,4 +218,5 @@ public class common_util {
         student.setStudent_profileUrl(map.get("student_profileUrl").toString());
 return student;
     }
+    public void uselessMethod(){}
 }
