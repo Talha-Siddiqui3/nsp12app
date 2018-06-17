@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingLeft="4dp"
+    >
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textSize="24sp"
+        android:paddingLeft="4dp"
+        android:paddingTop="2dp"
+        android:id="@+id/text_item"
+        android:clickable="true">
+
+    </TextView>
+
+
+
+
+
+
+
+
+
+</android.support.v7.widget.LinearLayoutCompat>
+
+
+
