@@ -91,10 +91,10 @@ public class UserPhoto {
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                String photourl = taskSnapshot.getDownloadUrl().toString();
-                ((home_screen)context).db.collection("users").document(username).update("photourl",photourl);
-                common_util.saveUserDataLocally(context,"photourl",photourl);
-                setDisplay(photourl,context);
+              //  String photourl = taskSnapshot.getDownloadUrl().toString();
+               // ((home_screen)context).db.collection("users").document(username).update("photourl",photourl);
+               // common_util.saveUserDataLocally(context,"photourl",photourl);
+               // setDisplay(photourl,context);
             }
         });
     }
