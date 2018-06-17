@@ -56,7 +56,8 @@ public class PastPapers extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_past_papers);
-GetDataFireBase();
+//sadfasf
+        GetDataFireBase();
         GetExternalStoragePermission();
 
         }
