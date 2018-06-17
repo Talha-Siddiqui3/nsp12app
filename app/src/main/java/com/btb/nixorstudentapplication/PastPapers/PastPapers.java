@@ -1,5 +1,11 @@
 package com.btb.nixorstudentapplication.PastPapers;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Context;
@@ -11,8 +17,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+
 import com.btb.nixorstudentapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +34,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -45,19 +56,32 @@ public class PastPapers extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_past_papers);
-        GetDataFireBase();
+GetDataFireBase();
+        GetExternalStoragePermission();
+
         }
 
+    private void GetExternalStoragePermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+// No explanation needed; request the permission
+            ActivityCompat.requestPermissions(this,
+                    new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
 
-        public void readDataFromFile () {
+
+        }
+    }
+
+
+    public void readDataFromFile () {
             String s;
             ArrayList<String> PastPapersList = new ArrayList<>();
-            int i = 0;
             try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(getAssets().open("123.txt")));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(getAssets().open("chem.txt")));
 
-                while (reader.readLine() != null) {
-                    s = reader.readLine();
+                while ((s=reader.readLine()) != null) {
+
                     PastPapersList.add(s);
 
 //Log.i("PUPU",DataUpload.get(i));
@@ -67,8 +91,10 @@ public class PastPapers extends AppCompatActivity {
 
             } catch (IOException e) {
                 e.printStackTrace();
+                Log.i("ERROR","ERROR");
             }
 
+        Log.i("COUNT", Integer.toString(PastPapersList.size()));
             StringManipulate(PastPapersList);
 
         }
@@ -82,78 +108,94 @@ public class PastPapers extends AppCompatActivity {
             String s[] = new String[Data.size() + 1];
             ArrayList<String> FormattedData = new ArrayList<>();
 
-            for (int i = 0; i < Data.size(); i++) {
-                FormattedData.add(Data.get(i).substring(0, 6) + "_" + Data.get(i).substring(6, Data.get(i).length()));
-                s = FormattedData.get(i).split("_");
-                s[s.length - 1] = s[s.length - 1].replace(".pdf", "");
+    for (int i = 0; i < Data.size(); i++) {
 
-                if (s.length == 4) {
-                    if (s[3].compareTo("gt") == 0) {
-                        s[3] = "Grade Threeshold";
+      try {
+           FormattedData.add(Data.get(i).substring(0, 6) + "_" + Data.get(i).substring(6, Data.get(i).length()));
+        s = FormattedData.get(i).split("_");
+        s[s.length - 1] = s[s.length - 1].replace(".pdf", "");
+      }
+       catch(Exception e){
+          Log.i("ERROR",Data.get(i));
+       }
 
-                    } else if (s[3].compareTo("ci") == 0) {
-                        s[3] = "Condifential Instructions";
-                    } else if (s[3].compareTo("er") == 0) {
-                        s[3] = "Examiner Report";
+        if (s.length == 4) {
+            if (s[3].compareTo("gt") == 0) {
+                s[3] = "Grade Threeshold";
 
-                    }
-                    switch (s[1]) {
-                        case "m":
-                            s[1] = "March";
-                            break;
-                        case "s":
-                            s[1] = "Summer";
-                            break;
-                        case "w":
-                            s[1] = "Winter";
-                            break;
-                        default:
-                            s[1] = "error";
-                            break;
-                    }
-                    s[2] = "20" + s[2];
-
-                    type[i] = s[3];
-                    year[i] = s[2];
-                    month[i] = s[1];
-                    variant[i] = null;
-                    //9701_m_18_gt.pdf
-                } else if (s.length == 5) {
-                    switch (s[1]) {
-                        case "m":
-                            s[1] = "March";
-                            break;
-                        case "s":
-                            s[1] = "Summer";
-                            break;
-                        case "w":
-                            s[1] = "Winter";
-                            break;
-                        default:
-                            s[1] = "error";
-                            break;
-                    }
-
-
-                    s[2] = "20" + s[2];
-
-                    if (s[3].compareTo("ms") == 0) {
-                        s[3] = "Marking Scheme";
-
-                    } else if (s[3].compareTo("qp") == 0) {
-                        s[3] = "Question Paper";
-
-                    }
-
-                    // 9701_m_16_ms_33.pdf
-                    type[i] = s[3];
-                    year[i] = s[2];
-                    month[i] = s[1];
-                    variant[i] = s[4];
-                }
-
+            } else if (s[3].compareTo("ci") == 0) {
+                s[3] = "Condifential Instructions";
+            } else if (s[3].compareTo("er") == 0) {
+                s[3] = "Examiner Report";
 
             }
+            switch (s[1]) {
+                case "m":
+                    s[1] = "March";
+                    break;
+                case "s":
+                    s[1] = "Summer";
+                    break;
+                case "w":
+                    s[1] = "Winter";
+                    break;
+                default:
+                    s[1] = "error";
+                    break;
+            }
+            s[2] = "20" + s[2];
+
+            type[i] = s[3];
+            year[i] = s[2];
+            month[i] = s[1];
+            variant[i] = null;
+            //9701_m_18_gt.pdf
+        } else if (s.length == 5) {
+            switch (s[1]) {
+                case "m":
+                    s[1] = "March";
+                    break;
+                case "s":
+                    s[1] = "Summer";
+                    break;
+                case "w":
+                    s[1] = "Winter";
+                    break;
+                default:
+                    s[1] = "error";
+                    break;
+            }
+
+
+            s[2] = "20" + s[2];
+
+            if (s[3].compareTo("ms") == 0) {
+                s[3] = "Marking Scheme";
+
+            } else if (s[3].compareTo("qp") == 0) {
+                s[3] = "Question Paper";
+
+            }
+
+            // 9701_m_16_ms_33.pdf
+            type[i] = s[3];
+            year[i] = s[2];
+            month[i] = s[1];
+            variant[i] = s[4];
+        }
+
+
+    }
+
+
+
+
+
+
+
+
+
+
 
             uploadData(Data, month, year, type, variant);
         }
@@ -174,36 +216,54 @@ public class PastPapers extends AppCompatActivity {
                 map.put("variant", variant[x]);
 
                 cr.add(map);
-
+Log.i("DONE","DONE");
 
             }
         }
 
 
         ArrayList<String> FbQueryData = new ArrayList<>();
+    ArrayList<String> Actualname = new ArrayList<>();
     public void GetDataFireBase () {
 
             CollectionReference cr = FirebaseFirestore.getInstance().collection("Past Papers/Subjects/Chem");
-            Query ppQuery = cr.whereEqualTo("variant", "22").orderBy("year");
+            Query ppQuery = cr.whereEqualTo("variant","22").orderBy("year").orderBy("month").orderBy("type");
+
 
 
             ppQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
                     Map<String, Object> map;
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-
                             map = document.getData();
-                            FbQueryData.add(map.get("year").toString() + " " + (map.get("month").toString()) + " " + (map.get("type").toString()) + " " +
-                                    (map.get("variant").toString()));
+                            if (map.get("variant") == null) {
+                                FbQueryData.add(map.get("year").toString() + " " + (map.get("month").toString()) + " " + (map.get("type").toString()));
+                            }
 
+                            else{
+                                FbQueryData.add(map.get("year").toString() + " " + (map.get("month").toString()) + " " + (map.get("type").toString()) + " " +
+                                        (map.get("variant").toString()));
+
+
+                            }
+                            Actualname.add(map.get("name").toString());
                             Log.i("abc", document.getId() + " => " + document.getData());
                         }
-                    } else {
+
+                    }
+
+
+
+
+
+
+                     else {
                         Log.i("abc", "Error getting documents: ", task.getException());
                     }
-                    loadpapers(FbQueryData);
+                    loadpapers(FbQueryData,Actualname);
                 }
             });
 
@@ -211,38 +271,18 @@ public class PastPapers extends AppCompatActivity {
         }
 
 
-        ArrayList<String> pasptpaer;
-        public void getPastpaperNames () {
-            DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-            db.addValueEventListener(new ValueEventListener() {
-                ArrayList<String> pastpapers = new ArrayList<>();
-
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    //String name = dataSnapshot.getValue().toString();
-                /*for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String name = ds.child("FIELD1").getValue().toString();
-                    pastpapers.add(name);
-                }
-                loadpapers(pastpapers);
-
-            */
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-
-        }
 
 
-        private void loadpapers (ArrayList < String > mydata) {
+
+        private void loadpapers (ArrayList < String > mydata,ArrayList<String> Actualnames) {
             RecyclerView rv = findViewById(R.id.rv_list);
             rv.setLayoutManager(new LinearLayoutManager(this));
-            RvAdaptor rvAdaptor = new RvAdaptor(mydata, PastPapers.this);
+            RvAdaptor rvAdaptor = new RvAdaptor(mydata, PastPapers.this,Actualnames);
             rv.setAdapter(rvAdaptor);
         }
 
-    }
+
+
+
+
+}
