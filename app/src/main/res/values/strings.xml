@@ -56,4 +56,14 @@
     //XML
     <string name="nixorpoints_textView">Nixor points: </string>
 
+
+    //Past_papers
+    //XML
+    <string name="yearTitle_textView">Year:</string>
+    <string name="variantTitle_textView">Variant:</string>
+    <string name="typeTitle_textView">Type:</string>
+    <string name="monthTitle_textView">Month:</string>
+    //Java
+    <string name="pastpaper_loadingtext">Loading paper please wait</string>
+
 </resources>

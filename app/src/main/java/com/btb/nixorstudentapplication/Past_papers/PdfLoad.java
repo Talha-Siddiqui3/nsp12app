@@ -1,4 +1,4 @@
-package com.btb.nixorstudentapplication.PastPapers;
+package com.btb.nixorstudentapplication.Past_papers;
 
 import android.content.Intent;
 import android.os.Environment;
