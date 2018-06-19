@@ -146,15 +146,11 @@ public class pastpapers_filter extends Activity implements View.OnClickListener 
         }
         if(load_papers.variantSelection.equals("All")){
             queryReturn=    addOrderBy(queryReturn,"variant");
-        }else{
-            switch (load_papers.monthSelection){
-                case "Question Paper":queryReturn= addEquals(queryReturn,"type",load_papers.monthSelection);break;
-                case "Marking Scheme":queryReturn= addEquals(queryReturn,"type",load_papers.monthSelection);break;
-                case "Examiner Reports":queryReturn= addEquals(queryReturn,"type","er");break;
-                case "Grade Threshold":queryReturn= addEquals(queryReturn,"type","Grade Threeshold");break;
-                default:queryReturn= addEquals(queryReturn,"type",load_papers.monthSelection);
-            }
         }
+        else{
+            queryReturn=  addEquals(queryReturn,"variant",load_papers.variantSelection);
+        }
+
         return queryReturn;
 
 
