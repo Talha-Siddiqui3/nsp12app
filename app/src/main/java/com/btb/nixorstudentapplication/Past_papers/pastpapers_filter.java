@@ -104,7 +104,7 @@ public class pastpapers_filter extends Activity implements View.OnClickListener 
                    load_papers.variantSelection = "All";
 
                }else{
-                   variantspinner.setEnabled(false);
+                   variantspinner.setEnabled(true);
                 load_papers.typeSelection = type[position];
                 Log.i(TAG, load_papers.typeSelection);
             }}
@@ -148,12 +148,17 @@ public class pastpapers_filter extends Activity implements View.OnClickListener 
         if(load_papers.typeSelection.equals("All")){
             queryReturn=   addOrderBy(queryReturn,"type");
         }else{
+
             queryReturn=  addEquals(queryReturn,"type",load_papers.typeSelection);
+
         }
         if(load_papers.variantSelection.equals("All")){
             queryReturn=    addOrderBy(queryReturn,"variant");
         }
         else{
+
+
+
             queryReturn=  addEquals(queryReturn,"variant",load_papers.variantSelection);
         }
 

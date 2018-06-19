@@ -36,12 +36,24 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".Past_papers.Load_papers"/>
-
+        <activity android:name=".Past_papers.Load_papers" />
         <activity android:name=".Past_papers.PdfLoad" />
-        <activity android:name=".Past_papers.pastpapers_filter"
-            android:theme="@style/AlertDialogCustom"
-            ></activity>
+        <activity
+            android:name=".Past_papers.pastpapers_filter"
+            android:theme="@style/AlertDialogCustom" />
+        <activity
+            android:name=".BookMyTa.TaTab"
+            android:label="@string/title_activity_ta_tab"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".BookMyTa.Ta_Tab">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+
+        </activity>
     </application>
 
 </manifest>
