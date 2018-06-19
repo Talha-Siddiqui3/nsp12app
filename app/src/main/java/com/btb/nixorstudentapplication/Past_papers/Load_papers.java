@@ -1,6 +1,10 @@
 package com.btb.nixorstudentapplication.Past_papers;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Context;
@@ -8,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 
 
@@ -20,19 +25,24 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Map;
 
-public class Load_papers extends AppCompatActivity {
+public class Load_papers extends AppCompatActivity implements View.OnClickListener {
     public static Context context;
     Button byYear;
     Button byVariant;
     String TAG = "Load_papers";
+    public static ArrayList<paperObject> initialobjectList;
+    public static String[] listOfvariants;
+    public static queryVariable queryVariable = new queryVariable();
+
+  public static String yearSelection = "All";
+    public static  String monthSelection = "All";
+    public static  String typeSelection = "All";
+    public static  String variantSelection = "All";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +50,13 @@ public class Load_papers extends AppCompatActivity {
         setContentView(R.layout.activity_past_papers);
         byVariant = findViewById(R.id.byVariant);
         byYear = findViewById(R.id.byYear);
+        byVariant.setVisibility(View.INVISIBLE);
+        byVariant.setEnabled(false);
+        byVariant.setOnClickListener(this);
+
 
         GetExternalStoragePermission();
-        GetDataFireBase();
+        GetDataFireBase(true);
     }
 
     private void GetExternalStoragePermission() {
@@ -71,9 +85,26 @@ public class Load_papers extends AppCompatActivity {
         return true;
     }
 
-    public void GetDataFireBase() {
-        CollectionReference cr = FirebaseFirestore.getInstance().collection("Past Papers/Subjects/Chem");
-        Query ppQuery = cr.orderBy("year");
+    public void GetDataFireBase(final Boolean intial) {
+        Actualname = new ArrayList<>();
+        FbQueryData = new ArrayList<>();
+        final CollectionReference cr = FirebaseFirestore.getInstance().collection("Past Papers/Subjects/Chem");
+        Query ppQuery;
+        if (intial) {
+            ppQuery = cr.orderBy("year");
+            queryVariable.setBoo(cr);
+            queryVariable.setListener(new queryVariable.ChangeListener() {
+                @Override
+                public void onChange() {
+                    if (!queryVariable.isBoo().equals(cr)) {
+                        Log.i(TAG, "OnChange called");
+                        GetDataFireBase(false);
+                    }
+                }
+            });
+        } else {
+            ppQuery = queryVariable.isBoo();
+        }
         ppQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -81,20 +112,27 @@ public class Load_papers extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot document : task.getResult()) {
                         map = document.getData();
-                        if (!Actualname.contains(map.get("name").toString())) {
-                            paperObject paperObject = new paperObject();
-                            addDataToObject(paperObject, map.get("month"), map.get("year"), map.get("variant"), map.get("type"));
-                            if (!checkIfAllErrors(paperObject)) {
-                                FbQueryData.add(paperObject);
-                                Actualname.add(map.get("name").toString());
-                                Log.i(TAG, document.getId() + " => " + document.getData());
+                        if (map.get("name") != null) {
+                            if (!Actualname.contains(map.get("name").toString())) {
+                                paperObject paperObject = new paperObject();
+                                addDataToObject(paperObject, map.get("month"), map.get("year"), map.get("variant"), map.get("type"));
+                                if (!checkIfAllErrors(paperObject)) {
+                                    FbQueryData.add(paperObject);
+                                    Actualname.add(map.get("name").toString());
+                                    Log.i(TAG, document.getId() + " => " + document.getData());
+                                }
                             }
                         }
                     }
                 } else {
                     Log.i(TAG, "Error getting documents: ", task.getException());
                 }
+                initialobjectList = FbQueryData;
+                byVariant.setEnabled(true);
+                byVariant.setVisibility(View.VISIBLE);
                 loadpapers(FbQueryData, Actualname);
+                if(intial){ getVariants(FbQueryData);}
+                queryVariable.setBoo(cr);
             }
         });
 
@@ -134,5 +172,55 @@ public class Load_papers extends AppCompatActivity {
         rv.setLayoutManager(new LinearLayoutManager(this));
         RvAdaptor rvAdaptor = new RvAdaptor(mydata, Load_papers.this, Actualnames);
         rv.setAdapter(rvAdaptor);
+    }
+
+    public void getVariants(ArrayList<paperObject> paperObject) {
+        ArrayList<String> variants = new ArrayList<String>();
+        for (paperObject x : paperObject) {
+
+            if (!variants.contains(x.getVariant()) && !x.getVariant().equals("error") && !x.getVariant().equals("All")) {
+                variants.add(x.getVariant());
+            }
+
+        }
+        variants.add("All");
+        String[] variantsArray = variants.toArray(new String[0]);
+        Arrays.sort((variantsArray), new Comparator<String>() {
+            public int compare(String s1, String s2) {
+                int first = 0;
+                int second = 0;
+                if (s1.equals("All")) {
+                    first = -12000000;
+                } else if (s2.equals("All")) {
+                    second = -12000000;
+
+                } else {
+                    try {
+                        first = Integer.valueOf(s1);
+                    } catch (Exception e) {
+                        first = -10000000;
+                    }
+                    try {
+                        second = Integer.valueOf(s2);
+                    } catch (Exception e) {
+                        second = -1000000;
+                    }
+                }
+                return Integer.valueOf(first).compareTo(Integer.valueOf(second));
+
+            }
+
+        });
+
+        listOfvariants =variantsArray;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.byVariant:
+                startActivity(new Intent(Load_papers.this, pastpapers_filter.class));
+                break;
+        }
     }
 }

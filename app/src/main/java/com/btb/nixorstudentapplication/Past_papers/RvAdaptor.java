@@ -60,6 +60,7 @@ if(data.equals("error")){
 
 }
 
+
     @Override
     public void onBindViewHolder(@NonNull Rv_ViewHolder holder, final int position) {
     validateData(holder.typeTitle,holder.type,data.get(position).getType(),holder.ratingBar);

@@ -1,16 +1,24 @@
 package com.btb.nixorstudentapplication.Past_papers;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Upload_papers {
     public void readDataFromFile(Activity activity) {
@@ -59,11 +67,11 @@ public class Upload_papers {
 
             if (s.length == 4) {
                 if (s[3].compareTo("gt") == 0) {
-                    s[3] = "Grade Threeshold";
+                    s[3] = "Grade Threshold";
 
                 } else if (s[3].compareTo("ci") == 0) {
-                    s[3] = "Condifential Instructions";
-                } else if (s[3].compareTo("er") == 0) {
+                    s[3] = "Confidential Instructions";
+                } else if (s[3].compareTo("er") == 0 || s[3].compareTo("er") == 0) {
                     s[3] = "Examiner Report";
 
                 }
@@ -150,4 +158,25 @@ public class Upload_papers {
         }
     }
 
+    public void repair() {
+        final CollectionReference cr = FirebaseFirestore.getInstance().collection("Past Papers/Subjects/Chem");
+        cr.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                Map<String, Object> map;
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+                        map = document.getData();
+                        if (map.get("name") != null) {
+                      //  if()
+
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+
 }
+

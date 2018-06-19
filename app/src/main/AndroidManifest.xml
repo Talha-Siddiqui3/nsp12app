@@ -43,7 +43,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Past_papers.PdfLoad"></activity>
+        <activity android:name=".Past_papers.PdfLoad" />
+        <activity android:name=".Past_papers.pastpapers_filter"
+            android:theme="@style/AlertDialogCustom"
+            ></activity>
     </application>
 
 </manifest>
