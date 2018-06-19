@@ -19,7 +19,7 @@ public class Search_Ta_Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-    view=inflater.inflate(R.layout.searchta_fragment,container,false);
+    view=inflater.inflate(R.layout.searcht_ta,container,false);
     return view;
     }
 }

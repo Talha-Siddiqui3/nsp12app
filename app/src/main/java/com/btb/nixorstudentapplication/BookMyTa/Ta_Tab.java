@@ -19,9 +19,11 @@ private ViewPager viewPager;
     ViewPageAdaptor adaptor=new ViewPageAdaptor(getSupportFragmentManager());
 adaptor.AddFragment(new Search_Ta_Fragment(),"Search Ta");
         adaptor.AddFragment(new Student_Requests_For_Ta_Fragment(),"Requests for you");
-        adaptor.AddFragment(new Requests_For_Ta_Fragment(),"Your requets for Ta");
+        adaptor.AddFragment(new Requests_To_Book_Ta_Fragment(),"Your requets for Ta");
         viewPager.setAdapter(adaptor);
         tablayout.setupWithViewPager(viewPager);
+
+
 
 
 
