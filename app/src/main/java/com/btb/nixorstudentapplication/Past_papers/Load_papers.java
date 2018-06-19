@@ -53,6 +53,7 @@ public class Load_papers extends AppCompatActivity implements View.OnClickListen
         byVariant.setVisibility(View.INVISIBLE);
         byVariant.setEnabled(false);
         byVariant.setOnClickListener(this);
+        byYear.setOnClickListener(this);
 
 
         GetExternalStoragePermission();
@@ -221,6 +222,9 @@ public class Load_papers extends AppCompatActivity implements View.OnClickListen
             case R.id.byVariant:
                 startActivity(new Intent(Load_papers.this, pastpapers_filter.class));
                 break;
+            case R.id.byYear:
+                Upload_papers upload_papers = new Upload_papers(); upload_papers.repair();break;
         }
+
     }
 }

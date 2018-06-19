@@ -8,6 +8,7 @@ import android.view.View;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -21,6 +22,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Upload_papers {
+    String TAG ="Upload_papers";
+
     public void readDataFromFile(Activity activity) {
         String s;
         ArrayList<String> PastPapersList = new ArrayList<>();
@@ -158,6 +161,31 @@ public class Upload_papers {
         }
     }
 
+
+    public void uploadData(Map<String,Object> map, String doc) {
+
+        DocumentReference cr = FirebaseFirestore.getInstance().collection("Past Papers/Subjects/Chem").document(doc);
+        //hashmap moved outside loop
+
+        cr.update(map);
+            Log.i("DONE", "DONE");
+        }
+
+ArrayList<DocumentSnapshot> errordocs = new ArrayList();
+    public void changeErrors(){
+        for(DocumentSnapshot documentSnapshot: errordocs){
+
+
+        }
+
+
+
+    }
+
+    ArrayList<String> years = new ArrayList<>();
+    ArrayList<String> types = new ArrayList<>();
+    ArrayList<String> variants = new ArrayList<>();
+    ArrayList<String> months = new ArrayList<>();
     public void repair() {
         final CollectionReference cr = FirebaseFirestore.getInstance().collection("Past Papers/Subjects/Chem");
         cr.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -167,11 +195,83 @@ public class Upload_papers {
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot document : task.getResult()) {
                         map = document.getData();
-                        if (map.get("name") != null) {
-                      //  if()
 
-                        }
+                        if (map.get("name") != null) {
+                            if(map.get("variant")!=null){
+                            if(map.get("variant").equals("32-1")) {
+                               map.put("variant","32");
+                             uploadData(map,document.getId());
+                             Log.i(TAG,map.get("name").toString());
+                            }
+
+                        }}
                     }
+
+
+                }
+            }
+        });
+    }
+
+
+    public void myRepairMethod() {
+        final CollectionReference cr = FirebaseFirestore.getInstance().collection("Past Papers/Subjects/Chem");
+        cr.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                Map<String, Object> map;
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+                        map = document.getData();
+                        try{
+                            if(map.get("year")!=null){
+                                if(!years.contains(map.get("year").toString())){
+                                    years.add(map.get("year").toString());
+                                }}
+                            if(map.get("type")!=null){
+                                if(!types.contains(map.get("type").toString())){
+                                    types.add(map.get("type").toString());
+                                }}
+                            if(map.get("month")!=null){
+                                if(!months.contains(map.get("mont").toString())){
+                                    months.add(map.get("month").toString());
+                                }}
+                            if(map.get("variant")!=null) {
+                                if (!variants.contains(map.get("variant").toString())) {
+                                    variants.add(map.get("variant").toString());
+                                }
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+
+                        }/*
+                        if (map.get("name") != null) {
+                            if(map.get("type")!=null){
+                            if(map.get("type").equals("sp")) {
+                               map.put("type","Specimen Paper");
+                             uploadData(map,document.getId());
+                             Log.i(TAG,map.get("name").toString());
+                            }
+
+                        }}*/
+                    }
+                    for(String x: years){
+                        Log.i(TAG,x);
+                    }
+
+                    for(String x: variants){
+                        Log.i(TAG,x);
+                    }
+
+                    for(String x: types){
+                        Log.i(TAG,x);
+                    }
+
+                    for(String x: months){
+                        Log.i(TAG,x);
+                    }
+
+
                 }
             }
         });

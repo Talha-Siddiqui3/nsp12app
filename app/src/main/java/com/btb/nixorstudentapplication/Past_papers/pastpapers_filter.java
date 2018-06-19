@@ -38,7 +38,7 @@ public class pastpapers_filter extends Activity implements View.OnClickListener 
 
         Spinner yearspinner = findViewById(R.id.yearspinner);
         final Spinner variantspinner = findViewById(R.id.variantspinner);
-        Spinner typespinner = findViewById(R.id.typespinner);
+        final Spinner typespinner = findViewById(R.id.typespinner);
         Spinner monthspinner = findViewById(R.id.monthspinner);
         populateSpinner(yearspinner, years);
         populateSpinner(variantspinner, variants);
@@ -99,9 +99,15 @@ public class pastpapers_filter extends Activity implements View.OnClickListener 
         typespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+               if(type[position].equals("Grade Threshold")){
+                   variantspinner.setEnabled(false);
+                   load_papers.variantSelection = "All";
+
+               }else{
+                   variantspinner.setEnabled(false);
                 load_papers.typeSelection = type[position];
                 Log.i(TAG, load_papers.typeSelection);
-            }
+            }}
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
