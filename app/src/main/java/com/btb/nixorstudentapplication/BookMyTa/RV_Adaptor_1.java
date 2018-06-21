@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.btb.nixorstudentapplication.Past_papers.RvAdaptor;
 import com.btb.nixorstudentapplication.R;
@@ -28,3 +29,13 @@ public class RV_Adaptor_1 extends RecyclerView.Adapter<RvAdaptor.Rv_ViewHolder> 
         return 0;
     }
 }
+class Rv_ViewHolder extends RecyclerView.ViewHolder{
+    TextView txt;
+    public Rv_ViewHolder(View itemView) {
+        super(itemView);
+        txt= itemView.findViewById(R.id.text_item);
+
+
+    }
+}
+
