@@ -16,55 +16,87 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class Requests_To_Book_Ta_Fragment extends Fragment {
 
     View view;
     TextView statusText;
+    TextView TaNameText;
+    String TAG = "Requests_To_Book_Ta_Fragment";
+    String TaName;
+    String Status;
+    CollectionReference cr = FirebaseFirestore.getInstance().collection("BookMyTa/BookMyTaDocument/Requests");
 
     public Requests_To_Book_Ta_Fragment() {
     }
 
-    String TAG = "Requests_To_Book_Ta_Fragment";
-    String StudentName = "";
-    String Status;
-
     public void DisplayRequest() {
-        CollectionReference cr = FirebaseFirestore.getInstance().collection("BookMyTa");
-        Query NameQuery = cr.whereEqualTo("StudentName", "Talha");
-        cr.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+        Query myQuery = cr.whereEqualTo("TaName", "Hassan");
+        myQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            Map<String, Object> map = new HashMap<>();
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (DocumentSnapshot document : task.getResult()) {
-                        Status = document.get("StudentName").toString();
+            public void onEvent(QuerySnapshot value, FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+                for (DocumentSnapshot document : value) {
+                    if (document.getData() != null) {
+                        map = document.getData();
+                        Status = map.get("Status").toString();
+                        TaName = map.get("TaName").toString();
+                        statusText.setText(Status);
+                        TaNameText.setText(TaName);
 
                     }
                 }
 
 
+
+
+
+
             }
-        });
+        }) ;
+
 
     }
-        @Nullable
-        @Override
-        public View onCreateView (LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState){
 
-            view = inflater.inflate(R.layout.requests_to_book_ta, container, false);
-           statusText=view.findViewById(R.id.booked_ta_request);
+
+
+
+
+
+
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+
+        view = inflater.inflate(R.layout.requests_to_book_ta, container, false);
+        statusText = view.findViewById(R.id.Request_Status);
+        TaNameText = view.findViewById(R.id.Ta_Name);
 
         DisplayRequest();
-            //statusText.setText(Status);
-          Log.i(TAG,Status);
-            return view;
 
-        }
+
+        return view;
+
     }
+}
 
 
 
