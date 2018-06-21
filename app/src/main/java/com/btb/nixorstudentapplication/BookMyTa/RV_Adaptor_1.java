@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.btb.nixorstudentapplication.Past_papers.RvAdaptor;
@@ -30,10 +31,10 @@ public class RV_Adaptor_1 extends RecyclerView.Adapter<RvAdaptor.Rv_ViewHolder> 
     }
 }
 class Rv_ViewHolder extends RecyclerView.ViewHolder{
-    TextView txt;
+  EditText txt;
     public Rv_ViewHolder(View itemView) {
         super(itemView);
-        txt= itemView.findViewById(R.id.text_item);
+        txt= itemView.findViewById(R.id.Student_Name);
 
 
     }
