@@ -1,9 +1,13 @@
 package com.btb.nixorstudentapplication.BookMyTa;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.btb.nixorstudentapplication.Past_papers.Load_papers;
+import com.btb.nixorstudentapplication.Past_papers.RvAdaptor;
 import com.btb.nixorstudentapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -35,71 +41,65 @@ public class Student_Requests_For_Ta_Fragment extends Fragment  {
     Button AcceptRequest;
     Button RejectRequest;
     Boolean datarecieved = false;
+    Activity a;
 CollectionReference cr = FirebaseFirestore.getInstance().collection("BookMyTa/BookMyTaDocument/Requests");
 
     public Student_Requests_For_Ta_Fragment() {
     }
 
-    public void GetRequest() {
-
+    public List<String> GetRequest() {
+        final List<String> requests = new ArrayList<>();
         cr.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot value, FirebaseFirestoreException e) {
-                List<String> requests = new ArrayList<>();
+
                 int x = 0;
                 for (DocumentSnapshot doc : value) {
                     if (doc.get("StudentName") != null) {
                         requests.add(doc.get("StudentName").toString());
-                        Student_Name.setText(requests.get(x));
+                       // Student_Name.setText(requests.get(x));
                         Log.i(TAG, requests.get(x) + " Booked you");
                         x = x + 1;
                     }
-                }
+                    }
 
             }
 
         });
+return requests;
     }
 
-/*onlick not working even after implementing View.onClickListener
-    @Override
-    public void onClick(View v) {
-        if (datarecieved) {
-            if (v == AcceptRequest) {
-UpdateRequest("Accepted");
-            Log.i(TAG,"ACCEPT");
-            }
-            if (v == RejectRequest) {
-                UpdateRequest("Rejected");
-            }
 
-            Log.i(TAG,v.toString());
+
+    /*onlick not working even after implementing View.onClickListener
+        @Override
+        public void onClick(View v) {
+            if (datarecieved) {
+                if (v == AcceptRequest) {
+    UpdateRequest("Accepted");
+                Log.i(TAG,"ACCEPT");
+                }
+                if (v == RejectRequest) {
+                    UpdateRequest("Rejected");
+                }
+
+                Log.i(TAG,v.toString());
+            }
         }
-    }
-*/
+    */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.student_requests_for_ta, container, false);
-        Student_Name = view.findViewById(R.id.Student_Name);
-        AcceptRequest = view.findViewById(R.id.Accept_Request);
-        AcceptRequest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG,"ACCEPT");
-                UpdateRequest("Accepted");
-            }
-        });
-        RejectRequest = view.findViewById(R.id.Reject_Request);
-RejectRequest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG,"REJECT");
-                UpdateRequest("Rejected");
-            }
-        });
-      GetRequest();
+        RecyclerView rv = (RecyclerView) view.findViewById(R.id.student_requests_for_ta_rv);
+        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        RV_Adaptor_1 rvAdaptor = new RV_Adaptor_1(GetRequest());
+        rv.setAdapter(rvAdaptor);
+
+
+
+
 
         return view;
     }
@@ -132,4 +132,10 @@ String id=document.getId();
     });
 
 }
+
+
+
+
+
+
 }
