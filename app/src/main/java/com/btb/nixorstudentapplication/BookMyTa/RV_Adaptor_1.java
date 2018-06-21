@@ -23,10 +23,10 @@ public class RV_Adaptor_1 extends RecyclerView.Adapter<RV_Adaptor_1.Rv_ViewHolde
 
     @NonNull
     @Override
-    public RV_Adaptor_1.Rv_ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public Rv_ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.student_request_for_ta_layout, parent, false);
-        return new RV_Adaptor_1.Rv_ViewHolder(view);
+        return new Rv_ViewHolder(view);
     }
 
     @Override
