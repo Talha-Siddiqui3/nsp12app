@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/Home"
+        android:enabled="true"
+        android:icon="@drawable/home"
+        android:title="@string/Home"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/Carpool"
+        android:enabled="true"
+        android:icon="@drawable/carpool"
+        android:title="@string/Carpool"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/Soc"
+        android:enabled="true"
+        android:icon="@drawable/soc"
+        android:title="@string/Soc"
+        app:showAsAction="ifRoom" />
+</menu>

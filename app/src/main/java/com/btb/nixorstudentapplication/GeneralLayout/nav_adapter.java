@@ -28,16 +28,16 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.util.ArrayList;
 
-public class nav_menuAdapter extends RecyclerView.Adapter<nav_menuAdapter.Rv_ViewHolder> {
-    common_util common_util = new common_util();
+public class nav_adapter extends RecyclerView.Adapter<nav_adapter.Rv_ViewHolder> {
+
+    private ArrayList<String> allitems;
+
+
     Context activity;
+    public nav_adapter(ArrayList pastpapers, Context context){
+        allitems=pastpapers;
+        activity= context;
 
-    ArrayList<String> allitems;
-
-    public nav_menuAdapter(ArrayList<String> items, Context context){
-
-        activity=context;
-        allitems =items;
     }
 
 
@@ -53,17 +53,21 @@ public class nav_menuAdapter extends RecyclerView.Adapter<nav_menuAdapter.Rv_Vie
 
     @Override
     public void onBindViewHolder(@NonNull Rv_ViewHolder holder, final int position) {
+
         Log.i("yo","Got here");
         switch (allitems.get(position)){
-            case "Home":holder.item_icon.setImageResource(R.drawable.home); holder.item_name.setText(activity.getString(R.string.Home));Log.i("yo","Home");break;
-            case "Pastpapers":holder.item_icon.setImageResource(R.drawable.pastpapers); holder.item_name.setText(activity.getString(R.string.Pastpapers));break;
-            case "Carpool":holder.item_icon.setImageResource(R.drawable.carpool); holder.item_name.setText(activity.getString(R.string.Carpool));break;
-            case "Portal":holder.item_icon.setImageResource(R.drawable.portal); holder.item_name.setText(activity.getString(R.string.Portal));break;
-            case "Soc":holder.item_icon.setImageResource(R.drawable.soc); holder.item_name.setText(activity.getString(R.string.Soc));break;
-            case "Bookmyta":holder.item_icon.setImageResource(R.drawable.bookmyta); holder.item_name.setText(activity.getString(R.string.Bookmyta));break;
+            case "Home":holder.item_icon.setImageResource(R.drawable.home);break;
+            case "Pastpapers":holder.item_icon.setImageResource(R.drawable.pastpapers);break;
+            case "Carpool":holder.item_icon.setImageResource(R.drawable.carpool);break;
+            case "Portal":holder.item_icon.setImageResource(R.drawable.portal);break;
+            case "Soc":holder.item_icon.setImageResource(R.drawable.soc); break;
+            case "Bookmyta":holder.item_icon.setImageResource(R.drawable.bookmyta);break;
 
 
         }
+
+
+
 
     }
 
@@ -73,8 +77,9 @@ public class nav_menuAdapter extends RecyclerView.Adapter<nav_menuAdapter.Rv_Vie
     }
 
     class Rv_ViewHolder extends RecyclerView.ViewHolder{
+
         ImageView item_icon;
-        TextView item_name;
+
 
 
 
@@ -83,10 +88,13 @@ public class nav_menuAdapter extends RecyclerView.Adapter<nav_menuAdapter.Rv_Vie
         public Rv_ViewHolder(View itemView) {
             super(itemView);
 
-        item_icon = itemView.findViewById(R.id.item_icon);
-        item_name = itemView.findViewById(R.id.item_name);
+            item_icon = itemView.findViewById(R.id.item_icon);
+
+
         }
     }
+
+
 
 
 
