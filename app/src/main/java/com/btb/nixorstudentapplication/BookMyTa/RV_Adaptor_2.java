@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class RV_Adaptor_2 extends RecyclerView.Adapter<RV_Adaptor_2.Rv_ViewHolder>{
-    TextView TaNamesText;
-    TextView StatusText;
+
     List<Map<String,Object>> mymaps=new ArrayList<>();
 
 
@@ -37,8 +36,8 @@ public class RV_Adaptor_2 extends RecyclerView.Adapter<RV_Adaptor_2.Rv_ViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull RV_Adaptor_2.Rv_ViewHolder holder, int position) {
-StatusText.setText(mymaps.get(position).get("Status").toString());
-      TaNamesText.setText(mymaps.get(position).get("TaName").toString());
+holder.StatusText.setText(mymaps.get(position).get("Status").toString());
+      holder.TaNamesText.setText(mymaps.get(position).get("TaName").toString());
       Log.i(TAG,mymaps.get(position).get("TaName").toString());
         Log.i(TAG,mymaps.get(position).get("Status").toString());
         Log.i(TAG,Integer.toString(position));
@@ -52,7 +51,8 @@ StatusText.setText(mymaps.get(position).get("Status").toString());
     }
 
     class Rv_ViewHolder extends RecyclerView.ViewHolder {
-
+        TextView TaNamesText;
+        TextView StatusText;
 
         public Rv_ViewHolder(View itemView) {
             super(itemView);
