@@ -73,10 +73,12 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
                             case REMOVED:
                                 break;
                             case MODIFIED:
-                                maps.set(Integer.parseInt(dc.getDocument().getString("StatusId")), dc.getDocument().getData());
-                              UpdateStatus(Integer.parseInt(dc.getDocument().getString("StatusId")));
-                              Log.i(TAG,dc.getDocument().getString("StatusId"));
-                                AddData();
+                               // maps.set(Integer.parseInt(dc.getDocument().getString("StatusId")), dc.getDocument().getData());
+                              //UpdateStatus(Integer.parseInt(dc.getDocument().getString("StatusId")));
+                            //  Log.i(TAG,dc.getDocument().getString("StatusId"));
+
+                               maps.set(dc.getOldIndex(),dc.getDocument().getData());
+                               UpdateStatus(dc.getOldIndex());
                               break;
 
 
