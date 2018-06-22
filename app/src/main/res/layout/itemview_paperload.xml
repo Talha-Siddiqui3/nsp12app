@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/paperlayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="@color/winter_color"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:id="@+id/ratingbox"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/rating_textview"
+            style="@style/sub_headings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/rating_textview"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp" />
+
+        <ImageView
+            android:id="@+id/decor_paper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/snow_flake" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="100dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/linear_qp_year"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp">
+
+            <TextView
+                android:id="@+id/type_textView"
+                style="@style/sub_headings"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:paddingLeft="2dp"
+                android:paddingTop="2dp"
+                android:text="Question Paper"
+                android:textAlignment="viewStart"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/year_textView"
+                style="@style/sub_headings"
+                android:layout_width="50dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:paddingLeft="2dp"
+                android:paddingTop="2dp"
+                android:text="2017"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_var_month"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp">
+
+            <TextView
+                android:id="@+id/month_textView"
+                style="@style/sub_headings"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:paddingLeft="2dp"
+                android:paddingTop="2dp"
+                android:text="Summer"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/variant_textView"
+                style="@style/sub_headings"
+                android:layout_width="50dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:paddingLeft="2dp"
+                android:paddingTop="2dp"
+                android:text="Var 3"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/multiwindow_button"
+                style="@style/multiWindow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:text="MultiWindow"
+                android:textColor="#000" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

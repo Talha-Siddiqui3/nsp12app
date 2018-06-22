@@ -186,7 +186,7 @@ ArrayList<DocumentSnapshot> errordocs = new ArrayList();
     ArrayList<String> types = new ArrayList<>();
     ArrayList<String> variants = new ArrayList<>();
     ArrayList<String> months = new ArrayList<>();
-    public void repair() {
+    public void repair(final String changeValue, final String oldvalue, final String newValue) {
         final CollectionReference cr = FirebaseFirestore.getInstance().collection("Past Papers/Subjects/Chem");
         cr.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -197,9 +197,9 @@ ArrayList<DocumentSnapshot> errordocs = new ArrayList();
                         map = document.getData();
 
                         if (map.get("name") != null) {
-                            if(map.get("variant")!=null){
-                            if(map.get("variant").equals("32-1")) {
-                               map.put("variant","32");
+                            if(map.get(changeValue)!=null){
+                            if(map.get(changeValue).equals(oldvalue)) {
+                               map.put(changeValue,newValue);
                              uploadData(map,document.getId());
                              Log.i(TAG,map.get("name").toString());
                             }

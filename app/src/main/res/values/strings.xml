@@ -69,8 +69,10 @@
     <string name="byType">Type:</string>
     <string name="apply_button">Apply</string>
     <string name="filter_heading">Filter By:</string>
+    <string name="notrated_textView">Not rated</string>
     //Java
     <string name="pastpaper_loadingtext">Loading paper please wait</string>
+    <string name="ratingSuccessMessage">Rating given. Thank you</string>
     <string-array name="listofmonths">
     <item>All</item>
     <item>May/June</item>
@@ -107,6 +109,26 @@
         <item>Grade Threshold</item>
         <item>Specimen Paper</item>
     </string-array>
+
+
+
+    //PdfLoad
+    //XML
+    <string name="done_button">Done</string>
+    <string name="ratingTitle">Thank you</string>
+    <string name="ratingMessage">Rate paper difficulty</string>
+    <string name="search_hint">Subject name</string>
+    <string name="rating_textview">Paper difficulty</string>
+
+
+    //GeneralLayout
+    //Java
+    <string name="Bookmyta">BookMyTa</string>
+    <string name="Home">Home</string>
+    <string name="Pastpapers">Past papers</string>
+    <string name="Soc">Sharks on Cloud</string>
+    <string name="Portal">Portal</string>
+    <string name="Carpool">Nixor Carpool</string>
 
 
 </resources>

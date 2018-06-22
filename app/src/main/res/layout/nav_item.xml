@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/item_icon"
+        android:layout_width="@dimen/menuitem_width"
+        android:layout_height="@dimen/menuitem_width"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        app:srcCompat="@drawable/home" />
+
+    <TextView
+        android:id="@+id/item_name"
+        style="@style/headings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/item_icon"
+        android:layout_centerHorizontal="true"
+        android:text="BookMyTa"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+</RelativeLayout>

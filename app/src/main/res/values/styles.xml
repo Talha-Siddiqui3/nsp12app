@@ -34,7 +34,12 @@
     <item name="android:textSize">15sp</item>
     <item name="android:textColor">@color/button_textColor</item>
 </style>
-
+    <style name="multiWindow">
+        <item name="android:background">@color/main_blue</item>
+        <item name="android:fontFamily">@font/assistant</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/button_textColor</item>
+    </style>
     //Customize Pastpaper filter dialogue
     <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog">
     <item name="android:background">#fff</item>

@@ -104,7 +104,7 @@ public class pastpapers_filter extends Activity implements View.OnClickListener 
                    load_papers.variantSelection = "All";
 
                }else{
-                   variantspinner.setEnabled(false);
+                   variantspinner.setEnabled(true);
                 load_papers.typeSelection = type[position];
                 Log.i(TAG, load_papers.typeSelection);
             }}

@@ -1,11 +1,8 @@
 package com.btb.nixorstudentapplication.Past_papers;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -13,7 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 
 
 import com.btb.nixorstudentapplication.Misc.permission_util;
@@ -30,16 +27,15 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
 
-public class Load_papers extends AppCompatActivity implements View.OnClickListener {
+public class Load_papers extends Activity implements View.OnClickListener {
     public static Context context;
-    Button byYear;
-    Button byVariant;
+    ImageView FilterButton;
     String TAG = "Load_papers";
     public static ArrayList<paperObject> initialobjectList;
     public static String[] listOfvariants;
     public static queryVariable queryVariable = new queryVariable();
 
-  public static String yearSelection = "All";
+    public static String yearSelection = "All";
     public static  String monthSelection = "All";
     public static  String typeSelection = "All";
     public static  String variantSelection = "All";
@@ -48,12 +44,10 @@ public class Load_papers extends AppCompatActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_past_papers);
-        byVariant = findViewById(R.id.byVariant);
-        byYear = findViewById(R.id.byYear);
-        byVariant.setVisibility(View.INVISIBLE);
-        byVariant.setEnabled(false);
-        byVariant.setOnClickListener(this);
-        byYear.setOnClickListener(this);
+
+        FilterButton = findViewById(R.id.filterButton);
+
+        FilterButton.setOnClickListener(this);
 
 
         GetExternalStoragePermission();
@@ -85,6 +79,12 @@ public class Load_papers extends AppCompatActivity implements View.OnClickListen
         }
         return true;
     }
+
+    public void loadPapersList(){
+
+
+    }
+
 
     public void GetDataFireBase(final Boolean intial) {
         Actualname = new ArrayList<>();
@@ -129,8 +129,7 @@ public class Load_papers extends AppCompatActivity implements View.OnClickListen
                     Log.i(TAG, "Error getting documents: ", task.getException());
                 }
                 initialobjectList = FbQueryData;
-                byVariant.setEnabled(true);
-                byVariant.setVisibility(View.VISIBLE);
+
                 loadpapers(FbQueryData, Actualname);
                 if(intial){ getVariants(FbQueryData);}
                 queryVariable.setBoo(cr);
@@ -171,8 +170,8 @@ public class Load_papers extends AppCompatActivity implements View.OnClickListen
     private void loadpapers(ArrayList<paperObject> mydata, ArrayList<String> Actualnames) {
         RecyclerView rv = findViewById(R.id.rv_list);
         rv.setLayoutManager(new LinearLayoutManager(this));
-        RvAdaptor rvAdaptor = new RvAdaptor(mydata, Load_papers.this, Actualnames);
-        rv.setAdapter(rvAdaptor);
+        Pastpaper_adapter pastpaperadapter = new Pastpaper_adapter(mydata, Load_papers.this, Actualnames);
+        rv.setAdapter(pastpaperadapter);
     }
 
     public void getVariants(ArrayList<paperObject> paperObject) {
@@ -219,11 +218,9 @@ public class Load_papers extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.byVariant:
+            case R.id.filterButton:
                 startActivity(new Intent(Load_papers.this, pastpapers_filter.class));
                 break;
-            case R.id.byYear:
-                Upload_papers upload_papers = new Upload_papers(); upload_papers.repair();break;
         }
 
     }

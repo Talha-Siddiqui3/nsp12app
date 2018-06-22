@@ -8,4 +8,10 @@
     <color name="button_textColor">#fff</color>
 
     <color name="van_footercolor">#f1f1f1</color>
+
+
+
+    <color name="winter_color">#d9f4ff</color>
+    <color name="summer_color">#de5a26</color>
+    <color name="spring_color">#608651</color>
 </resources>

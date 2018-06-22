@@ -218,5 +218,21 @@ public class common_util {
         student.setStudent_profileUrl(map.get("student_profileUrl").toString());
 return student;
     }
-    public void uselessMethod(){}
-}
+    public AlertDialog showAlertDialogue(Activity activity, String title, String message){
+
+        Context context = activity;
+
+        AlertDialog builder;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert).create();
+        } else {
+            builder = new AlertDialog.Builder(context).create();
+        }
+
+        builder.setTitle(title);
+        builder.setMessage(message);
+
+       return builder;
+
+}}
