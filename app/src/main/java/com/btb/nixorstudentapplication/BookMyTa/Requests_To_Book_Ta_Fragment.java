@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import com.btb.nixorstudentapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,6 +25,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,54 +37,64 @@ import java.util.Map;
 public class Requests_To_Book_Ta_Fragment extends Fragment {
 
     View view;
-    TextView statusText;
-    TextView TaNameText;
+
     String TAG = "Requests_To_Book_Ta_Fragment";
-    String TaName;
-    String Status;
+    List<Map<String, Object>> maps = new ArrayList<>();
     CollectionReference cr = FirebaseFirestore.getInstance().collection("BookMyTa/BookMyTaDocument/Requests");
+    boolean initial = true;
+    RV_Adaptor_2 rvAdaptor = new RV_Adaptor_2(DisplayRequest());
+
 
     public Requests_To_Book_Ta_Fragment() {
     }
 
-    public void DisplayRequest() {
+    public List<Map<String, Object>> DisplayRequest() {
 
-        Query myQuery = cr.whereEqualTo("TaName", "Hassan");
-        myQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            Map<String, Object> map = new HashMap<>();
+
+        cr.addSnapshotListener(new EventListener<QuerySnapshot>() {
+
             @Override
-            public void onEvent(QuerySnapshot value, FirebaseFirestoreException e) {
+            public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException e) {
+
+                int x = 0;
                 if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
+                    Log.i(TAG, "Listen failed.", e);
                     return;
                 }
-                for (DocumentSnapshot document : value) {
-                    if (document.getData() != null) {
-                        map = document.getData();
-                        Status = map.get("Status").toString();
-                        TaName = map.get("TaName").toString();
-                        statusText.setText(Status);
-                        TaNameText.setText(TaName);
+                for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                    if (initial) {
+                        maps.add(dc.getDocument().getData());
+                    } else {
+                        switch (dc.getType()) {
+                            case ADDED:
+                                maps.add(dc.getDocument().getData());
+                                AddData();
+                                break;
+                            case REMOVED:
+                                break;
+                            case MODIFIED:
+                                maps.set(Integer.parseInt(dc.getDocument().getString("StatusId")), dc.getDocument().getData());
+                              UpdateStatus(Integer.parseInt(dc.getDocument().getString("StatusId")));
+                              Log.i(TAG,dc.getDocument().getString("StatusId"));
+                                AddData();
+                              break;
 
+
+                        }
                     }
+
                 }
-
-
-
-
+                initial = false;
 
 
             }
-        }) ;
 
+        });
+
+
+        return maps;
 
     }
-
-
-
-
-
-
 
 
     @Nullable
@@ -87,15 +102,26 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.requests_to_book_ta, container, false);
-        statusText = view.findViewById(R.id.Request_Status);
-        TaNameText = view.findViewById(R.id.Ta_Name);
+        RecyclerView rv = (RecyclerView) view.findViewById(R.id.request_to_book_ta_rv);
 
-        DisplayRequest();
+        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rv.setAdapter(rvAdaptor);
 
 
         return view;
 
     }
+
+    public void UpdateStatus(int pos) {
+        rvAdaptor.notifyItemChanged(pos);
+
+    }
+
+    public void AddData() {
+        rvAdaptor.notifyDataSetChanged();
+    }
+
+
 }
 
 
