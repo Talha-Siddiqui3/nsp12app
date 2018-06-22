@@ -39,23 +39,24 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
     View view;
 
     String TAG = "Requests_To_Book_Ta_Fragment";
-    List<Map<String, Object>> maps = new ArrayList<>();
+
     CollectionReference cr = FirebaseFirestore.getInstance().collection("BookMyTa/BookMyTaDocument/Requests");
     boolean initial = true;
     RV_Adaptor_2 rvAdaptor = new RV_Adaptor_2(DisplayRequest());
+    boolean initialAddition;
 
 
     public Requests_To_Book_Ta_Fragment() {
     }
 
-    public List<Map<String, Object>> DisplayRequest() {
-
+    List<Map<String, Object>> DisplayRequest() {
+        final List<Map<String, Object>> maps = new ArrayList<>();
 
         cr.addSnapshotListener(new EventListener<QuerySnapshot>() {
 
             @Override
             public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException e) {
-
+               initialAddition=true;
                 int x = 0;
                 if (e != null) {
                     Log.i(TAG, "Listen failed.", e);
@@ -67,19 +68,19 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
                     } else {
                         switch (dc.getType()) {
                             case ADDED:
+                                if(initialAddition) {
+                                    maps.clear();
+                                    initialAddition=false;
+                                }
                                 maps.add(dc.getDocument().getData());
                                 AddData();
                                 break;
                             case REMOVED:
                                 break;
                             case MODIFIED:
-                               // maps.set(Integer.parseInt(dc.getDocument().getString("StatusId")), dc.getDocument().getData());
-                              //UpdateStatus(Integer.parseInt(dc.getDocument().getString("StatusId")));
-                            //  Log.i(TAG,dc.getDocument().getString("StatusId"));
-
-                               maps.set(dc.getOldIndex(),dc.getDocument().getData());
-                               UpdateStatus(dc.getOldIndex());
-                              break;
+                                maps.set(dc.getOldIndex(), dc.getDocument().getData());
+                                UpdateStatus(dc.getOldIndex());
+                                break;
 
 
                         }

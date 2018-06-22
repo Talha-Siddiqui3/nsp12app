@@ -42,7 +42,7 @@ public class Student_Requests_For_Ta_Fragment extends Fragment {
     List<String> DocIds = new ArrayList<>();
     RV_Adaptor_1 rvAdaptor = new RV_Adaptor_1(GetRequest(), DocIds);
     int i = 0;
-
+boolean initialAddition;
     public Student_Requests_For_Ta_Fragment() {
     }
 
@@ -51,11 +51,15 @@ public class Student_Requests_For_Ta_Fragment extends Fragment {
         cr.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException e) {
-
+initialAddition=true;
                 for (DocumentChange dc : snapshots.getDocumentChanges()) {
 
                     switch (dc.getType()) {
                         case ADDED:
+                            if(initialAddition) {
+                                requests.clear();
+                            initialAddition=false;
+                            }
                             requests.add(dc.getDocument().get("StudentName").toString());
                             AddData();
                             DocIds.add(i, dc.getDocument().getId());
