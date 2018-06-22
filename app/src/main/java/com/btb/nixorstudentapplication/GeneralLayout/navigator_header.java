@@ -1,5 +1,6 @@
 package com.btb.nixorstudentapplication.GeneralLayout;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
@@ -9,6 +10,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.btb.nixorstudentapplication.Application_Home.home_screen;
+import com.btb.nixorstudentapplication.Past_papers.Load_papers;
 import com.btb.nixorstudentapplication.R;
 
 import java.util.ArrayList;
@@ -31,14 +34,24 @@ public class navigator_header extends RelativeLayout {
     private void init(Context context) {
         rootView = inflate(context, R.layout.menu_scroll, this);
         recyclerView =  rootView.findViewById(R.id.list_recycler);
-        allitems.add("Home");
         allitems.add("Carpool");
-        allitems.add("Soc");
         allitems.add("Portal");
+        allitems.add("Home");
+        allitems.add("Soc");
         allitems.add("Bookmyta");
         allitems.add("Pastpapers");
+
+      if(context instanceof Load_papers){
+          allitems.remove("Pastpapers");
+      }
+
+        if(context instanceof home_screen){
+            allitems.remove("Home");
+        }
+
+
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(horizontalLayoutManager);
+     recyclerView.setLayoutManager(horizontalLayoutManager);
         nav_adapter adapter= new nav_adapter(allitems,context);
         SnapHelper helper = new LinearSnapHelper();
         helper.attachToRecyclerView(recyclerView);

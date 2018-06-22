@@ -13,6 +13,7 @@
     <dimen name="van_footerHeight">60dp</dimen>
 
     <dimen name="menuitem_width">60dp</dimen>
+    <dimen name="navmenu_height">75dp</dimen>
 
 
 </resources>

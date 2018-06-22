@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 
+import com.btb.nixorstudentapplication.GeneralLayout.activity_header;
+import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.Misc.permission_util;
 import com.btb.nixorstudentapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,11 +42,13 @@ public class Load_papers extends Activity implements View.OnClickListener {
     public static  String typeSelection = "All";
     public static  String variantSelection = "All";
 
+    activity_header activity_header;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_past_papers);
-
+        activity_header =findViewById(R.id.toolbar_top);
         FilterButton = findViewById(R.id.filterButton);
 
         FilterButton.setOnClickListener(this);
@@ -52,8 +56,14 @@ public class Load_papers extends Activity implements View.OnClickListener {
 
         GetExternalStoragePermission();
         GetDataFireBase(true);
+        initialize();
     }
+ public void initialize(){
+     common_util cm = new common_util();
+        activity_header.setActivityname("Pastpapers");
 
+
+ }
     private void GetExternalStoragePermission() {
         permission_util permission_util = new permission_util();
         String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};

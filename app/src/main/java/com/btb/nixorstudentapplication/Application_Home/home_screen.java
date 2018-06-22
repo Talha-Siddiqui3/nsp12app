@@ -38,7 +38,7 @@ public class home_screen extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_home_screen);
 
         //XML
-        photoStudent_circleView = findViewById(R.id.photoStudent_circleView);
+        photoStudent_circleView = findViewById(R.id.student_photo);
         idStudent_textView = findViewById(R.id.idStudent_textView);
         nameStudent_textView = findViewById(R.id.nameStudent_textView);
         pastPapersIntent = findViewById(R.id.pastPapersIntent);

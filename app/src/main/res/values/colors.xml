@@ -14,4 +14,7 @@
     <color name="winter_color">#d9f4ff</color>
     <color name="summer_color">#de5a26</color>
     <color name="spring_color">#608651</color>
+
+
+    <color name="header_white">#00ffffff</color>
 </resources>

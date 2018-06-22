@@ -16,7 +16,7 @@
         android:src="@drawable/nav_header" />
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/photoStudent_circleView"
+        android:id="@+id/student_photo"
         style="main_studentphoto"
         android:layout_width="@dimen/main_studentphoto"
         android:layout_height="@dimen/main_studentphoto"
@@ -30,7 +30,7 @@
         style="@style/sub_headings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/photoStudent_circleView"
+        android:layout_below="@+id/student_photo"
         android:layout_centerHorizontal="true"
         android:text="Student Name"
         android:textColor="#fff" />
