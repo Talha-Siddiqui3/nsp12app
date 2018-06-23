@@ -1,16 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/Monday_Title"
+        android:layout_width="78dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="431dp"
+        android:layout_marginEnd="310dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="200dp"
+        android:text="Monday:"
+        android:textAlignment="textStart"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Tuesday_Title"
+        android:layout_width="78dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="310dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Tuesday:"
+        android:textAlignment="textStart"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Monday_Title" />
+
+    <TextView
+        android:id="@+id/Wednesday_Title"
+        android:layout_width="78dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="310dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Wednesday:"
+        android:textAlignment="textStart"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Tuesday_Title" />
+
+    <TextView
+        android:id="@+id/Thursday_Title"
+        android:layout_width="78dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="310dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Thursday:"
+        android:textAlignment="textStart"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Wednesday_Title" />
+
+    <TextView
+        android:id="@+id/Friday_Title"
+        android:layout_width="78dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="310dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Friday:"
+        android:textAlignment="textStart"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Thursday_Title" />
+
+    <TextView
+        android:id="@+id/Monday_Time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="YOUR DIALOGUE"
-        android:textSize="18sp"
-        tools:layout_editor_absoluteX="132dp"
-        tools:layout_editor_absoluteY="243dp" />
+        android:layout_marginBottom="431dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginStart="214dp"
+        android:layout_marginTop="200dp"
+        android:text="@string/Default_Time_Ta"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Monday_Title"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Tuesday_Time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:layout_marginStart="214dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/Default_Time_Ta"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Tuesday_Title"
+        app:layout_constraintTop_toBottomOf="@+id/Monday_Time" />
+
+    <TextView
+        android:id="@+id/Wednesday_Time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:layout_marginStart="214dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/Default_Time_Ta"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Wednesday_Title"
+        app:layout_constraintTop_toBottomOf="@+id/Tuesday_Time" />
+
+    <TextView
+        android:id="@+id/Thursday_Time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:layout_marginStart="214dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/Default_Time_Ta"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Thursday_Title"
+        app:layout_constraintTop_toBottomOf="@+id/Wednesday_Time" />
+
+    <TextView
+        android:id="@+id/Friday_Time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:layout_marginStart="214dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/Default_Time_Ta"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Friday_Title"
+        app:layout_constraintTop_toBottomOf="@+id/Thursday_Time" />
+
+    <Button
+        android:id="@+id/Submit_Button_Ta_Dialogue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="51dp"
+        android:layout_marginEnd="148dp"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="412dp"
+        android:text="@string/submit_Button_textView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/TA_NAME_DIALOGUE_TITLE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="69dp"
+        android:layout_marginEnd="302dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="39dp"
+        android:text="Ta Name:"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/Monday_Title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/TA_NAME_DIALOGUE"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="69dp"
+        android:layout_marginEnd="55dp"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="39dp"
+        android:text="Muhammad Talha Siddiqui"
+        android:textAlignment="textEnd"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/Monday_Time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/TA_NAME_DIALOGUE_TITLE"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </android.support.constraint.ConstraintLayout>
+
+
+
+
+
+
+

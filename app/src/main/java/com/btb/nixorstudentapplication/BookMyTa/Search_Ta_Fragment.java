@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.Past_papers.paperObject;
 import com.btb.nixorstudentapplication.R;
 import com.google.firebase.firestore.CollectionReference;
@@ -27,7 +28,7 @@ import java.util.Map;
 public class Search_Ta_Fragment extends Fragment {
     View view;
     static CollectionReference cr = FirebaseFirestore.getInstance().collection("BookMyTa/BookMyTaDocument/TA Details");
-    RV_Adaptor_3_For_Search_Ta rvAdaptor = new RV_Adaptor_3_For_Search_Ta(DisplayTa(),getActivity());
+    RV_Adaptor_3_For_Search_Ta rvAdaptor = new RV_Adaptor_3_For_Search_Ta(DisplayTa());
     boolean initial = true;
     Map<String, Object> map = new HashMap();
     String TAG = "Search_Ta_Fragment";
@@ -54,10 +55,10 @@ public class Search_Ta_Fragment extends Fragment {
                  else {
                         switch (dc.getType()) {
                             case ADDED:
-                                if (initialAddition) {
-                                    map.clear();
-                                    initialAddition = false;
-                                }
+                               // if (initialAddition) {
+                                //    map.clear();
+                                 //   initialAddition = false;
+                               // }
                                 map = dc.getDocument().getData();
                                 addDataToObject(ta_object, map.get("Name"), map.get("Days"), map.get("TaID"), map.get("Timings"), map.get("Subject"));
                                 AddDataToAdaptor();
@@ -73,9 +74,10 @@ public class Search_Ta_Fragment extends Fragment {
 
                     }
                 }
+                initial = false;
             }
         });
-        initial = false;
+
         return ta_objects;
     }
 

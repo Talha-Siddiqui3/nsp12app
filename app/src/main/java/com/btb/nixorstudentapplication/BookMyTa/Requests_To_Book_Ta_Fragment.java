@@ -52,12 +52,12 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
     List<Map<String, Object>> DisplayRequest() {
         final List<Map<String, Object>> maps = new ArrayList<>();
 
-        cr.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        cr.orderBy("latestUpdateTimestamp").addSnapshotListener(new EventListener<QuerySnapshot>() {
 
             @Override
             public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException e) {
                initialAddition=true;
-                int x = 0;
+
                 if (e != null) {
                     Log.i(TAG, "Listen failed.", e);
                     return;
@@ -68,18 +68,19 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
                     } else {
                         switch (dc.getType()) {
                             case ADDED:
-                                if(initialAddition) {
-                                    maps.clear();
-                                    initialAddition=false;
-                                }
+                                //if(initialAddition) {
+                                //    maps.clear();
+                                 //   initialAddition=false;
+                               // }
                                 maps.add(dc.getDocument().getData());
                                 AddData();
                                 break;
                             case REMOVED:
                                 break;
                             case MODIFIED:
-                                maps.set(dc.getOldIndex(), dc.getDocument().getData());
-                                UpdateStatus(dc.getOldIndex());
+                                maps.set(dc.getNewIndex(), dc.getDocument().getData());
+                                UpdateStatus(dc.getNewIndex());
+                              //  Log.i(TAG,Integer.valueOf(dc.getDocument().getString("StatusId")).toString());
                                 break;
 
 

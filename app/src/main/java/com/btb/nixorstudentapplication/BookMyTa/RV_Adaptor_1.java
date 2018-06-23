@@ -74,14 +74,14 @@ public class RV_Adaptor_1 extends RecyclerView.Adapter<RV_Adaptor_1.Rv_ViewHolde
                 @Override
                 public void onClick(View v) {
                     Student_Requests_For_Ta_Fragment.UpdateRequest("Accepted", DocIds.get(getAdapterPosition()));
-                    Log.i(TAG, "CHALING 1");
+
                 }
             });
             RejectRequest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Student_Requests_For_Ta_Fragment.UpdateRequest("Rejected", DocIds.get(getAdapterPosition()));
-                    Log.i(TAG, "CHALING 2");
+
 
                 }
             });

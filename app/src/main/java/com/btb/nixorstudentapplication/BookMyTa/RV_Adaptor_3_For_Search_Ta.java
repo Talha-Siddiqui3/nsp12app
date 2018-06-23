@@ -2,6 +2,7 @@ package com.btb.nixorstudentapplication.BookMyTa;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,9 +24,9 @@ Ta_Tab ta_tab=new Ta_Tab();
 
 
     String TAG="RV_Adaptor_3_For_Search_Ta";
-    public RV_Adaptor_3_For_Search_Ta(List<TA_Object> ta_objects, Context context){
+    public RV_Adaptor_3_For_Search_Ta(List<TA_Object> ta_objects){
 this.ta_objects=ta_objects;
-this.context=context;
+
     }
 
     @NonNull
@@ -37,7 +38,7 @@ this.context=context;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RV_Adaptor_3_For_Search_Ta.Rv_ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RV_Adaptor_3_For_Search_Ta.Rv_ViewHolder holder, final int position) {
 Log.i(TAG,ta_objects.get(1).getTaName());
 holder.TaNamesText.setText(ta_objects.get(position).getTaName());
 holder.TeachesText.setText(ta_objects.get(position).getSubject());
@@ -45,6 +46,9 @@ holder.relativeLayoutLayout.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
         Ta_Dialogue ta_dialogue=new Ta_Dialogue(context);
+
+       ta_dialogue.ExtractTime(ta_objects.get(position));
+        ta_dialogue.UpdateLayout();
         ta_dialogue.show();
     }
 });
@@ -65,6 +69,7 @@ return ta_objects.size();
             TaNamesText=itemView.findViewById(R.id.TA_NAME_Search);
             TeachesText=itemView.findViewById(R.id.Teaches_Search);
 relativeLayoutLayout=itemView.findViewById(R.id.search_ta_relative_layout);
+context= itemView.getContext();
         }
     }
 }

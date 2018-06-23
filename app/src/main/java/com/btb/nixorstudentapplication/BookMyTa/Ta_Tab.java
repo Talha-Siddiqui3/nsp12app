@@ -5,7 +5,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.R;
 
 public class Ta_Tab extends AppCompatActivity {
@@ -23,6 +25,7 @@ adaptor.AddFragment(new Search_Ta_Fragment(),"Search Ta");
         adaptor.AddFragment(new Requests_To_Book_Ta_Fragment(),"Your requets for Ta");
         viewPager.setAdapter(adaptor);
         tablayout.setupWithViewPager(viewPager);
+
 
 
 

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -74,6 +75,8 @@ public class home_screen extends Activity implements View.OnClickListener {
     }
 
     public String getUsername() {
+
+
         return common_util.getUserDataLocally(home_screen.this, "username");
     }
 

@@ -69,6 +69,28 @@
     <string name="byType">Type:</string>
     <string name="apply_button">Apply</string>
     <string name="filter_heading">Filter By:</string>
+
+
+
+    //BookMyTa
+//XMl
+    <string name="submit_Button_textView">Book TA</string>
+    <string name="Default_Time_Ta">Unavailable</string>
+    <string name="ta_Name">TA Name</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //Java
     <string name="pastpaper_loadingtext">Loading paper please wait</string>
     <string-array name="listofmonths">
@@ -109,6 +131,17 @@
     </string-array>
     <string name="title_activity_scrolling_ta">ScrollingTa</string>
     <string name="large_text">
+
+
+
+
+
+
+
+
+
+
+
         "Material is the metaphor.\n\n"
 
         "A material metaphor is the unifying theory of a rationalized space and a system of motion."

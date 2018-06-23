@@ -41,42 +41,58 @@ public class Student_Requests_For_Ta_Fragment extends Fragment {
     static CollectionReference cr = FirebaseFirestore.getInstance().collection("BookMyTa/BookMyTaDocument/Requests");
     List<String> DocIds = new ArrayList<>();
     RV_Adaptor_1 rvAdaptor = new RV_Adaptor_1(GetRequest(), DocIds);
-    int i = 0;
+
 boolean initialAddition;
+boolean initial=true;
     public Student_Requests_For_Ta_Fragment() {
     }
 
     public List<String> GetRequest() {
         final List<String> requests = new ArrayList<>();
-        cr.addSnapshotListener(new EventListener<QuerySnapshot>() {
+
+
+
+        cr.orderBy("latestUpdateTimestamp").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException e) {
 initialAddition=true;
+
                 for (DocumentChange dc : snapshots.getDocumentChanges()) {
+Log.i("aaa",Boolean.toString(initial));
+                    if(initial){
+    requests.add(dc.getDocument().get("StudentName").toString());
+    DocIds.add( dc.getDocument().getId());
 
-                    switch (dc.getType()) {
-                        case ADDED:
-                            if(initialAddition) {
-                                requests.clear();
-                            initialAddition=false;
-                            }
-                            requests.add(dc.getDocument().get("StudentName").toString());
-                            AddData();
-                            DocIds.add(i, dc.getDocument().getId());
-                            i = i + 1;
-                            break;
-                        case REMOVED:
-                            break;
-                        case MODIFIED:
-                            break;
+}
+
+else {
+    switch (dc.getType()) {
+        case ADDED:
+           // if (initialAddition) {
+           //     requests.clear();
+           //     initialAddition = false;
+           // }
+            requests.add(dc.getDocument().get("StudentName").toString());
+
+            AddData();
+            DocIds.add(dc.getDocument().getId());
+
+            break;
+        case REMOVED:
+            break;
+        case MODIFIED:
+            break;
 
 
-                    }
-
+    }
+}
 
                 }
+                initial=false;
             }
         });
+
+
         return requests;
     }
 
