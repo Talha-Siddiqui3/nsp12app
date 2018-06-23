@@ -47,9 +47,10 @@ holder.relativeLayoutLayout.setOnClickListener(new View.OnClickListener() {
     public void onClick(View v) {
         Ta_Dialogue ta_dialogue=new Ta_Dialogue(context);
 
-       ta_dialogue.ExtractTime(ta_objects.get(position));
-        ta_dialogue.UpdateLayout();
-        ta_dialogue.show();
+ta_dialogue.ParseData(ta_objects.get(position));
+        ta_dialogue.ExtractTime();
+ta_dialogue.UpdateLayout();
+ta_dialogue.show();
     }
 });
     }

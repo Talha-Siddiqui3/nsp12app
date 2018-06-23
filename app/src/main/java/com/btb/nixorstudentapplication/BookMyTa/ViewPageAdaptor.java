@@ -42,12 +42,4 @@ fragment_list.add(fragment);
 fragment_list_title.add(title);
 }
 
-
-
-
-
-
-
-
-
 }

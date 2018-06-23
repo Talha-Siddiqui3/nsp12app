@@ -59,7 +59,7 @@ public class Ta_Dialogue extends Dialog {
         TaID=findViewById((R.id.TA_ID_DIALOGUE));
         photoStudent_circleView=findViewById(R.id.photoStudent_circleView_FOR_DIALOGUE);
         Glide.with(context).load(cu.getUserDataLocally(context,"nsp_photo")).into(photoStudent_circleView);
-     
+
 
         BookTa = findViewById(R.id.Submit_Button_Ta_Dialogue);
         BookTa.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +74,7 @@ public class Ta_Dialogue extends Dialog {
 
 
     }
-
+//Creating new request to book TA from Dialogue
     private void sendRequest() {
         map.put("Status", "Pending");
         map.put("TaName", ta_object.getTaName());
@@ -91,6 +91,7 @@ public class Ta_Dialogue extends Dialog {
         FridayTIme = findViewById(R.id.Friday_Time);
 
 
+//OLD IMPLEMENTATION
         if (!days[0].equals("Null")) {
             MondayTime.setText(times[0]);
         }
@@ -111,14 +112,39 @@ public class Ta_Dialogue extends Dialog {
 
     }
 
-    public void ExtractTime(TA_Object ta_object) {
+
+//IMLEMENT THIS
+    public void ParseData(TA_Object ta_object){
+this.ta_object=ta_object;
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //OLD IMPLEMENTATION
+    //Make new implementation
+    public void ExtractTime() {
         time = ta_object.getTimings();
         day = ta_object.getDays();
         times = time.split(",");
         days = day.split(",");
         TaName.setText(ta_object.getTaName());
         TaID.setText(ta_object.getTaID());
-        this.ta_object = ta_object;
+
 
     }
+
 }

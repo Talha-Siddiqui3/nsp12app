@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.Past_papers.Load_papers;
 import com.btb.nixorstudentapplication.Past_papers.RvAdaptor;
 import com.btb.nixorstudentapplication.R;
@@ -41,9 +42,9 @@ public class Student_Requests_For_Ta_Fragment extends Fragment {
     static CollectionReference cr = FirebaseFirestore.getInstance().collection("BookMyTa/BookMyTaDocument/Requests");
     List<String> DocIds = new ArrayList<>();
     RV_Adaptor_1 rvAdaptor = new RV_Adaptor_1(GetRequest(), DocIds);
+    common_util cu = new common_util();
+    boolean initial = true;
 
-boolean initialAddition;
-boolean initial=true;
     public Student_Requests_For_Ta_Fragment() {
     }
 
@@ -51,44 +52,43 @@ boolean initial=true;
         final List<String> requests = new ArrayList<>();
 
 
-
         cr.orderBy("latestUpdateTimestamp").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException e) {
-initialAddition=true;
+
 
                 for (DocumentChange dc : snapshots.getDocumentChanges()) {
-Log.i("aaa",Boolean.toString(initial));
-                    if(initial){
-    requests.add(dc.getDocument().get("StudentName").toString());
-    DocIds.add( dc.getDocument().getId());
 
-}
+                    if (initial) {
 
-else {
-    switch (dc.getType()) {
-        case ADDED:
-           // if (initialAddition) {
-           //     requests.clear();
-           //     initialAddition = false;
-           // }
-            requests.add(dc.getDocument().get("StudentName").toString());
+                        if (dc.getDocument().get("TaName").toString().equals(cu.getUserDataLocally(getContext(), "name"))) {
+                            requests.add(dc.getDocument().get("StudentName").toString());
+                            DocIds.add(dc.getDocument().getId());
 
-            AddData();
-            DocIds.add(dc.getDocument().getId());
+                        }
 
-            break;
-        case REMOVED:
-            break;
-        case MODIFIED:
-            break;
+                    } else {
+                        Log.i("ABC", "IF NOT EXECUTED");
+                        switch (dc.getType()) {
+                            case ADDED:
+
+                                if (dc.getDocument().get("TaName").toString().equals(cu.getUserDataLocally(getContext(), "name"))) {
+                                    requests.add(dc.getDocument().get("StudentName").toString());
+                                    AddData();
+                                    DocIds.add(dc.getDocument().getId());
+                                    break;
+                                }
+                            case REMOVED:
+                                break;
+                            case MODIFIED:
+                                break;
 
 
-    }
-}
+                        }
+                    }
 
                 }
-                initial=false;
+                initial = false;
             }
         });
 

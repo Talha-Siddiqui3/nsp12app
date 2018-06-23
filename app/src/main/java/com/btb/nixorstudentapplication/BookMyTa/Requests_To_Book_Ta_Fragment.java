@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -42,9 +43,10 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
 
     CollectionReference cr = FirebaseFirestore.getInstance().collection("BookMyTa/BookMyTaDocument/Requests");
     boolean initial = true;
-    RV_Adaptor_2 rvAdaptor = new RV_Adaptor_2(DisplayRequest());
     boolean initialAddition;
-
+    common_util cu = new common_util();
+    boolean added = false;
+    RV_Adaptor_2 rvAdaptor = new RV_Adaptor_2(DisplayRequest());
 
     public Requests_To_Book_Ta_Fragment() {
     }
@@ -56,7 +58,7 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
 
             @Override
             public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException e) {
-               initialAddition=true;
+                initialAddition = true;
 
                 if (e != null) {
                     Log.i(TAG, "Listen failed.", e);
@@ -64,25 +66,29 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
                 }
                 for (DocumentChange dc : snapshots.getDocumentChanges()) {
                     if (initial) {
-                        maps.add(dc.getDocument().getData());
+//NOT WORKING IDK WHY              if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(),"name"))) {
+                        if (dc.getDocument().get("StudentName").toString().equals("Muhammad Talha Siddiqui")) {
+                            maps.add(dc.getDocument().getData());
+                        }
                     } else {
                         switch (dc.getType()) {
                             case ADDED:
-                                //if(initialAddition) {
-                                //    maps.clear();
-                                 //   initialAddition=false;
-                               // }
-                                maps.add(dc.getDocument().getData());
-                                AddData();
-                                break;
+                                if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(), "name"))) {
+                                    maps.add(dc.getDocument().getData());
+                                    AddData();
+                                    added = true;
+                                    break;
+                                }
                             case REMOVED:
                                 break;
                             case MODIFIED:
-                                maps.set(dc.getNewIndex(), dc.getDocument().getData());
-                                UpdateStatus(dc.getNewIndex());
-                              //  Log.i(TAG,Integer.valueOf(dc.getDocument().getString("StatusId")).toString());
-                                break;
-
+                                if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(), "name")) && added == false) {
+                                    maps.set(dc.getNewIndex(), dc.getDocument().getData());
+                                    UpdateStatus(dc.getNewIndex());
+                                    added = false;
+                                    //  Log.i(TAG,Integer.valueOf(dc.getDocument().getString("StatusId")).toString());
+                                    break;
+                                }
 
                         }
                     }
