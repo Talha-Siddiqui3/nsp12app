@@ -1,4 +1,4 @@
-package com.btb.nixorstudentapplication.Past_papers;
+package com.btb.nixorstudentapplication.Past_papers.Objects;
 
 public class paperObject {
     String month,year,variant,type, documentID;

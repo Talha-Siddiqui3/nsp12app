@@ -17,8 +17,9 @@ import android.widget.ImageView;
 
 
 import com.btb.nixorstudentapplication.GeneralLayout.activity_header;
-import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.Misc.permission_util;
+import com.btb.nixorstudentapplication.Past_papers.Adapter.Pastpaper_adapter;
+import com.btb.nixorstudentapplication.Past_papers.Objects.paperObject;
 import com.btb.nixorstudentapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -33,9 +34,9 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
 
-public class Load_papers extends Activity implements View.OnClickListener {
+public class MainPPActivity extends Activity implements View.OnClickListener {
     public static Context context;
-    String TAG = "Load_papers";
+    String TAG = "MainPPActivity";
     public static ArrayList<paperObject> initialobjectList;
     public static String[] listOfvariants;
     //Filter Query variable.
@@ -91,7 +92,7 @@ public class Load_papers extends Activity implements View.OnClickListener {
     private void GetExternalStoragePermission() {
         permission_util permission_util = new permission_util();
         String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-        permission_util.getPermissions(Load_papers.this, permissions);
+        permission_util.getPermissions(MainPPActivity.this, permissions);
     }
 
 
@@ -198,7 +199,7 @@ public class Load_papers extends Activity implements View.OnClickListener {
     private void loadPapers(ArrayList<paperObject> mydata, ArrayList<String> Actualnames, ArrayList<String> stringname) {
         RecyclerView rv = findViewById(R.id.rv_list);
         rv.setLayoutManager(new LinearLayoutManager(this));
-        Pastpaper_adapter pastpaperadapter = new Pastpaper_adapter(mydata, Load_papers.this, Actualnames, stringname);
+        Pastpaper_adapter pastpaperadapter = new Pastpaper_adapter(mydata, MainPPActivity.this, Actualnames, stringname);
         rv.setAdapter(pastpaperadapter);
         if (Actualnames.size() != 0) {
             addTextWatcher(pastpaperadapter);
@@ -298,7 +299,7 @@ public class Load_papers extends Activity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.filterButton:
-                startActivity(new Intent(Load_papers.this, pastpapers_filter.class));
+                startActivity(new Intent(MainPPActivity.this, PaperFilter.class));
                 break;
         }
 

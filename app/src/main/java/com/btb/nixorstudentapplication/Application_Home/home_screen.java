@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.btb.nixorstudentapplication.Misc.common_util;
-import com.btb.nixorstudentapplication.Past_papers.Load_papers;
+import com.btb.nixorstudentapplication.Past_papers.MainPPActivity;
 import com.btb.nixorstudentapplication.R;
 import com.btb.nixorstudentapplication.User.UserPhoto;
 import com.bumptech.glide.Glide;
@@ -87,7 +87,7 @@ public class home_screen extends Activity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.pastPapersIntent:
-                startActivity(new Intent(home_screen.this, Load_papers.class));break;
+                startActivity(new Intent(home_screen.this, MainPPActivity.class));break;
         }
     }
 }

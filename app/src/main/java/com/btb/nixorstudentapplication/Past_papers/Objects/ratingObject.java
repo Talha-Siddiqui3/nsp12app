@@ -1,4 +1,4 @@
-package com.btb.nixorstudentapplication.Past_papers;
+package com.btb.nixorstudentapplication.Past_papers.Objects;
 
 public class ratingObject {
 

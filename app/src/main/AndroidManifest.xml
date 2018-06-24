@@ -36,10 +36,10 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".Past_papers.Load_papers"/>
+        <activity android:name=".Past_papers.MainPPActivity"/>
 
         <activity android:name=".Past_papers.PdfLoad" />
-        <activity android:name=".Past_papers.pastpapers_filter"
+        <activity android:name=".Past_papers.PaperFilter"
             android:theme="@style/AlertDialogCustom"
             ></activity>
     </application>

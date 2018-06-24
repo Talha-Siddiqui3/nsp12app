@@ -1,31 +1,15 @@
 package com.btb.nixorstudentapplication.GeneralLayout;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.btb.nixorstudentapplication.Misc.common_util;
-import com.btb.nixorstudentapplication.Past_papers.PdfLoad;
-import com.btb.nixorstudentapplication.Past_papers.paperObject;
 import com.btb.nixorstudentapplication.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public class nav_adapter extends RecyclerView.Adapter<nav_adapter.Rv_ViewHolder> {

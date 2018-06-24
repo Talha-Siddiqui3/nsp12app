@@ -78,8 +78,8 @@ File file=new File(Environment.getExternalStorageDirectory() + "/nixorapp/pastpa
             public void onClick(View view) {
                 if (rating != -1) {
 
-                   // Load_papers load_papers = new Load_papers();
-                 //   load_papers.setRating(load_papers.paperOpened.getDocumentID(), rating, PdfLoad.this);
+                   // MainPPActivity mainPPActivity = new MainPPActivity();
+                 //   mainPPActivity.setRating(mainPPActivity.paperOpened.getDocumentID(), rating, PdfLoad.this);
 
                 } else {
                    finish();

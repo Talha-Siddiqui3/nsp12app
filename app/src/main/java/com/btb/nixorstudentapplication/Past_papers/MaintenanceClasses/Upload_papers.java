@@ -1,4 +1,4 @@
-package com.btb.nixorstudentapplication.Past_papers;
+package com.btb.nixorstudentapplication.Past_papers.MaintenanceClasses;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
@@ -33,18 +33,15 @@ public class Upload_papers {
             while ((s = reader.readLine()) != null) {
 
                 PastPapersList.add(s);
-
-//Log.i("PUPU",DataUpload.get(i));
-                //i=i+1;
             }
 
 
         } catch (IOException e) {
             e.printStackTrace();
-            Log.i("ERROR", "ERROR");
+            Log.i(TAG, "ERROR");
         }
 
-        Log.i("COUNT", Integer.toString(PastPapersList.size()));
+        Log.i(TAG, Integer.toString(PastPapersList.size()));
         StringManipulate(PastPapersList);
 
     }
@@ -65,7 +62,7 @@ public class Upload_papers {
                 s = FormattedData.get(i).split("_");
                 s[s.length - 1] = s[s.length - 1].replace(".pdf", "");
             } catch (Exception e) {
-                Log.i("ERROR", Data.get(i));
+                Log.i(TAG, Data.get(i));
             }
 
             if (s.length == 4) {
@@ -156,7 +153,7 @@ public class Upload_papers {
             map.put("variant", variant[x]);
 
             cr.add(map);
-            Log.i("DONE", "DONE");
+            Log.i(TAG, "DONE");
 
         }
     }
@@ -168,7 +165,7 @@ public class Upload_papers {
         //hashmap moved outside loop
 
         cr.update(map);
-            Log.i("DONE", "DONE");
+            Log.i(TAG, "DONE");
         }
 
 ArrayList<DocumentSnapshot> errordocs = new ArrayList();
