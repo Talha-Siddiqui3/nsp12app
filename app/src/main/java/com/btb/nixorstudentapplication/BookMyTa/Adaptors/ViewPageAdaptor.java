@@ -1,4 +1,4 @@
-package com.btb.nixorstudentapplication.BookMyTa;
+package com.btb.nixorstudentapplication.BookMyTa.Adaptors;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;

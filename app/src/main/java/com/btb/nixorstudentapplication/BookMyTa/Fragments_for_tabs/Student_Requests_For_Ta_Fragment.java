@@ -1,8 +1,5 @@
-package com.btb.nixorstudentapplication.BookMyTa;
+package com.btb.nixorstudentapplication.BookMyTa.Fragments_for_tabs;
 
-import android.app.Activity;
-import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,29 +9,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
+import com.btb.nixorstudentapplication.BookMyTa.Adaptors.RV_Adaptor_1;
 import com.btb.nixorstudentapplication.Misc.common_util;
-import com.btb.nixorstudentapplication.Past_papers.Load_papers;
-import com.btb.nixorstudentapplication.Past_papers.RvAdaptor;
 import com.btb.nixorstudentapplication.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Student_Requests_For_Ta_Fragment extends Fragment {
     static String TAG = "Student_Requests_For_Ta_Fragment";
@@ -44,6 +32,7 @@ public class Student_Requests_For_Ta_Fragment extends Fragment {
     RV_Adaptor_1 rvAdaptor = new RV_Adaptor_1(GetRequest(), DocIds);
     common_util cu = new common_util();
     boolean initial = true;
+    List<Integer> localIndexList = new ArrayList<>();
 
     public Student_Requests_For_Ta_Fragment() {
     }
@@ -63,23 +52,33 @@ public class Student_Requests_For_Ta_Fragment extends Fragment {
 
                         if (dc.getDocument().get("TaName").toString().equals(cu.getUserDataLocally(getContext(), "name"))) {
                             requests.add(dc.getDocument().get("StudentName").toString());
+                            localIndexList.add(dc.getNewIndex());
                             DocIds.add(dc.getDocument().getId());
 
                         }
 
                     } else {
-                        Log.i("ABC", "IF NOT EXECUTED");
                         switch (dc.getType()) {
                             case ADDED:
-
                                 if (dc.getDocument().get("TaName").toString().equals(cu.getUserDataLocally(getContext(), "name"))) {
+                                   Log.i(TAG,"WORKING");
                                     requests.add(dc.getDocument().get("StudentName").toString());
-                                    AddData();
+                                    localIndexList.add(dc.getNewIndex());
                                     DocIds.add(dc.getDocument().getId());
+                                    DataAddORRemove();
                                     break;
                                 }
                             case REMOVED:
-                                break;
+                                if (dc.getDocument().get("TaName").toString().equals(cu.getUserDataLocally(getContext(), "name"))) {
+                                    for (int i = 0; i < localIndexList.size(); i++) {
+                                        if (localIndexList.get(i) == dc.getOldIndex()) {
+                                            requests.remove(i);
+                                            localIndexList.remove(i);
+                                        }
+                                    }
+                                    DataAddORRemove();
+                                    break;
+                                }
                             case MODIFIED:
                                 break;
 
@@ -120,7 +119,7 @@ public class Student_Requests_For_Ta_Fragment extends Fragment {
 
     }
 
-    public void AddData() {
+    public void DataAddORRemove() {
         rvAdaptor.notifyDataSetChanged();
     }
 

@@ -1,4 +1,4 @@
-package com.btb.nixorstudentapplication.BookMyTa;
+package com.btb.nixorstudentapplication.BookMyTa.Fragments_for_tabs;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.btb.nixorstudentapplication.Misc.common_util;
-import com.btb.nixorstudentapplication.Past_papers.paperObject;
+import com.btb.nixorstudentapplication.BookMyTa.Adaptors.RV_Adaptor_3_For_Search_Ta;
+import com.btb.nixorstudentapplication.BookMyTa.TA_Object;
 import com.btb.nixorstudentapplication.R;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;

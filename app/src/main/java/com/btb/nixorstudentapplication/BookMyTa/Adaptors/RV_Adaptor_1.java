@@ -1,19 +1,16 @@
-package com.btb.nixorstudentapplication.BookMyTa;
+package com.btb.nixorstudentapplication.BookMyTa.Adaptors;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 
+import com.btb.nixorstudentapplication.BookMyTa.Fragments_for_tabs.Student_Requests_For_Ta_Fragment;
 import com.btb.nixorstudentapplication.R;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +22,7 @@ public class RV_Adaptor_1 extends RecyclerView.Adapter<RV_Adaptor_1.Rv_ViewHolde
     Button RejectRequest;
     String TAG = "RV_Adaptor_1";
 
-    RV_Adaptor_1(List<String> StudentName, List<String> DocIds) {
+    public RV_Adaptor_1(List<String> StudentName, List<String> DocIds) {
         this.StudentName = StudentName;
         this.DocIds = DocIds;
     }

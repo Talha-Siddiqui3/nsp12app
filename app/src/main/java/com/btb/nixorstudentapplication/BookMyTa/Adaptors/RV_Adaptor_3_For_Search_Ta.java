@@ -1,8 +1,7 @@
-package com.btb.nixorstudentapplication.BookMyTa;
+package com.btb.nixorstudentapplication.BookMyTa.Adaptors;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.btb.nixorstudentapplication.BookMyTa.TA_Object;
+import com.btb.nixorstudentapplication.BookMyTa.Ta_Dialogue;
+import com.btb.nixorstudentapplication.BookMyTa.Ta_Tab;
 import com.btb.nixorstudentapplication.R;
 
 import java.util.ArrayList;

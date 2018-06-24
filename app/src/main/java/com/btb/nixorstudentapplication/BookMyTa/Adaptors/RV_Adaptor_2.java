@@ -1,4 +1,4 @@
-package com.btb.nixorstudentapplication.BookMyTa;
+package com.btb.nixorstudentapplication.BookMyTa.Adaptors;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.btb.nixorstudentapplication.R;
@@ -21,7 +20,7 @@ public class RV_Adaptor_2 extends RecyclerView.Adapter<RV_Adaptor_2.Rv_ViewHolde
 
 
     String TAG="RV_Adaptor_2";
-    RV_Adaptor_2( List<Map<String,Object>> mymaps){
+    public RV_Adaptor_2(List<Map<String, Object>> mymaps){
       this.mymaps=mymaps;
 
     }
