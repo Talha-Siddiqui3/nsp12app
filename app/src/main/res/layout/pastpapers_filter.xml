@@ -4,11 +4,36 @@
     android:layout_height="wrap_content"
     android:background="#fff">
 
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="Cancel"
+            android:textColor="@color/colorAccent" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/transparent"
+            android:text="Reset"
+            android:textColor="@color/colorAccent" />
+    </RelativeLayout>
+
     <TextView
         android:id="@+id/textView4"
         style="@style/headings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/header"
         android:text="@string/filter_heading"
         android:textAlignment="center" />
 
@@ -30,7 +55,8 @@
         <Spinner
             android:id="@+id/yearspinner"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp" />
 
         <TextView
             android:id="@+id/variant_textView"
@@ -42,7 +68,8 @@
         <Spinner
             android:id="@+id/variantspinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp" />
 
         <TextView
             android:id="@+id/month_textView"
@@ -54,7 +81,8 @@
         <Spinner
             android:id="@+id/monthspinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp" />
 
         <TextView
             android:id="@+id/type_textView"
@@ -66,7 +94,8 @@
         <Spinner
             android:id="@+id/typespinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -76,10 +105,13 @@
             <Button
                 android:id="@+id/apply_button"
                 style="@style/auth_buttons"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
+                android:layout_marginBottom="50dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:text="@string/apply_button" />
         </RelativeLayout>
 

@@ -33,6 +33,8 @@ import java.util.HashMap;
 
 public class common_util {
     static ProgressDialog pd;
+    String TAG ="common_util";
+
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public boolean checkPlayServices(Activity context, String error_message ) {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
@@ -202,7 +204,7 @@ public class common_util {
         String result="";
         String sharedPrefName= context.getString(R.string.SharedPref);
         SharedPreferences pref = context.getSharedPreferences(sharedPrefName, Context.MODE_PRIVATE);
-        Log.i("data",data);
+        Log.i(TAG,data);
        result=  pref.getString(data,null);
 
     return result;
@@ -215,8 +217,9 @@ public class common_util {
         student.setStudent_year(map.get("student_year").toString());
         student.setStudent_id(map.get("student_id").toString());
         student.setStudent_house(map.get("student_house").toString());
+        //NSP PHOTO NOT FIREBASE FOR FIREBASE USE "photourl"
         student.setStudent_profileUrl(map.get("student_profileUrl").toString());
-return student;
+        return student;
     }
     public AlertDialog showAlertDialogue(Activity activity, String title, String message){
 

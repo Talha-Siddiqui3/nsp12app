@@ -54,7 +54,7 @@ public class nav_adapter extends RecyclerView.Adapter<nav_adapter.Rv_ViewHolder>
     @Override
     public void onBindViewHolder(@NonNull Rv_ViewHolder holder, final int position) {
 
-        Log.i("yo","Got here");
+
         switch (allitems.get(position)){
             case "Home":holder.item_icon.setImageResource(R.drawable.home);break;
             case "Pastpapers":holder.item_icon.setImageResource(R.drawable.pastpapers);break;

@@ -68,7 +68,7 @@
     <string name="byMonth">Month:</string>
     <string name="byType">Type:</string>
     <string name="apply_button">Apply</string>
-    <string name="filter_heading">Filter By:</string>
+    <string name="filter_heading">Filter papers</string>
     <string name="notrated_textView">Not rated</string>
     //Java
     <string name="pastpaper_loadingtext">Loading paper please wait</string>

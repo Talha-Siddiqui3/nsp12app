@@ -2,6 +2,7 @@ package com.btb.nixorstudentapplication.Past_papers;
 
 import com.google.firebase.firestore.Query;
 
+
 public class queryVariable {
     private Query query = null;
     private ChangeListener listener;

@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -25,17 +27,22 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.util.ArrayList;
 
+import static android.util.Log.e;
 import static android.util.Log.i;
-public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv_ViewHolder> {
+public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv_ViewHolder> implements Filterable {
 
-    private ArrayList<paperObject> data;
-    private ArrayList<String> ActualNames;
+    public static ArrayList<paperObject> data;
+    public static ArrayList<String> ActualNames;
+    public static ArrayList<String> stringname;
     common_util common_util = new common_util();
     Activity activity;
-    public Pastpaper_adapter(ArrayList<paperObject> pastpapers, Activity context, ArrayList<String> ActualNames){
+    CustomFilter filter;
+
+    public Pastpaper_adapter(ArrayList<paperObject> pastpapers, Activity context, ArrayList<String> ActualNames, ArrayList<String> stringname1){
         data=pastpapers;
         activity= context;
     this.ActualNames=ActualNames;
+    stringname=stringname1;
     }
 
 
@@ -108,6 +115,17 @@ public void setRatingValue(float ratingValue, RatingBar ratingBar){
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        if(filter==null)
+        {
+            filter=new CustomFilter(stringname,ActualNames,data,this);
+        }
+
+        return filter;
+
     }
 
     class Rv_ViewHolder extends RecyclerView.ViewHolder{
@@ -189,8 +207,173 @@ public void setRatingValue(float ratingValue, RatingBar ratingBar){
 
 
 
+
+
     }
 
 
+
+    /*
+    * for (int i=0;i<filterList.size();i++)
+                {
+                    //CHECK
+                    if(filterList.get(i).toUpperCase().contains(constraint)) { int values = getIndexNumber(filterList.get(i),filterList);
+                        if(1==1){
+                            filteredActualNames.add(actualnames.get(values));
+                            filteeddata.add(data.get(values));
+                            filteredcombinedname.add(filterList.get(i)); }
+                            }else{
+
+
+                            if (itContains(constraint.toString().toUpperCase(),data.get(i))){
+                                int values = getIndexNumber(data.get(i),data);
+                                if(values!=-1){
+                                filteredActualNames.add(actualnames.get(values));
+                                filteeddata.add(data.get(i));
+                                filteredcombinedname.add(filterList.get(values));
+                            }}
+
+                    }
+                }
+
+                returnData.add(filteeddata);
+                returnData.add(filteredActualNames);
+                returnData.add(filteredcombinedname);
+
+                results.count=returnData.size();
+                results.values=returnData;
+                return results;*/
+   private class CustomFilter extends Filter{
+
+        Pastpaper_adapter adapter;
+        ArrayList<String> filterList;
+        ArrayList<String> actualnames;
+        ArrayList<paperObject> data;
+        String TAG= "CustomFilter";
+
+        public CustomFilter(ArrayList<String> filterList,ArrayList<String> actualnames1, ArrayList<paperObject> data1 ,Pastpaper_adapter adapter)
+        {
+                actualnames=actualnames1;
+                data=data1;
+            this.adapter=adapter;
+            this.filterList=filterList;
+
+        }
+
+        //FILTERING OCURS
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults results=new FilterResults();
+
+            //CHECK CONSTRAINT VALIDITY
+            if(constraint != null && constraint.length() > 0)
+            {
+                //CHANGE TO UPPER
+              String  text =constraint.toString().toUpperCase().trim();
+                //STORE OUR FILTERED PLAYERS
+                ArrayList<String> filteredcombinedname=new ArrayList<>();
+                ArrayList<paperObject> filteeddata=new ArrayList<>();
+                ArrayList<String> filteredActualNames=new ArrayList<>();
+                ArrayList<ArrayList> returnData = new ArrayList<>();
+
+
+                String[] firstsplit= text.split("\\s+");;
+                 Log.i(TAG,Integer.toString(firstsplit.length));
+                for(int x=0;x<data.size();x++){
+                int count =0;
+                int found =0;
+                for(String value: firstsplit) {
+                    if (!value.trim().isEmpty()) {
+                        if(!value.trim().equals("PAPER")||!value.trim().equals("SCHEME")){
+                        count++;
+                        }
+
+                       Boolean contains = itContains(value, data.get(x));
+                        if(contains){
+                            found++;
+                        }
+
+                    }
+
+                }
+                    if(found==count){
+                    filteeddata.add(data.get(x));
+                        filteredActualNames.add(actualnames.get(x));
+                        filteredcombinedname.add(filterList.get(x));
+                    }
+
+                }
+                returnData.add(filteeddata);
+                returnData.add(filteredActualNames);
+                returnData.add(filteredcombinedname);
+                results.count=returnData.size();
+                results.values=returnData;
+                return results;
+
+
+            }else
+            {
+
+                ArrayList<ArrayList> returnData = new ArrayList<>();
+                returnData.add(data);
+                returnData.add(actualnames);
+                returnData.add(filterList);
+
+                results.count=returnData.size();
+                results.values=returnData;
+                return results;
+            }
+
+
+
+        }
+
+
+        public Boolean itContains(String value, paperObject paperObject){
+            try{
+          if(paperObject.getVariant().toUpperCase().contains(value)
+                  || paperObject.getYear().toUpperCase().contains(value)
+                  || paperObject.getType().toUpperCase().contains(value)
+                  || paperObject.getMonth().toUpperCase().contains(value)
+                  ){
+              return true;
+          }else{
+              return false;
+          }}catch (Exception e){
+
+                e.printStackTrace();
+                return false;
+            }
+        }
+        public int getIndexNumber(Object name, ArrayList main){
+
+            if(main.contains(name)) {
+                int index = main.indexOf(name);
+                return  index;
+            }else{
+                return -1;}
+
+
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+
+            ArrayList<ArrayList> resultFinal;
+            resultFinal =(ArrayList<ArrayList>) results.values;
+
+            if(results.values==null){
+                Log.i("TAG","Results is null");
+
+            }else{
+
+                adapter.stringname= resultFinal.get(2) ;
+                adapter.data= resultFinal.get(0) ;
+                adapter.ActualNames= resultFinal.get(1) ;
+
+                //REFRESH
+                adapter.notifyDataSetChanged();}
+        }
+    }
 
 }
