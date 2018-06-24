@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/paperlayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="@android:drawable/dialog_holo_light_frame">
+
+    <ImageView
+        android:id="@+id/decor_paper"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_below="@+id/type_textView"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="3dp"
+        android:layout_toEndOf="@+id/month_textView"
+        app:srcCompat="@drawable/summer_icon" />
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/rating_textview"
+        android:layout_below="@+id/type_textView"
+        android:theme="@style/RatingBar" />
+
+    <TextView
+        android:id="@+id/rating_textview"
+        style="@style/sub_headings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/type_textView"
+        android:layout_marginRight="16dp"
+        android:layout_toRightOf="@+id/year_textView"
+        android:text="@string/rating_textview"
+        android:textAlignment="center"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/year_textView"
+        style="@style/sub_headings"
+        android:layout_width="50dp"
+        android:layout_height="25dp"
+        android:layout_alignTop="@+id/type_textView"
+        android:layout_marginLeft="0dp"
+        android:layout_toEndOf="@+id/type_textView"
+        android:layout_weight="1"
+        android:paddingLeft="2dp"
+        android:paddingTop="2dp"
+        android:text="2017"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/variant_textView"
+        style="@style/sub_headings"
+        android:layout_width="50dp"
+        android:layout_height="25dp"
+        android:layout_alignStart="@+id/year_textView"
+        android:layout_below="@+id/type_textView"
+        android:layout_weight="1"
+        android:paddingLeft="2dp"
+        android:paddingTop="2dp"
+        android:text="Var 3"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/type_textView"
+        style="@style/sub_headings"
+        android:layout_width="180dp"
+        android:layout_height="25dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="18dp"
+        android:layout_weight="1"
+        android:paddingLeft="2dp"
+        android:paddingTop="2dp"
+        android:text="Question Paper"
+        android:textAlignment="viewStart"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/month_textView"
+        style="@style/sub_headings"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_alignStart="@+id/type_textView"
+        android:layout_below="@+id/type_textView"
+        android:layout_marginBottom="18dp"
+        android:layout_weight="1"
+        android:paddingLeft="2dp"
+        android:paddingTop="2dp"
+        android:text="Summer"
+        android:textSize="14sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="14dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimaryDark">
+
+    </RelativeLayout>
+</RelativeLayout>

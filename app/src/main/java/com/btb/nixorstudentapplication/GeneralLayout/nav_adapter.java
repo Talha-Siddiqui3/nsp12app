@@ -43,7 +43,7 @@ public class nav_adapter extends RecyclerView.Adapter<nav_adapter.Rv_ViewHolder>
             case "Home":holder.item_icon.setImageResource(R.drawable.home);break;
             case "Pastpapers":holder.item_icon.setImageResource(R.drawable.pastpapers);break;
             case "Carpool":holder.item_icon.setImageResource(R.drawable.carpool);break;
-            case "Portal":holder.item_icon.setImageResource(R.drawable.portal);break;
+            case "Chat":holder.item_icon.setImageResource(R.drawable.chat);break;
             case "Soc":holder.item_icon.setImageResource(R.drawable.soc); break;
             case "Bookmyta":holder.item_icon.setImageResource(R.drawable.bookmyta);break;
 

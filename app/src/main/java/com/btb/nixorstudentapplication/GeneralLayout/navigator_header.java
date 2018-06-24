@@ -34,7 +34,7 @@ public class navigator_header extends RelativeLayout {
         rootView = inflate(context, R.layout.menu_scroll, this);
         recyclerView =  rootView.findViewById(R.id.list_recycler);
         allitems.add("Carpool");
-        allitems.add("Portal");
+        allitems.add("Chat");
         allitems.add("Home");
         allitems.add("Soc");
         allitems.add("Bookmyta");

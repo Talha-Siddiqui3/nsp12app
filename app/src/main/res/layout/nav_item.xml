@@ -20,8 +20,6 @@
             android:layout_height="@dimen/menuitem_width"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             app:srcCompat="@drawable/home" />
 
     </LinearLayout>

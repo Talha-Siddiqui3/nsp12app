@@ -112,6 +112,7 @@
 
     <string name="node_subjects">Past Papers/names/</string>
     <string name="node_papers">Past Papers/Subjects/</string>
+    <string name="paperhint">"Question paper 2017..."</string>
 
 
 
@@ -121,7 +122,7 @@
     <string name="ratingTitle">Thank you</string>
     <string name="ratingMessage">Rate paper difficulty</string>
     <string name="search_hint">Subject name</string>
-    <string name="rating_textview">Paper difficulty</string>
+    <string name="rating_textview">Difficulty</string>
 
 
     //GeneralLayout

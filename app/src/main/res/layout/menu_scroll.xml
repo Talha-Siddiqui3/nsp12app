@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/navmenu_height"
-    android:background="@color/main_blue"
-    >
+    android:layout_height="@dimen/navmenu_height">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list_recycler"

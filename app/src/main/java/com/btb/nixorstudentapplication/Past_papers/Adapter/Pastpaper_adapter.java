@@ -62,15 +62,15 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
 
         switch (data.get(position).getMonth()) {
             case "Winter":
-                holder.linearLayout.setBackgroundColor(activity.getResources().getColor(R.color.winter_color));
+
                 holder.decor_paper.setImageResource(R.drawable.snow_flake);
                 break;
             case "Summer":
-                holder.linearLayout.setBackgroundColor(activity.getResources().getColor(R.color.summer_color));
+
                 holder.decor_paper.setImageResource(R.drawable.summer_icon);
                 break;
             case "March":
-                holder.linearLayout.setBackgroundColor(activity.getResources().getColor(R.color.spring_color));
+
                 holder.decor_paper.setImageResource(R.drawable.spring_icon);
                 break;
 
@@ -329,7 +329,7 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
     @Override
     public Rv_ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.itemview_paperload, parent, false);
+        View view = inflater.inflate(R.layout.item_paper, parent, false);
         return new Rv_ViewHolder(view);
     }
     @Override

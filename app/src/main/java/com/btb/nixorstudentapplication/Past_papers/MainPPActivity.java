@@ -30,6 +30,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,7 +54,7 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
 
     //XML
     ImageView FilterButton;
-    public static EditText searchfield;
+    public static MaterialSearchBar searchfield;
     activity_header activity_header;
 
     //Really you want a comment for this too?
@@ -72,7 +73,7 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
 
     public void initialize() { activity_header.setActivityname("Pastpapers"); }
     public void addTextWatcher(final Pastpaper_adapter pastpaper_adapter, Context context) {
-        ((MainPPActivity)context).searchfield.addTextChangedListener(new TextWatcher() {
+        ((MainPPActivity)context).searchfield.addTextChangeListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -135,10 +136,12 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
 
     public void getPapersForSubject(final Boolean intial, final String subjectname, final Context myContext, final RecyclerView rv) {
         subjectSelected=subjectname;
+        String hint = myContext.getString(R.string.paperhint);
+        ((MainPPActivity)myContext).searchfield.setHint(hint);
          paperUrlArrayList = new ArrayList<>();
         paperObjectArrayList = new ArrayList<>();
 
-        String getNodeLocation = getString(R.string.node_papers);
+        String getNodeLocation = myContext.getString(R.string.node_papers);
         final CollectionReference subjectRootCollection = FirebaseFirestore.getInstance().collection(getNodeLocation + subjectname);
         Query pastPaperQuery;
         if (intial) {

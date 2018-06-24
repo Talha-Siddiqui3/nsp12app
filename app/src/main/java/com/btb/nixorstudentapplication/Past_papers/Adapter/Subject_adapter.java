@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.btb.nixorstudentapplication.Past_papers.MainPPActivity;
@@ -40,10 +41,18 @@ RecyclerView rv;
 
     @Override
     public void onBindViewHolder(@NonNull Rv_ViewHolder holder, final int position) {
+
+
    if(allitems.get(position)!=null) {
        holder.item_name.setText(allitems.get(position).toString());
-
        holder.item_name.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               MainPPActivity mainPPActivity = new MainPPActivity();
+               mainPPActivity.getPapersForSubject(true,allitems.get(position).toString(),activity, rv);
+           }
+       });
+       holder.layout.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
                MainPPActivity mainPPActivity = new MainPPActivity();
@@ -62,6 +71,7 @@ RecyclerView rv;
     class Rv_ViewHolder extends RecyclerView.ViewHolder{
 
         TextView item_name;
+        RelativeLayout layout;
 
 
 
@@ -69,6 +79,7 @@ RecyclerView rv;
         public Rv_ViewHolder(View itemView) {
             super(itemView);
             item_name = itemView.findViewById(R.id.subjectname_textView);
+            layout = itemView.findViewById(R.id.layout);
 
 
         }
