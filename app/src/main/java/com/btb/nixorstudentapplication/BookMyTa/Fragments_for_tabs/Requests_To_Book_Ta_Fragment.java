@@ -36,7 +36,7 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
     boolean removed = false;
     boolean added = false;
     List<Integer> localIndexList = new ArrayList<>();
-    RV_Adaptor_2 rvAdaptor = new RV_Adaptor_2(DisplayRequest());
+    RV_Adaptor_2 rvAdaptor;
     common_util cu = new common_util();
 
     public Requests_To_Book_Ta_Fragment() {
@@ -56,8 +56,8 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
                 }
                 for (DocumentChange dc : snapshots.getDocumentChanges()) {
                     if (initial) {
-//NOT WORKING IDK WHY              if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(),"name"))) {
-                       if (dc.getDocument().get("StudentName").toString().equals("Muhammad Talha Siddiqui")) {
+if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(),"name"))) {
+
                             maps.add(dc.getDocument().getData());
                             localIndexList.add(dc.getNewIndex());
                        }
@@ -65,8 +65,8 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
 
                         switch (dc.getType()) {
                             case ADDED:
-                                //NOT WORKING IDK WHY              if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(),"name")))
-                                if (dc.getDocument().get("StudentName").toString().equals("Muhammad Talha Siddiqui")) {
+                                     if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(),"name"))){
+
                                     maps.add(dc.getDocument().getData());
                                     localIndexList.add(dc.getNewIndex());
                                     DataAddORRemove();
@@ -74,8 +74,8 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
                                     break;
                                 }
                             case REMOVED:
-//NOT WORKING IDK WHY              if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(),"name")))
-                                if (dc.getDocument().get("StudentName").toString().equals("Muhammad Talha Siddiqui")) {
+    if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(),"name"))){
+
 
                                     for (int i = 0; i < localIndexList.size(); i++) {
                                         if (localIndexList.get(i) == dc.getOldIndex()) {
@@ -120,7 +120,7 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
 
         view = inflater.inflate(R.layout.requests_to_book_ta, container, false);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.request_to_book_ta_rv);
-
+        rvAdaptor = new RV_Adaptor_2(DisplayRequest());
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv.setAdapter(rvAdaptor);
 

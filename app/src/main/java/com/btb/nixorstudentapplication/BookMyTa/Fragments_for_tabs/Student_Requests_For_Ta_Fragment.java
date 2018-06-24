@@ -29,7 +29,7 @@ public class Student_Requests_For_Ta_Fragment extends Fragment {
     View view;
     static CollectionReference cr = FirebaseFirestore.getInstance().collection("BookMyTa/BookMyTaDocument/Requests");
     List<String> DocIds = new ArrayList<>();
-    RV_Adaptor_1 rvAdaptor = new RV_Adaptor_1(GetRequest(), DocIds);
+    RV_Adaptor_1 rvAdaptor;
     common_util cu = new common_util();
     boolean initial = true;
     List<Integer> localIndexList = new ArrayList<>();
@@ -103,7 +103,7 @@ public class Student_Requests_For_Ta_Fragment extends Fragment {
         view = inflater.inflate(R.layout.student_requests_for_ta, container, false);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.student_requests_for_ta_rv);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+         rvAdaptor = new RV_Adaptor_1(GetRequest(), DocIds);
         rv.setAdapter(rvAdaptor);
 
 
