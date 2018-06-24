@@ -19,10 +19,12 @@ import android.widget.ImageView;
 import com.btb.nixorstudentapplication.GeneralLayout.activity_header;
 import com.btb.nixorstudentapplication.Misc.permission_util;
 import com.btb.nixorstudentapplication.Past_papers.Adapter.Pastpaper_adapter;
+import com.btb.nixorstudentapplication.Past_papers.Adapter.Subject_adapter;
 import com.btb.nixorstudentapplication.Past_papers.Objects.paperObject;
 import com.btb.nixorstudentapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.CollectionReference;
@@ -32,30 +34,29 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map;
 
 public class MainPPActivity extends Activity implements View.OnClickListener {
-    public static Context context;
     String TAG = "MainPPActivity";
     public static ArrayList<paperObject> initialobjectList;
     public static String[] listOfvariants;
+    public static  String subjectSelected;
+
     //Filter Query variable.
     public static queryVariable queryVariable = new queryVariable();
 
+    //Just some static variables to store the Current Filter applied. That is if it is applied
+    public static String yearSelection = "All",monthSelection = "All",typeSelection = "All",variantSelection = "All";
 
-    public static String yearSelection = "All";
-    public static String monthSelection = "All";
-    public static String typeSelection = "All";
-    public static String variantSelection = "All";
-    public static String subjectname = "Chem";
 
 
     //XML
     ImageView FilterButton;
-    EditText searchfield;
+    public static EditText searchfield;
     activity_header activity_header;
 
-
+    //Really you want a comment for this too?
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,14 +66,13 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
         searchfield = findViewById(R.id.searchfield);
         FilterButton.setOnClickListener(this);
         GetExternalStoragePermission();
-        GetDataFireBase(true);
+        getListOfSubjects(MainPPActivity.this);
+        // GetDataFireBase(true);
         initialize(); }
 
-
-
     public void initialize() { activity_header.setActivityname("Pastpapers"); }
-    public void addTextWatcher(final Pastpaper_adapter pastpaper_adapter) {
-        searchfield.addTextChangedListener(new TextWatcher() {
+    public void addTextWatcher(final Pastpaper_adapter pastpaper_adapter, Context context) {
+        ((MainPPActivity)context).searchfield.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -106,12 +106,40 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
     //Initial variable checks to see if its the first call for this method for this particular paper. Which allows it to set and initial value for the query
     //and setup and on change listener so that when the user applies a filter and the query changes, the method is called again to display the new query results
 
+     ArrayList<Object> listofSubjects = new ArrayList<>();
+     public void getListOfSubjects(final Context mycontext){
 
-    public void GetDataFireBase(final Boolean intial) {
-        paperUrlArrayList = new ArrayList<>();
+        String getNodeLocation = getString(R.string.node_subjects);
+        final DocumentReference subjectRootCollection = FirebaseFirestore.getInstance().document(getNodeLocation);
+        subjectRootCollection.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+           if(task.isSuccessful()){
+           DocumentSnapshot documentSnapshot= task.getResult();
+            Map<String,Object> map = documentSnapshot.getData();
+               Log.i(TAG,Integer.toString(map.size()));
+               listofSubjects  =new ArrayList<Object>(map.values());
+               RecyclerView rv = findViewById(R.id.rv_list);
+               rv.setLayoutManager(new LinearLayoutManager(mycontext));
+               Subject_adapter subject_adapter = new Subject_adapter(listofSubjects,mycontext,rv);
+               rv.setAdapter(subject_adapter);
+           }else{
+               Log.i(TAG,"Couldn't get subjects");
+           }
+
+            }
+        });
+
+    }
+
+
+    public void getPapersForSubject(final Boolean intial, final String subjectname, final Context myContext, final RecyclerView rv) {
+        subjectSelected=subjectname;
+         paperUrlArrayList = new ArrayList<>();
         paperObjectArrayList = new ArrayList<>();
 
-        final CollectionReference subjectRootCollection = FirebaseFirestore.getInstance().collection("Past Papers/Subjects/" + subjectname);
+        String getNodeLocation = getString(R.string.node_papers);
+        final CollectionReference subjectRootCollection = FirebaseFirestore.getInstance().collection(getNodeLocation + subjectname);
         Query pastPaperQuery;
         if (intial) {
             pastPaperQuery = subjectRootCollection.orderBy("year");
@@ -125,14 +153,14 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
                         Log.i(TAG, "Query Changed by Filter");
                         //The query has been changed by the user and hence the method is called. Think of this onchange method as an independent method
                         //Outside this method. It has only been placed inside this method so that the listener is setup only after the initial call
-                        GetDataFireBase(false);
+                        getPapersForSubject(false, subjectname, myContext, rv);
                     }
                 }
             });
 
 
         } else {
-            //Here because we know that this method has not been called for the first time as the value for inital is false. We know the user
+            //Here because we know that this method has not been called for the first time as the value for initial is false. We know the user
             //Changed the Query. We will now be obtaining the new Query from the Query interface and getting data from Firebase accordingly
             pastPaperQuery = queryVariable.isBoo();
         }
@@ -161,7 +189,7 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
                 }
                 initialobjectList = paperObjectArrayList;
 
-                loadPapers(paperObjectArrayList, paperUrlArrayList, paperNameArrayList);
+                loadPapers(paperObjectArrayList, paperUrlArrayList, paperNameArrayList, myContext, rv);
                 if (intial) {
                     getVariants(paperObjectArrayList);
                 }
@@ -196,13 +224,13 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
     }
 
     //Method to add adapter to list and initialize a text watcher on the search field
-    private void loadPapers(ArrayList<paperObject> mydata, ArrayList<String> Actualnames, ArrayList<String> stringname) {
-        RecyclerView rv = findViewById(R.id.rv_list);
-        rv.setLayoutManager(new LinearLayoutManager(this));
-        Pastpaper_adapter pastpaperadapter = new Pastpaper_adapter(mydata, MainPPActivity.this, Actualnames, stringname);
+    private void loadPapers(ArrayList<paperObject> mydata, ArrayList<String> Actualnames, ArrayList<String> stringname, Context myContext, RecyclerView rv) {
+
+
+        Pastpaper_adapter pastpaperadapter = new Pastpaper_adapter(mydata, myContext, Actualnames, stringname);
         rv.setAdapter(pastpaperadapter);
         if (Actualnames.size() != 0) {
-            addTextWatcher(pastpaperadapter);
+            addTextWatcher(pastpaperadapter,myContext);
         }
     }
 

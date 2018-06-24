@@ -1,6 +1,7 @@
 package com.btb.nixorstudentapplication.Past_papers.Adapter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -37,50 +38,21 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
     public static ArrayList<paperObject> data;
     public static ArrayList<String> ActualNames;
     public static ArrayList<String> stringname;
+
+
     common_util common_util = new common_util();
-    Activity activity;
+    Context activity;
     searchFilter filter;
 
-    public Pastpaper_adapter(ArrayList<paperObject> pastpapers, Activity context, ArrayList<String> ActualNames, ArrayList<String> stringname1) {
+    //Constructor nothing more
+    public Pastpaper_adapter(ArrayList<paperObject> pastpapers, Context context, ArrayList<String> ActualNames, ArrayList<String> stringofnames) {
         data = pastpapers;
         activity = context;
         this.ActualNames = ActualNames;
-        stringname = stringname1;
+        stringname = stringofnames;
     }
 
-
-    @NonNull
-    @Override
-    public Rv_ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.itemview_paperload, parent, false);
-        return new Rv_ViewHolder(view);
-    }
-
-
-    public void validateData(TextView value, String data, RatingBar ratingBar) {
-    //Atleast one should not be error
-        if (data.equals("error")) {
-
-            value.setVisibility(View.INVISIBLE);
-
-        } else {
-            value.setText(data);
-            ratingBar.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void setRatingValue(float ratingValue, RatingBar ratingBar) {
-        if (ratingValue != -1) {
-            ratingBar.setRating(ratingValue);
-
-        } else {
-            ratingBar.setVisibility(View.INVISIBLE);
-
-
-        }
-    }
-
+    //Here you play with the views
     @Override
     public void onBindViewHolder(@NonNull Rv_ViewHolder holder, final int position) {
         validateData(holder.type, data.get(position).getType(), holder.ratingBar);
@@ -119,22 +91,6 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
             }
         });
     }
-
-    @Override
-    public int getItemCount() {
-        return data.size();
-    }
-
-    @Override
-    public Filter getFilter() {
-        if (filter == null) {
-            filter = new searchFilter(stringname, ActualNames, data, this);
-        }
-
-        return filter;
-
-    }
-
     class Rv_ViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout linearLayout;
         TextView year;
@@ -160,6 +116,9 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
         }
     }
 
+
+
+    //Pretty self explanatory. Downloads the papers.
     public void downloadpapers(final String Actualname, final paperObject paperObject) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl("gs://nixorstudentapplication.appspot.com/PastPapers/Subjects/Chem/" + Actualname);
@@ -198,7 +157,32 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
 
 
     }
+    //Makes all those error fields disappear so that your bitchy user likes the UI
+    public void validateData(TextView value, String data, RatingBar ratingBar) {
+        //Atleast one should not be error
+        if (data.equals("error")) {
 
+            value.setVisibility(View.INVISIBLE);
+
+        } else {
+            value.setText(data);
+            ratingBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    //Yeah this needs to be changed. Will write a library for rating. So don't you worry about that
+    public void setRatingValue(float ratingValue, RatingBar ratingBar) {
+        if (ratingValue != -1) {
+            ratingBar.setRating(ratingValue);
+
+        } else {
+            ratingBar.setVisibility(View.INVISIBLE);
+
+
+        }
+    }
+
+    //Moving on..
 
     //The search bar's main shit
     private class searchFilter extends Filter {
@@ -207,7 +191,7 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
         ArrayList<String> filterList;
         ArrayList<String> actualnames;
         ArrayList<paperObject> data;
-        String TAG = "CustomFilter";
+        String TAG = "searchFilter";
 
         //Constructor
         public searchFilter(ArrayList<String> filterList, ArrayList<String> actualnames1, ArrayList<paperObject> data1, Pastpaper_adapter adapter) {
@@ -337,4 +321,28 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
         }
     }
 
+
+
+
+   //All the methods that I have never bothered about
+    @NonNull
+    @Override
+    public Rv_ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(R.layout.itemview_paperload, parent, false);
+        return new Rv_ViewHolder(view);
+    }
+    @Override
+    public int getItemCount() {
+        return data.size();
+    }
+    @Override
+    public Filter getFilter() {
+        if (filter == null) {
+            filter = new searchFilter(stringname, ActualNames, data, this);
+        }
+
+        return filter;
+
+    }
 }

@@ -18,8 +18,8 @@ public class nav_adapter extends RecyclerView.Adapter<nav_adapter.Rv_ViewHolder>
 
 
     Context activity;
-    public nav_adapter(ArrayList pastpapers, Context context){
-        allitems=pastpapers;
+    public nav_adapter(ArrayList items, Context context){
+        allitems=items;
         activity= context;
 
     }
