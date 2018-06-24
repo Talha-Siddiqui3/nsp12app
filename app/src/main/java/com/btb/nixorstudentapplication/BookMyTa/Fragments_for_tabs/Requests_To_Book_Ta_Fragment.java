@@ -56,16 +56,16 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
                 }
                 for (DocumentChange dc : snapshots.getDocumentChanges()) {
                     if (initial) {
-if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(),"name"))) {
+                        if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(), "name"))) {
 
                             maps.add(dc.getDocument().getData());
                             localIndexList.add(dc.getNewIndex());
-                       }
+                        }
                     } else {
 
                         switch (dc.getType()) {
                             case ADDED:
-                                     if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(),"name"))){
+                                if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(), "name"))) {
 
                                     maps.add(dc.getDocument().getData());
                                     localIndexList.add(dc.getNewIndex());
@@ -74,7 +74,7 @@ if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(
                                     break;
                                 }
                             case REMOVED:
-    if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(),"name"))){
+                                if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(), "name"))) {
 
 
                                     for (int i = 0; i < localIndexList.size(); i++) {
@@ -88,7 +88,7 @@ if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(
                                     break;
                                 }
                             case MODIFIED:
-                               if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(), "name")) && added == false && removed == false) {
+                                if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(), "name")) && added == false && removed == false) {
                                     for (int i = 0; i < localIndexList.size(); i++) {
                                         if (localIndexList.get(i) == dc.getOldIndex()) {
                                             maps.set(i, dc.getDocument().getData());
@@ -98,7 +98,7 @@ if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(
                                     added = false;
                                     removed = false;
                                     break;
-                               }
+                                }
                         }
                     }
 
