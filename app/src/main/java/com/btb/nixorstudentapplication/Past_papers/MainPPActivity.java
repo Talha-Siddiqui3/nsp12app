@@ -11,9 +11,11 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 
 import com.btb.nixorstudentapplication.GeneralLayout.activity_header;
@@ -44,6 +46,10 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
     public static String[] listOfvariants;
     public static  String subjectSelected;
 
+
+
+
+
     //Filter Query variable.
     public static queryVariable queryVariable = new queryVariable();
 
@@ -56,6 +62,7 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
     ImageView FilterButton;
     public static MaterialSearchBar searchfield;
     activity_header activity_header;
+    ProgressBar loading;
 
     //Really you want a comment for this too?
     @Override
@@ -64,6 +71,7 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_past_papers);
         activity_header = findViewById(R.id.toolbar_top);
         FilterButton = findViewById(R.id.filterButton);
+        loading = findViewById(R.id.loading);
         searchfield = findViewById(R.id.searchfield);
         FilterButton.setOnClickListener(this);
         GetExternalStoragePermission();
@@ -72,7 +80,23 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
         initialize(); }
 
     public void initialize() { activity_header.setActivityname("Pastpapers"); }
+
+    public void showLoading(Context context){
+        if( ((MainPPActivity)context).loading!=null){
+            ((MainPPActivity)context).loading.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void hideLoading(Context context){
+        if( ((MainPPActivity)context).loading!=null){
+            ((MainPPActivity)context).loading.setVisibility(View.INVISIBLE);
+        }
+    }
+
+
     public void addTextWatcher(final Pastpaper_adapter pastpaper_adapter, Context context) {
+
+
         ((MainPPActivity)context).searchfield.addTextChangeListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -109,6 +133,10 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
 
      ArrayList<Object> listofSubjects = new ArrayList<>();
      public void getListOfSubjects(final Context mycontext){
+         final RecyclerView rv = findViewById(R.id.rv_list);
+         rv.setVisibility(View.INVISIBLE);
+         rv.setAdapter(null);
+         showLoading(mycontext);
 
         String getNodeLocation = getString(R.string.node_subjects);
         final DocumentReference subjectRootCollection = FirebaseFirestore.getInstance().document(getNodeLocation);
@@ -120,10 +148,12 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
             Map<String,Object> map = documentSnapshot.getData();
                Log.i(TAG,Integer.toString(map.size()));
                listofSubjects  =new ArrayList<Object>(map.values());
-               RecyclerView rv = findViewById(R.id.rv_list);
+              rv.setVisibility(View.VISIBLE);
+              hideLoading(mycontext);
                rv.setLayoutManager(new LinearLayoutManager(mycontext));
                Subject_adapter subject_adapter = new Subject_adapter(listofSubjects,mycontext,rv);
                rv.setAdapter(subject_adapter);
+               hideLoading(mycontext);
            }else{
                Log.i(TAG,"Couldn't get subjects");
            }
@@ -135,6 +165,10 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
 
 
     public void getPapersForSubject(final Boolean intial, final String subjectname, final Context myContext, final RecyclerView rv) {
+      rv.setVisibility(View.INVISIBLE);
+      rv.setAdapter(null);
+      showLoading(myContext);
+
         subjectSelected=subjectname;
         String hint = myContext.getString(R.string.paperhint);
         ((MainPPActivity)myContext).searchfield.setHint(hint);
@@ -232,6 +266,8 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
 
         Pastpaper_adapter pastpaperadapter = new Pastpaper_adapter(mydata, myContext, Actualnames, stringname);
         rv.setAdapter(pastpaperadapter);
+        rv.setVisibility(View.VISIBLE);
+        hideLoading(myContext);
         if (Actualnames.size() != 0) {
             addTextWatcher(pastpaperadapter,myContext);
         }
@@ -336,4 +372,14 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
 
     }
 
+
+    @Override
+    public void onBackPressed() {
+
+         if(subjectSelected!=null){
+             getListOfSubjects(this);
+             subjectSelected=null;
+         }else{
+        super.onBackPressed();}
+    }
 }
