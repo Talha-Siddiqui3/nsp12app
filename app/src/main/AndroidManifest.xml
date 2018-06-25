@@ -38,7 +38,7 @@
             android:name=".Past_papers.pastpapers_filter"
             android:theme="@style/AlertDialogCustom" />
         <activity
-            android:name=".BookMyTa.Ta_Tab"
+            android:name=".BookMyTa.Main_Activity_Ta_Tab"
             android:label="@string/title_activity_ta_tab"
             android:theme="@style/AppTheme.NoActionBar" >
 

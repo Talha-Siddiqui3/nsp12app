@@ -14,7 +14,7 @@ import com.btb.nixorstudentapplication.R;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//ADAPTOR FOR Student_Requests_For_Ta_Fragment
 public class RV_Adaptor_1 extends RecyclerView.Adapter<RV_Adaptor_1.Rv_ViewHolder> {
     List<String> StudentName = new ArrayList<>();
     List<String> DocIds;
@@ -46,7 +46,7 @@ public class RV_Adaptor_1 extends RecyclerView.Adapter<RV_Adaptor_1.Rv_ViewHolde
         return StudentName.size();
     }
 
-    //NOT WORKING EVEN AFTER IMPLEMENTING
+    //NOT WORKING EVEN AFTER IMPLEMENTING OnClick Listener
   /*  @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -67,10 +67,13 @@ public class RV_Adaptor_1 extends RecyclerView.Adapter<RV_Adaptor_1.Rv_ViewHolde
             txt = itemView.findViewById(R.id.Student_Name);
             AcceptRequest = itemView.findViewById(R.id.Accept_Request);
             RejectRequest = itemView.findViewById(R.id.Reject_Request);
+
+         //Both buttons return status and corresponding DocId for selected request
+
             AcceptRequest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Student_Requests_For_Ta_Fragment.UpdateRequest("Accepted", DocIds.get(getAdapterPosition()));
+                   Student_Requests_For_Ta_Fragment.UpdateRequest("Accepted", DocIds.get(getAdapterPosition()));
 
                 }
             });

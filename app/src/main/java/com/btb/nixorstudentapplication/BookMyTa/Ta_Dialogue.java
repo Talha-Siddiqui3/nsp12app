@@ -25,40 +25,46 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-
+//Opens when student clicks on any TA for booking
 public class Ta_Dialogue extends Dialog {
-    CollectionReference cr = FirebaseFirestore.getInstance().collection("BookMyTa/BookMyTaDocument/Requests");
+    private CollectionReference cr = FirebaseFirestore.getInstance().collection("BookMyTa/BookMyTaDocument/Requests");
 
-    String time;
-    String day;
-    String times[] = new String[5];
-    String days[] = new String[5];
-    TextView MondayTime;
-    TextView TuesdayTime;
-    TextView WednesdayTime;
-    TextView ThursdayTime;
-    TextView FridayTIme;
-    TextView TaName;
-    TextView TaID;
-    Button BookTa;
-    CircleImageView photoStudent_circleView;
-    Map<String, Object> map = new HashMap<>();
-    common_util cu = new common_util();
-    TA_Object ta_object;
-    Context context;
+    private String time;
+    private String day;
+    private String times[] = new String[5];
+    private String days[] = new String[5];
+    private TextView MondayTime;
+    private TextView TuesdayTime;
+    private TextView WednesdayTime;
+    private TextView ThursdayTime;
+    private TextView FridayTIme;
+    private TextView TaName;
+    private TextView TaID;
+    private TextView TaSubject;
+    private Button BookTa;
+    private CircleImageView photoStudent_circleView;
+    private Map<String, Object> map = new HashMap<>();
+    private common_util cu = new common_util();
+    private TA_Object ta_object;
+    private Context context;
     @ServerTimestamp
     Date timestamp;
 
 
-    public Ta_Dialogue(@NonNull final Context context) {
+    public Ta_Dialogue(@NonNull final Context context,TA_Object ta_object) {
         super(context);
         this.context = context;
-        setTitle("Title");
         setContentView(R.layout.ta_dialogue_layout);
+        this.ta_object=ta_object;
         TaName = findViewById(R.id.TA_NAME_DIALOGUE);
-        TaID=findViewById((R.id.TA_ID_DIALOGUE));
-        photoStudent_circleView=findViewById(R.id.photoStudent_circleView_FOR_DIALOGUE);
-        Glide.with(context).load(cu.getUserDataLocally(context,"nsp_photo")).into(photoStudent_circleView);
+        TaID = findViewById((R.id.TA_ID_DIALOGUE));
+        TaSubject=findViewById(R.id.SubjectTA_Dialogue);
+        photoStudent_circleView = findViewById(R.id.photoStudent_circleView_FOR_DIALOGUE);
+        TaName.setText(ta_object.getTaName());
+        TaID.setText(ta_object.getTaID());
+TaSubject.setText(ta_object.getSubject());
+        //loading TA Picture
+        Glide.with(context).load(cu.getUserDataLocally(context, "nsp_photo")).into(photoStudent_circleView);
 
 
         BookTa = findViewById(R.id.Submit_Button_Ta_Dialogue);
@@ -74,7 +80,8 @@ public class Ta_Dialogue extends Dialog {
 
 
     }
-//Creating new request to book TA from Dialogue
+
+    //Creating new request to book TA from Dialogue
     private void sendRequest() {
         map.put("Status", "Pending");
         map.put("TaName", ta_object.getTaName());
@@ -113,25 +120,10 @@ public class Ta_Dialogue extends Dialog {
     }
 
 
-//IMLEMENT THIS
-    public void ParseData(TA_Object ta_object){
-this.ta_object=ta_object;
+    //IMLEMENT THIS
+    public void ParseData() {
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     //OLD IMPLEMENTATION
@@ -141,8 +133,6 @@ this.ta_object=ta_object;
         day = ta_object.getDays();
         times = time.split(",");
         days = day.split(",");
-        TaName.setText(ta_object.getTaName());
-        TaID.setText(ta_object.getTaID());
 
 
     }

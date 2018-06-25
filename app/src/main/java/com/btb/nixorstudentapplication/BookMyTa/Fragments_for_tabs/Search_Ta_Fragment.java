@@ -24,15 +24,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+//Class for displaying List of TAs.
 
 public class Search_Ta_Fragment extends Fragment {
     View view;
     static CollectionReference cr = FirebaseFirestore.getInstance().collection("BookMyTa/BookMyTaDocument/TA Details");
     RV_Adaptor_3_For_Search_Ta rvAdaptor = new RV_Adaptor_3_For_Search_Ta(DisplayTa());
-    boolean initial = true;
+    boolean isInitialData = true;
     Map<String, Object> map = new HashMap();
     String TAG = "Search_Ta_Fragment";
-    boolean initialAddition;
+
 
     public Search_Ta_Fragment() {
     }
@@ -44,10 +45,11 @@ public class Search_Ta_Fragment extends Fragment {
         cr.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException e) {
-                initialAddition=true;
+
                 for (DocumentChange dc : snapshots.getDocumentChanges()) {
                     TA_Object ta_object = new TA_Object();
-                    if (initial) {
+                    //Check whether it is the first time data is recivied from Firebase.
+                    if (isInitialData) {
                         map = dc.getDocument().getData();
                         Log.i(TAG, map.toString());
                         ta_objects.add(addDataToObject(ta_object, map.get("Name"), map.get("Days"), map.get("TaID"), map.get("Timings"), map.get("Subject")));
@@ -61,9 +63,9 @@ public class Search_Ta_Fragment extends Fragment {
                                 AddDataToAdaptor();
                                 break;
 
-                            case REMOVED:
+                                case REMOVED:
                                 break;
-                            case MODIFIED:
+                                case MODIFIED:
                                 break;
 
 
@@ -71,7 +73,7 @@ public class Search_Ta_Fragment extends Fragment {
 
                     }
                 }
-                initial = false;
+                isInitialData = false;
             }
         });
 
@@ -91,7 +93,6 @@ public class Search_Ta_Fragment extends Fragment {
         return view;
     }
 
-
     public void AddDataToAdaptor() {
 
         rvAdaptor.notifyDataSetChanged();
@@ -99,6 +100,7 @@ public class Search_Ta_Fragment extends Fragment {
 
     }
 
+    //sets TA Object to data received from Firebase
     public TA_Object addDataToObject(TA_Object ta_object, Object Ta_Name, Object Days, Object TaId, Object Timings, Object Subject) {
         ta_object.setDays(Days.toString());
         ta_object.setSubject(Subject.toString());

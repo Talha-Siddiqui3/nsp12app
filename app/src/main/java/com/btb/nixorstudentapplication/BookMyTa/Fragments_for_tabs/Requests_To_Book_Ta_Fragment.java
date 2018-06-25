@@ -24,17 +24,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
+// Class for Students who requested to book a Ta
+//Displays Request status(Accepted,Rejected,Pending)
 public class Requests_To_Book_Ta_Fragment extends Fragment {
 
     View view;
-
     String TAG = "Requests_To_Book_Ta_Fragment";
-
     CollectionReference cr = FirebaseFirestore.getInstance().collection("BookMyTa/BookMyTaDocument/Requests");
-    boolean initial = true;
-    boolean removed = false;
-    boolean added = false;
+    boolean isInitialData = true;
+    boolean isDataRemoved = false;
+    boolean isDataAdded = false;
     List<Integer> localIndexList = new ArrayList<>();
     RV_Adaptor_2 rvAdaptor;
     common_util cu = new common_util();
@@ -55,7 +54,9 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
                     return;
                 }
                 for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                    if (initial) {
+                  //Check whther it is the first time data is recivied from Firebase.
+                    if (isInitialData) {
+                        //checks if the request is for the logged in user(may or may not be a TA but is a Student)
                         if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(), "name"))) {
 
                             maps.add(dc.getDocument().getData());
@@ -66,17 +67,18 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
                         switch (dc.getType()) {
                             case ADDED:
                                 if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(), "name"))) {
-
                                     maps.add(dc.getDocument().getData());
-                                    localIndexList.add(dc.getNewIndex());
+                                    localIndexList.add(dc.getNewIndex());//adds Firebase's recieved data's index number to a localIndexList array.
                                     DataAddORRemove();
-                                    added = true;
+                                    isDataAdded = true;
                                     break;
                                 }
                             case REMOVED:
                                 if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(), "name"))) {
-
-
+                                    //Common loop for both REMOVED and MODIFIED cases
+                                    //It gets the corresponding localIndex of Firebase's Index
+                                    //For exmaple 5th index of firebase's data is stored locally on 2nd index of maps
+                                    //so it returns 2
                                     for (int i = 0; i < localIndexList.size(); i++) {
                                         if (localIndexList.get(i) == dc.getOldIndex()) {
                                             maps.remove(i);
@@ -84,26 +86,27 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
                                         }
                                     }
                                     DataAddORRemove();
-                                    removed = true;
+                                   isDataRemoved = true;
                                     break;
                                 }
                             case MODIFIED:
-                                if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(), "name")) && added == false && removed == false) {
+                                //Additional check that modifies only executes when neither ADD or REMOVES executes
+                                if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(), "name")) &&  isDataAdded == false &&  isDataRemoved == false) {
                                     for (int i = 0; i < localIndexList.size(); i++) {
                                         if (localIndexList.get(i) == dc.getOldIndex()) {
                                             maps.set(i, dc.getDocument().getData());
                                             UpdateStatus(i);
                                         }
                                     }
-                                    added = false;
-                                    removed = false;
+                                    isDataAdded = false;
+                                    isDataRemoved = false;
                                     break;
                                 }
                         }
                     }
 
                 }
-                initial = false;
+                isInitialData = false;
 
 
             }
@@ -117,7 +120,7 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-
+//Simple Recycler View Set up.
         view = inflater.inflate(R.layout.requests_to_book_ta, container, false);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.request_to_book_ta_rv);
         rvAdaptor = new RV_Adaptor_2(DisplayRequest());
@@ -128,12 +131,12 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
         return view;
 
     }
-
+//executes when Request Status is changed
     public void UpdateStatus(int pos) {
         rvAdaptor.notifyItemChanged(pos);
 
     }
-
+    //executes when data is added or removed from FireBase
     public void DataAddORRemove() {
         rvAdaptor.notifyDataSetChanged();
 

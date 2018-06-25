@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//Simple adaptor for adding fragments to tabs
 public class ViewPageAdaptor extends FragmentPagerAdapter {
    List<Fragment> fragment_list=new ArrayList<>();
     List<String> fragment_list_title=new ArrayList<>();

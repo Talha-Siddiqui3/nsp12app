@@ -1,4 +1,5 @@
 package com.btb.nixorstudentapplication.BookMyTa;
+//OBJECT for storing all TA DATA
 
 public class TA_Object {
     private String TaName,Days,TaID,Timings,Subject;

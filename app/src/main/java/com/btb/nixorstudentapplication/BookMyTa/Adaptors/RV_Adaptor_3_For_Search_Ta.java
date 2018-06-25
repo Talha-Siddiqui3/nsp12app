@@ -12,22 +12,23 @@ import android.widget.TextView;
 
 import com.btb.nixorstudentapplication.BookMyTa.TA_Object;
 import com.btb.nixorstudentapplication.BookMyTa.Ta_Dialogue;
-import com.btb.nixorstudentapplication.BookMyTa.Ta_Tab;
+import com.btb.nixorstudentapplication.BookMyTa.Main_Activity_Ta_Tab;
 import com.btb.nixorstudentapplication.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class RV_Adaptor_3_For_Search_Ta extends RecyclerView.Adapter<RV_Adaptor_3_For_Search_Ta.Rv_ViewHolder>{
-    List<TA_Object> ta_objects=new ArrayList<>();
-Ta_Tab ta_tab=new Ta_Tab();
+public class RV_Adaptor_3_For_Search_Ta extends RecyclerView.Adapter<RV_Adaptor_3_For_Search_Ta.Rv_ViewHolder> {
+    List<TA_Object> ta_objects = new ArrayList<>();
+    Main_Activity_Ta_Tab mainActivityTa_tab = new Main_Activity_Ta_Tab();
     Context context;
 
 
-    String TAG="RV_Adaptor_3_For_Search_Ta";
-    public RV_Adaptor_3_For_Search_Ta(List<TA_Object> ta_objects){
-this.ta_objects=ta_objects;
+    String TAG = "RV_Adaptor_3_For_Search_Ta";
+
+    public RV_Adaptor_3_For_Search_Ta(List<TA_Object> ta_objects) {
+        this.ta_objects = ta_objects;
 
     }
 
@@ -41,25 +42,25 @@ this.ta_objects=ta_objects;
 
     @Override
     public void onBindViewHolder(@NonNull RV_Adaptor_3_For_Search_Ta.Rv_ViewHolder holder, final int position) {
-Log.i(TAG,ta_objects.get(1).getTaName());
-holder.TaNamesText.setText(ta_objects.get(position).getTaName());
-holder.TeachesText.setText(ta_objects.get(position).getSubject());
-holder.relativeLayoutLayout.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        Ta_Dialogue ta_dialogue=new Ta_Dialogue(context);
-
-ta_dialogue.ParseData(ta_objects.get(position));
-        ta_dialogue.ExtractTime();
-ta_dialogue.UpdateLayout();
-ta_dialogue.show();
-    }
-});
+        Log.i(TAG, ta_objects.get(position).getTaName());
+        holder.TaNamesText.setText(ta_objects.get(position).getTaName());
+        holder.TeachesText.setText(ta_objects.get(position).getSubject());
+        holder.relativeLayoutLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              //sends the speceific TAObject from the ArrayList of TaObjects.
+                Ta_Dialogue ta_dialogue = new Ta_Dialogue(context,ta_objects.get(position));
+                ta_dialogue.ParseData();
+                ta_dialogue.ExtractTime();
+                ta_dialogue.UpdateLayout();
+                ta_dialogue.show();
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-return ta_objects.size();
+        return ta_objects.size();
     }
 
     class Rv_ViewHolder extends RecyclerView.ViewHolder {
@@ -69,10 +70,10 @@ return ta_objects.size();
 
         public Rv_ViewHolder(View itemView) {
             super(itemView);
-            TaNamesText=itemView.findViewById(R.id.TA_NAME_Search);
-            TeachesText=itemView.findViewById(R.id.Teaches_Search);
-relativeLayoutLayout=itemView.findViewById(R.id.search_ta_relative_layout);
-context= itemView.getContext();
+            TaNamesText = itemView.findViewById(R.id.TA_NAME_Search);
+            TeachesText = itemView.findViewById(R.id.Teaches_Search);
+            relativeLayoutLayout = itemView.findViewById(R.id.search_ta_relative_layout);
+            context = itemView.getContext();
         }
     }
 }

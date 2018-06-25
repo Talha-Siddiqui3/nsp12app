@@ -14,14 +14,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class RV_Adaptor_2 extends RecyclerView.Adapter<RV_Adaptor_2.Rv_ViewHolder>{
+//ADAPTOR FOR Requests_To_Book_Ta_Fragment
+public class RV_Adaptor_2 extends RecyclerView.Adapter<RV_Adaptor_2.Rv_ViewHolder> {
 
-    List<Map<String,Object>> mymaps=new ArrayList<>();
+    List<Map<String, Object>> mymaps = new ArrayList<>();
 
 
-    String TAG="RV_Adaptor_2";
-    public RV_Adaptor_2(List<Map<String, Object>> mymaps){
-      this.mymaps=mymaps;
+    String TAG = "RV_Adaptor_2";
+
+    public RV_Adaptor_2(List<Map<String, Object>> mymaps) {
+        //mymaps contain array of maps containg Taname, Status,Student Name, and TimeStamp.
+        this.mymaps = mymaps;
 
     }
 
@@ -35,11 +38,11 @@ public class RV_Adaptor_2 extends RecyclerView.Adapter<RV_Adaptor_2.Rv_ViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull RV_Adaptor_2.Rv_ViewHolder holder, int position) {
-holder.StatusText.setText(mymaps.get(position).get("Status").toString());
-      holder.TaNamesText.setText(mymaps.get(position).get("TaName").toString());
-      Log.i(TAG,mymaps.get(position).get("TaName").toString());
-        Log.i(TAG,mymaps.get(position).get("Status").toString());
-        Log.i(TAG,Integer.toString(position));
+        holder.StatusText.setText(mymaps.get(position).get("Status").toString());
+        holder.TaNamesText.setText(mymaps.get(position).get("TaName").toString());
+        Log.i(TAG, mymaps.get(position).get("TaName").toString());
+        Log.i(TAG, mymaps.get(position).get("Status").toString());
+        Log.i(TAG, Integer.toString(position));
 
     }
 
@@ -55,9 +58,8 @@ holder.StatusText.setText(mymaps.get(position).get("Status").toString());
 
         public Rv_ViewHolder(View itemView) {
             super(itemView);
-TaNamesText=itemView.findViewById(R.id.Ta_Name);
-StatusText=itemView.findViewById(R.id.Request_Status);
-
+            TaNamesText = itemView.findViewById(R.id.Ta_Name);
+            StatusText = itemView.findViewById(R.id.Request_Status);
 
 
         }
