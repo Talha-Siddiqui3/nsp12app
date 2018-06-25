@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/type_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/month_view"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="20dp"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/title2"
+            style="@style/headings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="@color/colorPrimary"
+            android:text="Select Document Type"
+            android:textAlignment="center"
+            android:textColor="#fff"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/qp_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/ms_button"
+            android:background="@android:drawable/screen_background_light_transparent"
+            android:padding="5dp"
+            android:text="Question Paper"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/ms_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@android:drawable/screen_background_light_transparent"
+            android:padding="5dp"
+            android:text="Marking Scheme"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/other_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/title2"
+            android:layout_alignTop="@+id/ms_button"
+            android:background="@android:drawable/screen_background_light_transparent"
+            android:padding="5dp"
+            android:text="Other"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/month_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/top"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="20dp"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/headings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="@color/colorPrimary"
+            android:text="Select Month"
+            android:textAlignment="center"
+            android:textColor="#fff"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/summer_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/winter_button"
+            android:background="@android:drawable/screen_background_light_transparent"
+            android:padding="5dp"
+            android:text="Summer"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/winter_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_centerHorizontal="true"
+            android:background="@android:drawable/screen_background_light_transparent"
+            android:padding="5dp"
+            android:text="Winter"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/march_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/winter_button"
+            android:background="@android:drawable/screen_background_light_transparent"
+            android:padding="5dp"
+            android:text="March"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary">
+
+        <Button
+            android:id="@+id/cancel_button"
+            style="@style/auth_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="0dp"
+            android:background="@android:color/transparent"
+            android:text="Cancel"
+            android:textColor="#fff" />
+
+        <Button
+            android:id="@+id/reset_button"
+            style="@style/auth_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="0dp"
+            android:background="@android:color/transparent"
+            android:text="Reset"
+            android:textColor="#fff" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/year_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/type_view"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="20dp"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/textView8"
+            style="@style/headings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/year_view"
+            android:layout_alignEnd="@+id/year_view"
+            android:background="@color/colorPrimary"
+            android:text="Select Year"
+            android:textAlignment="center"
+            android:textColor="#fff"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/editText3"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/textView8"
+            android:ems="10"
+            android:hint="To"
+            android:inputType="number"
+            android:textAlignment="center"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/editText4"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textView8"
+            android:ems="10"
+            android:hint="From"
+            android:inputType="number"
+            android:textAlignment="center"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+</RelativeLayout>
