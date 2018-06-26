@@ -13,6 +13,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -79,7 +80,9 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
         // GetDataFireBase(true);
         initialize(); }
 
-    public void initialize() { activity_header.setActivityname("Pastpapers"); }
+    public void initialize() { activity_header.setActivityname("Pastpapers");
+    searchfield.setSpeechMode(false);
+    }
 
     public void showLoading(Context context){
         if( ((MainPPActivity)context).loading!=null){
@@ -94,7 +97,7 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
     }
 
 
-    public void addTextWatcher(final Pastpaper_adapter pastpaper_adapter, Context context) {
+    public void addTextWatcher(final Pastpaper_adapter pastpaper_adapter, final Subject_adapter subject_adapter, Context context) {
 
 
         ((MainPPActivity)context).searchfield.addTextChangeListener(new TextWatcher() {
@@ -104,7 +107,10 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                pastpaper_adapter.getFilter().filter(s.toString());
+                if(pastpaper_adapter==null){
+                    subject_adapter.getFilter().filter(s.toString());
+                }else{
+                pastpaper_adapter.getFilter().filter(s.toString());}
             }
 
             @Override
@@ -136,6 +142,9 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
          final RecyclerView rv = findViewById(R.id.rv_list);
          rv.setVisibility(View.INVISIBLE);
          rv.setAdapter(null);
+         String hint = mycontext.getString(R.string.subject_hint);
+         ((MainPPActivity)mycontext).searchfield.setHint(hint);
+
          showLoading(mycontext);
 
         String getNodeLocation = getString(R.string.node_subjects);
@@ -153,6 +162,7 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
                rv.setLayoutManager(new LinearLayoutManager(mycontext));
                Subject_adapter subject_adapter = new Subject_adapter(listofSubjects,mycontext,rv);
                rv.setAdapter(subject_adapter);
+               addTextWatcher(null,subject_adapter,mycontext);
                hideLoading(mycontext);
            }else{
                Log.i(TAG,"Couldn't get subjects");
@@ -269,7 +279,7 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
         rv.setVisibility(View.VISIBLE);
         hideLoading(myContext);
         if (Actualnames.size() != 0) {
-            addTextWatcher(pastpaperadapter,myContext);
+            addTextWatcher(pastpaperadapter,null,myContext);
         }
     }
 

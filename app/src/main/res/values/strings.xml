@@ -74,11 +74,11 @@
     <string name="pastpaper_loadingtext">Loading paper please wait</string>
     <string name="ratingSuccessMessage">Rating given. Thank you</string>
     <string-array name="listofmonths">
-    <item>All</item>
-    <item>May/June</item>
-    <item>October/November</item>
-    <item>February/March</item>
-</string-array>
+        <item>All</item>
+        <item>May/June</item>
+        <item>October/November</item>
+        <item>February/March</item>
+    </string-array>
     <string-array name="listofyears">
         <item>All</item>
         <item>From: To: </item>
@@ -113,7 +113,7 @@
     <string name="node_subjects">Past Papers/names/</string>
     <string name="node_papers">Past Papers/Subjects/</string>
     <string name="paperhint">"Question paper 2017..."</string>
-
+    <string name="subject_hint">"Enter a subject name</string>
 
 
     //PdfLoad
