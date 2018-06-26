@@ -26,6 +26,8 @@
                 android:id="@+id/maximize_primary"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="5dp"
                 android:background="@drawable/fullscreen" />
         </com.github.barteksc.pdfviewer.PDFView>
 
@@ -51,7 +53,7 @@
             android:id="@+id/pdfView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorAccent">
+            android:background="@color/backgrounPaperItem">
 
             <Button
                 android:id="@+id/maximize_secondary"
@@ -59,6 +61,8 @@
                 android:layout_height="30dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/fullscreen" />
         </com.github.barteksc.pdfviewer.PDFView>
