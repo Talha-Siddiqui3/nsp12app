@@ -104,4 +104,17 @@
         android:background="@color/colorPrimaryDark">
 
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/activateMultiView"
+        style="@style/auth_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/ratingBar"
+        android:layout_below="@+id/decor_paper"
+        android:layout_margin="0dp"
+        android:background="@android:color/transparent"
+        android:text="MultiView"
+        android:textColor="#000"
+        android:textSize="12sp" />
 </RelativeLayout>

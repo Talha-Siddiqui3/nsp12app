@@ -17,6 +17,7 @@ import android.widget.Adapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 
 import com.btb.nixorstudentapplication.GeneralLayout.activity_header;
@@ -46,8 +47,9 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
     public static ArrayList<paperObject> initialobjectList;
     public static String[] listOfvariants;
     public static  String subjectSelected;
-
-
+    public static String multiviewactiv;
+   public static RelativeLayout multiRelative;
+   public static Pastpaper_adapter  pastpaper_adapter;
 
 
 
@@ -74,6 +76,9 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
         FilterButton = findViewById(R.id.filterButton);
         loading = findViewById(R.id.loading);
         searchfield = findViewById(R.id.searchfield);
+        multiRelative = findViewById(R.id.multview);
+
+
         FilterButton.setOnClickListener(this);
         GetExternalStoragePermission();
         getListOfSubjects(MainPPActivity.this);
@@ -274,12 +279,12 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
     private void loadPapers(ArrayList<paperObject> mydata, ArrayList<String> Actualnames, ArrayList<String> stringname, Context myContext, RecyclerView rv) {
 
 
-        Pastpaper_adapter pastpaperadapter = new Pastpaper_adapter(mydata, myContext, Actualnames, stringname);
-        rv.setAdapter(pastpaperadapter);
+        pastpaper_adapter = new Pastpaper_adapter(mydata, myContext, Actualnames, false);
+        rv.setAdapter(pastpaper_adapter);
         rv.setVisibility(View.VISIBLE);
         hideLoading(myContext);
         if (Actualnames.size() != 0) {
-            addTextWatcher(pastpaperadapter,null,myContext);
+            addTextWatcher(pastpaper_adapter,null,myContext);
         }
     }
 
@@ -391,5 +396,21 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
              subjectSelected=null;
          }else{
         super.onBackPressed();}
+    }
+
+
+    public void addPapertoMultiView(paperObject paperObject, Context context, String actualname){
+        ((MainPPActivity)context).multiRelative.setVisibility(View.VISIBLE);
+        ArrayList<paperObject> paperObjects = new ArrayList<>();
+        ArrayList<String> actualnames = new ArrayList<>();
+        paperObjects.add(paperObject);
+        actualnames.add(actualname);
+        ((MainPPActivity)context).multiviewactiv =actualname;
+        Pastpaper_adapter pastpaperadapter = new Pastpaper_adapter(paperObjects, context, actualnames, true);
+
+
+        RecyclerView multiRecycler = ((MainPPActivity)context).findViewById(R.id.multiRecyler);
+        multiRecycler.setAdapter(pastpaperadapter);
+
     }
 }

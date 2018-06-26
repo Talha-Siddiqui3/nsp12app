@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -18,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.btb.nixorstudentapplication.Misc.common_util;
+import com.btb.nixorstudentapplication.Past_papers.MainPPActivity;
 import com.btb.nixorstudentapplication.Past_papers.PdfLoad;
 import com.btb.nixorstudentapplication.Past_papers.Objects.paperObject;
 import com.btb.nixorstudentapplication.R;
@@ -37,7 +39,7 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
 
     public static ArrayList<paperObject> data;
     public static ArrayList<String> ActualNames;
-    public static ArrayList<String> stringname;
+    public static Boolean multi;
 
 
     common_util common_util = new common_util();
@@ -45,11 +47,11 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
     searchFilter filter;
 
     //Constructor nothing more
-    public Pastpaper_adapter(ArrayList<paperObject> pastpapers, Context context, ArrayList<String> ActualNames, ArrayList<String> stringofnames) {
+    public Pastpaper_adapter(ArrayList<paperObject> pastpapers, Context context, ArrayList<String> ActualNames, Boolean multiview) {
         data = pastpapers;
         activity = context;
         this.ActualNames = ActualNames;
-        stringname = stringofnames;
+        multi = multiview;
     }
 
     //Here you play with the views
@@ -59,6 +61,28 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
         validateData(holder.year, data.get(position).getYear(), holder.ratingBar);
         validateData(holder.variant, data.get(position).getVariant(), holder.ratingBar);
         validateData(holder.month, data.get(position).getMonth(), holder.ratingBar);
+
+       if(((MainPPActivity)activity).multiviewactiv!=null){
+           holder.multiViewPaper.setText("Remove");
+           holder.multiViewPaper.setTextColor(activity.getResources().getColor(R.color.colorPrimary));
+           holder.multiViewPaper.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                   //Remove multiview
+
+
+               }
+           });
+       }else{
+     holder.multiViewPaper.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
+             ((MainPPActivity)activity).multiviewactiv=ActualNames.get(position);
+             ((MainPPActivity)activity).addPapertoMultiView(data.get(position),activity,ActualNames.get(position));
+
+         }
+     });}
+
 
         switch (data.get(position).getMonth()) {
             case "Winter":
@@ -78,6 +102,7 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
 
 
         setRatingValue(data.get(position).getRating(), holder.ratingBar);
+        if(!multi){
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
 
 
@@ -86,11 +111,15 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
 
                 String loadingtext = activity.getString(R.string.pastpaper_loadingtext);
                 common_util.progressDialogShow(activity, loadingtext);
-                downloadpapers(ActualNames.get(position).toString(), data.get(position));
+                if( ((MainPPActivity)activity).multiviewactiv!=null){
+                downloadpapers(ActualNames.get(position).toString(), true,((MainPPActivity)activity).multiviewactiv);}
+                else{
+                    downloadpapers(ActualNames.get(position).toString(), false,null);
+                }
                 Log.i("ERROR", ActualNames.get(position).toString());
             }
         });
-    }
+    }}
     class Rv_ViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout linearLayout;
         TextView year;
@@ -99,7 +128,7 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
         TextView type;
         RatingBar ratingBar;
         ImageView decor_paper;
-
+        Button multiViewPaper;
 
         public Rv_ViewHolder(View itemView) {
             super(itemView);
@@ -109,6 +138,7 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
             type = itemView.findViewById(R.id.type_textView);
             decor_paper = itemView.findViewById(R.id.decor_paper);
             ratingBar = itemView.findViewById(R.id.ratingBar);
+            multiViewPaper = itemView.findViewById(R.id.activateMultiView);
 
 
             linearLayout = itemView.findViewById(R.id.paperlayout);
@@ -119,8 +149,13 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
 
 
     //Pretty self explanatory. Downloads the papers.
-    public void downloadpapers(final String Actualname, final paperObject paperObject) {
+    public static String firspaper;
+
+
+    public void downloadpapers(final String Actualname, final Boolean multipapers, final String secondpaper) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
+        //Remove Chem from here
+
         StorageReference storageRef = storage.getReferenceFromUrl("gs://nixorstudentapplication.appspot.com/PastPapers/Subjects/Chem/" + Actualname);
         File file1 = new File(Environment.getExternalStorageDirectory() + "/nixorapp/pastpapers/" + Actualname);
         if (file1.exists() == false) {
@@ -128,19 +163,31 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
             storageRef.getFile(file1).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    // Local temp file has been created
-                    common_util.progressDialogHide();
-                    //    ((MainPPActivity)activity).paperOpened =paperObject;
+
+                   if(!multipapers&&!secondpaper.equals("open")){
+                       common_util.progressDialogHide();
                     Intent i = new Intent(activity, PdfLoad.class);
                     i.putExtra("FileName", Actualname);
-                    activity.startActivity(i);
+                    activity.startActivity(i);}
+                    else if(secondpaper.equals("open")){
+                       common_util.progressDialogHide();
+                       Intent i = new Intent(activity, PdfLoad.class);
+                       i.putExtra("firstPaper", firspaper);
+                       i.putExtra("secondPaper", Actualname);
+                       activity.startActivity(i);
+                   }else
+                        {
+                            firspaper=Actualname;
+                       downloadpapers(secondpaper, true,"open");
+
+                   }
+
                 }
 
 
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
-
                     common_util.progressDialogHide();
                     Log.i("ERROR", "error");
 
@@ -150,13 +197,29 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
 
         } else {
             common_util.progressDialogHide();
+            if(!multipapers&&!secondpaper.equals("open")){
+                common_util.progressDialogHide();
             Intent i = new Intent(activity, PdfLoad.class);
             i.putExtra("FileName", Actualname);
-            activity.startActivity(i);
+            activity.startActivity(i);}
+            else if(secondpaper.equals("open")){
+                common_util.progressDialogHide();
+                Intent i = new Intent(activity, PdfLoad.class);
+                i.putExtra("firstPaper", firspaper);
+                i.putExtra("secondPaper", Actualname);
+                activity.startActivity(i);
+
+            }else{
+                firspaper=Actualname;
+                downloadpapers(secondpaper, true,"open");
+
+            }
+
+        }
         }
 
 
-    }
+
     //Makes all those error fields disappear so that your bitchy user likes the UI
     public void validateData(TextView value, String data, RatingBar ratingBar) {
         //Atleast one should not be error
@@ -194,7 +257,7 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
         String TAG = "searchFilter";
 
         //Constructor
-        public searchFilter(ArrayList<String> filterList, ArrayList<String> actualnames1, ArrayList<paperObject> data1, Pastpaper_adapter adapter) {
+        public searchFilter(ArrayList<String> actualnames1, ArrayList<paperObject> data1, Pastpaper_adapter adapter) {
             actualnames = actualnames1;
             data = data1;
             this.adapter = adapter;
@@ -212,9 +275,7 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
 
                 String text = constraint.toString().toUpperCase().trim();
 
-                //I know this array of combinedname is pretty useless. I added it to make it work with the previous code. However as it is causing no harm I am gonna
-                //leave it here. Might just be useful later on
-                ArrayList<String> filteredcombinedname = new ArrayList<>();
+
 
                 //All the important arrays for pastpapers
                 ArrayList<paperObject> filteeddata = new ArrayList<>();
@@ -254,14 +315,13 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
                     if (found == count) {
                         filteeddata.add(data.get(x));
                         filteredActualNames.add(actualnames.get(x));
-                        filteredcombinedname.add(filterList.get(x));
+
                     }
 
                 }
                 //Putting all the arrays on the bus and sending them to publishResults :)
                 returnData.add(filteeddata);
                 returnData.add(filteredActualNames);
-                returnData.add(filteredcombinedname);
                 results.count = returnData.size();
                 results.values = returnData;
                 return results;
@@ -313,7 +373,7 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
 
             } else {
 
-                adapter.stringname = resultFinal.get(2);
+
                 adapter.data = resultFinal.get(0);
                 adapter.ActualNames = resultFinal.get(1);
                 adapter.notifyDataSetChanged();
@@ -339,7 +399,7 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
     @Override
     public Filter getFilter() {
         if (filter == null) {
-            filter = new searchFilter(stringname, ActualNames, data, this);
+            filter = new searchFilter(ActualNames, data, this);
         }
 
         return filter;
