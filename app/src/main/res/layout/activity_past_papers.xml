@@ -36,7 +36,7 @@
         <RelativeLayout
             android:id="@+id/multview"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="200dp"
             android:layout_above="@+id/nav_main"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"

@@ -24,6 +24,7 @@ import com.btb.nixorstudentapplication.GeneralLayout.activity_header;
 import com.btb.nixorstudentapplication.Misc.permission_util;
 import com.btb.nixorstudentapplication.Past_papers.Adapter.Pastpaper_adapter;
 import com.btb.nixorstudentapplication.Past_papers.Adapter.Subject_adapter;
+import com.btb.nixorstudentapplication.Past_papers.Adapter.multiView_adapter;
 import com.btb.nixorstudentapplication.Past_papers.Objects.paperObject;
 import com.btb.nixorstudentapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -47,9 +48,8 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
     public static ArrayList<paperObject> initialobjectList;
     public static String[] listOfvariants;
     public static  String subjectSelected;
-    public static String multiviewactiv;
-   public static RelativeLayout multiRelative;
-   public static Pastpaper_adapter  pastpaper_adapter;
+
+
 
 
 
@@ -76,9 +76,6 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
         FilterButton = findViewById(R.id.filterButton);
         loading = findViewById(R.id.loading);
         searchfield = findViewById(R.id.searchfield);
-        multiRelative = findViewById(R.id.multview);
-
-
         FilterButton.setOnClickListener(this);
         GetExternalStoragePermission();
         getListOfSubjects(MainPPActivity.this);
@@ -86,7 +83,7 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
         initialize(); }
 
     public void initialize() { activity_header.setActivityname("Pastpapers");
-    searchfield.setSpeechMode(false);
+        searchfield.setSpeechMode(false);
     }
 
     public void showLoading(Context context){
@@ -115,7 +112,7 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
                 if(pastpaper_adapter==null){
                     subject_adapter.getFilter().filter(s.toString());
                 }else{
-                pastpaper_adapter.getFilter().filter(s.toString());}
+                    pastpaper_adapter.getFilter().filter(s.toString());}
             }
 
             @Override
@@ -142,36 +139,36 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
     //Initial variable checks to see if its the first call for this method for this particular paper. Which allows it to set and initial value for the query
     //and setup and on change listener so that when the user applies a filter and the query changes, the method is called again to display the new query results
 
-     ArrayList<Object> listofSubjects = new ArrayList<>();
-     public void getListOfSubjects(final Context mycontext){
-         final RecyclerView rv = findViewById(R.id.rv_list);
-         rv.setVisibility(View.INVISIBLE);
-         rv.setAdapter(null);
-         String hint = mycontext.getString(R.string.subject_hint);
-         ((MainPPActivity)mycontext).searchfield.setHint(hint);
+    ArrayList<Object> listofSubjects = new ArrayList<>();
+    public void getListOfSubjects(final Context mycontext){
+        final RecyclerView rv = findViewById(R.id.rv_list);
+        rv.setVisibility(View.INVISIBLE);
+        rv.setAdapter(null);
+        String hint = mycontext.getString(R.string.subject_hint);
+        ((MainPPActivity)mycontext).searchfield.setHint(hint);
 
-         showLoading(mycontext);
+        showLoading(mycontext);
 
         String getNodeLocation = getString(R.string.node_subjects);
         final DocumentReference subjectRootCollection = FirebaseFirestore.getInstance().document(getNodeLocation);
         subjectRootCollection.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-           if(task.isSuccessful()){
-           DocumentSnapshot documentSnapshot= task.getResult();
-            Map<String,Object> map = documentSnapshot.getData();
-               Log.i(TAG,Integer.toString(map.size()));
-               listofSubjects  =new ArrayList<Object>(map.values());
-              rv.setVisibility(View.VISIBLE);
-              hideLoading(mycontext);
-               rv.setLayoutManager(new LinearLayoutManager(mycontext));
-               Subject_adapter subject_adapter = new Subject_adapter(listofSubjects,mycontext,rv);
-               rv.setAdapter(subject_adapter);
-               addTextWatcher(null,subject_adapter,mycontext);
-               hideLoading(mycontext);
-           }else{
-               Log.i(TAG,"Couldn't get subjects");
-           }
+                if(task.isSuccessful()){
+                    DocumentSnapshot documentSnapshot= task.getResult();
+                    Map<String,Object> map = documentSnapshot.getData();
+                    Log.i(TAG,Integer.toString(map.size()));
+                    listofSubjects  =new ArrayList<Object>(map.values());
+                    rv.setVisibility(View.VISIBLE);
+                    hideLoading(mycontext);
+                    rv.setLayoutManager(new LinearLayoutManager(mycontext));
+                    Subject_adapter subject_adapter = new Subject_adapter(listofSubjects,mycontext,rv);
+                    rv.setAdapter(subject_adapter);
+                    addTextWatcher(null,subject_adapter,mycontext);
+                    hideLoading(mycontext);
+                }else{
+                    Log.i(TAG,"Couldn't get subjects");
+                }
 
             }
         });
@@ -180,14 +177,14 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
 
 
     public void getPapersForSubject(final Boolean intial, final String subjectname, final Context myContext, final RecyclerView rv) {
-      rv.setVisibility(View.INVISIBLE);
-      rv.setAdapter(null);
-      showLoading(myContext);
+        rv.setVisibility(View.INVISIBLE);
+        rv.setAdapter(null);
+        showLoading(myContext);
 
         subjectSelected=subjectname;
         String hint = myContext.getString(R.string.paperhint);
         ((MainPPActivity)myContext).searchfield.setHint(hint);
-         paperUrlArrayList = new ArrayList<>();
+        paperUrlArrayList = new ArrayList<>();
         paperObjectArrayList = new ArrayList<>();
 
         String getNodeLocation = myContext.getString(R.string.node_papers);
@@ -279,12 +276,12 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
     private void loadPapers(ArrayList<paperObject> mydata, ArrayList<String> Actualnames, ArrayList<String> stringname, Context myContext, RecyclerView rv) {
 
 
-        pastpaper_adapter = new Pastpaper_adapter(mydata, myContext, Actualnames, false);
-        rv.setAdapter(pastpaper_adapter);
+        Pastpaper_adapter pastpaperadapter = new Pastpaper_adapter(mydata, myContext, Actualnames, stringname);
+        rv.setAdapter(pastpaperadapter);
         rv.setVisibility(View.VISIBLE);
         hideLoading(myContext);
         if (Actualnames.size() != 0) {
-            addTextWatcher(pastpaper_adapter,null,myContext);
+            addTextWatcher(pastpaperadapter,null,myContext);
         }
     }
 
@@ -391,26 +388,28 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
     @Override
     public void onBackPressed() {
 
-         if(subjectSelected!=null){
-             getListOfSubjects(this);
-             subjectSelected=null;
-         }else{
-        super.onBackPressed();}
+        if(subjectSelected!=null){
+            getListOfSubjects(this);
+            subjectSelected=null;
+        }else{
+            super.onBackPressed();}
     }
+    public void setMultiViewAdapter(Context context, paperObject paperObject, String name){
+        RelativeLayout multiviewBox = ((MainPPActivity)context).findViewById(R.id.multview);
+        multiviewBox.setVisibility(View.VISIBLE);
+        ArrayList<paperObject> data = new ArrayList<>();
+        ArrayList<String> namess = new ArrayList<>();
+
+        data.add(paperObject);
+        namess.add(name);
+        Log.i(TAG,Integer.toString(data.size()));
+
+        multiView_adapter adap = new multiView_adapter(data,context,namess);
 
 
-    public void addPapertoMultiView(paperObject paperObject, Context context, String actualname){
-        ((MainPPActivity)context).multiRelative.setVisibility(View.VISIBLE);
-        ArrayList<paperObject> paperObjects = new ArrayList<>();
-        ArrayList<String> actualnames = new ArrayList<>();
-        paperObjects.add(paperObject);
-        actualnames.add(actualname);
-        ((MainPPActivity)context).multiviewactiv =actualname;
-        Pastpaper_adapter pastpaperadapter = new Pastpaper_adapter(paperObjects, context, actualnames, true);
+        RecyclerView rv = ((MainPPActivity)context).findViewById(R.id.multiRecyler);
+        rv.setAdapter(adap);
 
-
-        RecyclerView multiRecycler = ((MainPPActivity)context).findViewById(R.id.multiRecyler);
-        multiRecycler.setAdapter(pastpaperadapter);
 
     }
 }
