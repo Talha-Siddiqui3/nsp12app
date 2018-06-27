@@ -22,19 +22,20 @@
         style="?android:attr/ratingBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/rating_textview"
-        android:layout_below="@+id/type_textView"
-        android:theme="@style/RatingBar" />
+        android:layout_alignTop="@+id/rating_textview"
+        android:layout_toStartOf="@+id/year_textView"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/rating_textview"
         style="@style/sub_headings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/type_textView"
-        android:layout_marginRight="16dp"
-        android:layout_toRightOf="@+id/year_textView"
+        android:layout_alignStart="@+id/type_textView"
+        android:layout_below="@+id/variant_textView"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="2dp"
+        android:paddingLeft="2dp"
         android:text="@string/rating_textview"
         android:textAlignment="center"
         android:textSize="14sp" />
@@ -101,20 +102,8 @@
         android:layout_height="14dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:background="@color/colorPrimaryDark">
+        android:background="@color/colorPrimary">
 
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/activateMultiView"
-        style="@style/auth_buttons"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/ratingBar"
-        android:layout_below="@+id/decor_paper"
-        android:layout_margin="0dp"
-        android:background="@android:color/transparent"
-        android:text="MultiView"
-        android:textColor="#000"
-        android:textSize="12sp" />
 </RelativeLayout>

@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.Past_papers.MainPPActivity;
+import com.btb.nixorstudentapplication.Past_papers.MultiView;
 import com.btb.nixorstudentapplication.Past_papers.PdfLoad;
 import com.btb.nixorstudentapplication.Past_papers.Objects.paperObject;
 import com.btb.nixorstudentapplication.R;
@@ -37,9 +38,10 @@ import static android.util.Log.i;
 
 public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv_ViewHolder> implements Filterable {
 
-    public static ArrayList<paperObject> data;
-    public static ArrayList<String> ActualNames;
-    public static ArrayList<String> stringname;
+    public  ArrayList<paperObject> data;
+    public  ArrayList<String> ActualNames;
+    public  ArrayList<String> stringname;
+    String TAG ="Pastpaper_adapter";
 
 
 
@@ -57,7 +59,7 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
 
     //Here you play with the views
     @Override
-    public void onBindViewHolder(@NonNull Rv_ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final Rv_ViewHolder holder, final int position) {
         validateData(holder.type, data.get(position).getType(), holder.ratingBar);
         validateData(holder.year, data.get(position).getYear(), holder.ratingBar);
         validateData(holder.variant, data.get(position).getVariant(), holder.ratingBar);
@@ -79,9 +81,20 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
 
         }
 
+        holder.linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if( ((MainPPActivity) activity).multiviewSubject==null){
+                    ((MainPPActivity)activity).setMultiview(activity,data.get(position));
+                ((MainPPActivity) activity).multiviewSubject = ActualNames.get(position);
+                return true;}
+                return true;
+            }});
 
-        setRatingValue(data.get(position).getRating(), holder.ratingBar);
-        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+
+
+                setRatingValue(data.get(position).getRating(), holder.ratingBar);
+                holder.linearLayout.setOnClickListener(new View.OnClickListener() {
 
 
             @Override
@@ -89,22 +102,19 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
 
                 String loadingtext = activity.getString(R.string.pastpaper_loadingtext);
                 common_util.progressDialogShow(activity, loadingtext);
-                downloadpapers(ActualNames.get(position).toString(), data.get(position));
+                if( ((MainPPActivity) activity).multiviewSubject==null){
+                downloadpapers(ActualNames.get(position).toString(), null);}else
+                {downloadpapers(ActualNames.get(position).toString(), ((MainPPActivity)activity).multiviewSubject);}
                 Log.i("ERROR", ActualNames.get(position).toString());
             }
         });
 
 
-        holder.activateMultiView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((MainPPActivity)activity).setMultiViewAdapter(activity,data.get(position),ActualNames.get(position));
-            }
-        });
+
 
 
     }
-    class Rv_ViewHolder extends RecyclerView.ViewHolder {
+   public class Rv_ViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout linearLayout;
         TextView year;
         TextView month;
@@ -112,7 +122,7 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
         TextView type;
         RatingBar ratingBar;
         ImageView decor_paper;
-        Button activateMultiView;
+
 
 
         public Rv_ViewHolder(View itemView) {
@@ -123,7 +133,7 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
             type = itemView.findViewById(R.id.type_textView);
             decor_paper = itemView.findViewById(R.id.decor_paper);
             ratingBar = itemView.findViewById(R.id.ratingBar);
-            activateMultiView = itemView.findViewById(R.id.activateMultiView);
+
 
 
             linearLayout = itemView.findViewById(R.id.paperlayout);
@@ -134,9 +144,71 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
 
 
     //Pretty self explanatory. Downloads the papers.
-    public void downloadpapers(final String Actualname, final paperObject paperObject) {
+    public void downloadpapers(final String Actualname, final String secondPaper) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReferenceFromUrl("gs://nixorstudentapplication.appspot.com/PastPapers/Subjects/Chem/" + Actualname);
+        StorageReference storageRef = storage.getReference().child("PastPapers/Subjects/Chem/" + Actualname);
+        File localFile = null;
+        try {
+            String PATH = Environment.getExternalStorageDirectory() + "/nixorapp/pastpapers/";
+            File file = new File(PATH);
+            if(!file.exists()){file.mkdirs();}
+            localFile = new File(file, Actualname);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (localFile.exists() == false) {
+
+            storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    // Local temp file has been created
+
+                    //    ((MainPPActivity)activity).paperOpened =paperObject;
+                    if(secondPaper==null){
+                        common_util.progressDialogHide();
+                    Intent i = new Intent(activity, PdfLoad.class);
+                    i.putExtra("FileName", Actualname);
+                    activity.startActivity(i);
+                }else
+                    {
+                        downloadSecondFile(secondPaper, Actualname);
+
+                    }
+                }
+
+
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+
+                    common_util.progressDialogHide();
+                    Log.i("Download1", Actualname);
+
+                }
+            });
+
+
+        } else {
+
+            if(secondPaper==null){
+                common_util.progressDialogHide();
+            Intent i = new Intent(activity, PdfLoad.class);
+            i.putExtra("FileName", Actualname);
+            activity.startActivity(i);}else{
+                downloadSecondFile(secondPaper, Actualname);
+            }
+        }
+
+
+    }
+
+
+    public void downloadSecondFile(final String Actualname, final String firsPaper) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference().child("PastPapers/Subjects/Chem/" + Actualname);
         File file1 = new File(Environment.getExternalStorageDirectory() + "/nixorapp/pastpapers/" + Actualname);
         if (file1.exists() == false) {
 
@@ -146,8 +218,10 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
                     // Local temp file has been created
                     common_util.progressDialogHide();
                     //    ((MainPPActivity)activity).paperOpened =paperObject;
-                    Intent i = new Intent(activity, PdfLoad.class);
-                    i.putExtra("FileName", Actualname);
+                    Intent i = new Intent(activity, MultiView.class);
+                    i.putExtra("firstPaper", firsPaper);
+                    i.putExtra("secondPaper", Actualname);
+                    ((MainPPActivity)activity).DeactivateMultiview(Pastpaper_adapter.this,activity);
                     activity.startActivity(i);
                 }
 
@@ -157,7 +231,7 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
                 public void onFailure(@NonNull Exception exception) {
 
                     common_util.progressDialogHide();
-                    Log.i("ERROR", "error");
+                    Log.i("Download2", Actualname);
 
                 }
             });
@@ -165,13 +239,17 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
 
         } else {
             common_util.progressDialogHide();
-            Intent i = new Intent(activity, PdfLoad.class);
-            i.putExtra("FileName", Actualname);
+            Intent i = new Intent(activity, MultiView.class);
+            i.putExtra("firstPaper", firsPaper);
+            i.putExtra("secondPaper", Actualname);
+            ((MainPPActivity)activity).DeactivateMultiview(Pastpaper_adapter.this,activity);
             activity.startActivity(i);
+
         }
 
 
     }
+
     //Makes all those error fields disappear so that your bitchy user likes the UI
     public void validateData(TextView value, String data, RatingBar ratingBar) {
         //Atleast one should not be error

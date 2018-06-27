@@ -20,4 +20,9 @@
 <color name="selected">#fff</color>
 <color name="notselected">#e4e4e4</color>
     <color name="header_white">#00ffffff</color>
+
+
+
+    <color name="selected_itemview">#43060606</color>
+    <color name="button_notselected">#a7a7a7</color>
 </resources>

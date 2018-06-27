@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/backgroundColor">
 
     <com.btb.nixorstudentapplication.GeneralLayout.activity_header
@@ -12,7 +13,99 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
 
-        />
+        >
+
+    </com.btb.nixorstudentapplication.GeneralLayout.activity_header>
+
+    <RelativeLayout
+        android:id="@+id/multiview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/toolbar_top"
+        android:layout_alignParentStart="true"
+        android:background="@android:drawable/dialog_holo_light_frame"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/decor_paper"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_below="@+id/type_textView"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="3dp"
+            android:layout_toEndOf="@+id/month_textView"
+            app:srcCompat="@drawable/summer_icon" />
+
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/colorPrimaryDark"
+            android:text="@string/paper_selectedMultiview"
+            android:textAlignment="center"
+            android:textColor="#fff">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/year_textView"
+            style="@style/sub_headings"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:layout_alignTop="@+id/type_textView"
+            android:layout_below="@+id/header"
+            android:layout_marginLeft="0dp"
+            android:layout_toEndOf="@+id/type_textView"
+            android:layout_weight="1"
+            android:paddingLeft="2dp"
+            android:paddingTop="2dp"
+            android:text="2017"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/variant_textView"
+            style="@style/sub_headings"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:layout_alignStart="@+id/year_textView"
+            android:layout_below="@+id/type_textView"
+            android:layout_weight="1"
+            android:paddingLeft="2dp"
+            android:paddingTop="2dp"
+            android:text="Var 3"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/type_textView"
+            style="@style/sub_headings"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/header"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:paddingLeft="2dp"
+            android:paddingTop="2dp"
+            android:text="Question Paper"
+            android:textAlignment="viewStart"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/month_textView"
+            style="@style/sub_headings"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_alignStart="@+id/type_textView"
+            android:layout_below="@+id/year_textView"
+            android:layout_weight="1"
+            android:paddingLeft="2dp"
+            android:paddingTop="2dp"
+            android:text="Summer"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
 
 
     <RelativeLayout
@@ -27,48 +120,20 @@
             android:id="@+id/rv_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/multview"
+            android:layout_above="@+id/nav_main"
             android:layout_below="@+id/search_filter"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp" />
-
-        <RelativeLayout
-            android:id="@+id/multview"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_above="@+id/nav_main"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
-            android:visibility="visible">
-
-            <TextView
-                android:id="@+id/textView5"
-                style="@style/sub_headings"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:text="Papers selected for multiview"
-                android:textAlignment="center"
-                android:textColor="#fff"
-                android:textSize="14sp" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/multiRecyler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/textView5"
-                android:layout_marginTop="2dp" />
-        </RelativeLayout>
+            android:layout_marginTop="10dp"
+            tools:ignore="NotSibling" />
 
         <RelativeLayout
             android:id="@+id/search_filter"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#fff"
-            android:padding="5dp">
+            android:layout_height="62dp"
+            android:layout_margin="1dp"
+            android:background="@android:drawable/dialog_holo_light_frame"
+            tools:targetApi="honeycomb">
 
             <ImageView
                 android:id="@+id/filterButton"
@@ -76,29 +141,27 @@
                 android:layout_height="50dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignTop="@+id/searchfield"
-                android:background="#fff"
                 android:padding="10dp"
                 android:src="@drawable/filter_icon" />
 
 
-            <com.mancj.materialsearchbar.MaterialSearchBar
+            <EditText
                 android:id="@+id/searchfield"
-                style="@style/MaterialSearchBarLight"
-                mt_speechMode="false"
+                style="@style/text_entry"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="50dp"
-                android:background="#fff"
+                android:backgroundTint="@android:color/transparent"
+                android:drawableLeft="@drawable/search_icon"
+                android:drawablePadding="5dp"
                 android:ems="10"
+                android:hint="Subject name"
                 android:inputType="textPersonName"
-                android:padding="3dp"
-                app:mt_hint="@string/search_hint"
-                app:mt_maxSuggestionsCount="10"
-                app:mt_speechMode="true" />
-
+                android:padding="5dp" />
         </RelativeLayout>
+
 
         <com.btb.nixorstudentapplication.GeneralLayout.navigator_header
             android:id="@+id/nav_main"

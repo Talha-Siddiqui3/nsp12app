@@ -59,7 +59,9 @@
 
     //Past_papers
     //XML
+    <string name="paper_selectedMultiview">Paper selected for multiview. Press back to remove</string>
     <string name="yearTitle_textView">Year:</string>
+    <string name="reset_button">Reset</string>
     <string name="variantTitle_textView">Variant:</string>
     <string name="typeTitle_textView">Type:</string>
     <string name="monthTitle_textView">Month:</string>
@@ -111,6 +113,8 @@
     </string-array>
 
     <string name="node_subjects">Past Papers/names/</string>
+
+
     <string name="node_papers">Past Papers/Subjects/</string>
     <string name="paperhint">"Question paper 2017..."</string>
     <string name="subject_hint">"Enter a subject name</string>
@@ -133,6 +137,4 @@
     <string name="Soc">Sharks on Cloud</string>
     <string name="Portal">Portal</string>
     <string name="Carpool">Nixor Carpool</string>
-
-
 </resources>

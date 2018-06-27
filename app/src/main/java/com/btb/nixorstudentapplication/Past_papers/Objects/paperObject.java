@@ -3,6 +3,7 @@ package com.btb.nixorstudentapplication.Past_papers.Objects;
 public class paperObject {
     String month,year,variant,type, documentID;
     float rating;
+    Boolean multiview;
 
     public float getRating() {
         return rating;
@@ -22,13 +23,21 @@ public class paperObject {
         return this;
     }
 
-    public paperObject(String month, String year, String variant, String type, String documentID, Float rating) {
+    public paperObject(String month, String year, String variant, String type, String documentID, Boolean multiview) {
         this.month = month;
         this.year = year;
         this.variant = variant;
         this.type = type;
         this.documentID = documentID;
-        this.rating = rating;
+        this.multiview = multiview;
+    }
+
+    public Boolean getMultiview() {
+        return multiview;
+    }
+
+    public void setMultiview(Boolean multiview) {
+        this.multiview = multiview;
     }
 
     public paperObject() {

@@ -164,7 +164,7 @@ public class SplitView extends LinearLayout implements OnTouchListener {
     }
 
 
-    private boolean setPrimaryContentHeight(int newHeight) {
+    public boolean setPrimaryContentHeight(int newHeight) {
         // the new primary content height should not be less than 0 to make the
         // handler always visible
         newHeight = Math.max(0, newHeight);

@@ -11,20 +11,19 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Adapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 
 import com.btb.nixorstudentapplication.GeneralLayout.activity_header;
 import com.btb.nixorstudentapplication.Misc.permission_util;
 import com.btb.nixorstudentapplication.Past_papers.Adapter.Pastpaper_adapter;
 import com.btb.nixorstudentapplication.Past_papers.Adapter.Subject_adapter;
-import com.btb.nixorstudentapplication.Past_papers.Adapter.multiView_adapter;
 import com.btb.nixorstudentapplication.Past_papers.Objects.paperObject;
 import com.btb.nixorstudentapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,22 +34,20 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.mancj.materialsearchbar.MaterialSearchBar;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Map;
 
 public class MainPPActivity extends Activity implements View.OnClickListener {
     String TAG = "MainPPActivity";
     public static ArrayList<paperObject> initialobjectList;
     public static String[] listOfvariants;
-    public static  String subjectSelected;
-
-
-
+    public static String subjectSelected;
+    public static String multiviewSubject;
+    private long animationTime = 1000;
 
 
     //Filter Query variable.
@@ -62,10 +59,11 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
 
 
     //XML
-    ImageView FilterButton;
-    public static MaterialSearchBar searchfield;
-    activity_header activity_header;
+   public static ImageView FilterButton;
+    public static EditText searchfield;
+    public static activity_header activity_header;
     ProgressBar loading;
+
 
     //Really you want a comment for this too?
     @Override
@@ -82,9 +80,13 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
         // GetDataFireBase(true);
         initialize(); }
 
-    public void initialize() { activity_header.setActivityname("Pastpapers");
-        searchfield.setSpeechMode(false);
-    }
+    public void initialize() {
+        activity_header.setActivityname("Pastpapers");
+
+        RelativeLayout layout = findViewById(R.id.multiview);
+        layout.animate().translationX(1000);
+        layout.setAlpha(0);
+        }
 
     public void showLoading(Context context){
         if( ((MainPPActivity)context).loading!=null){
@@ -102,7 +104,7 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
     public void addTextWatcher(final Pastpaper_adapter pastpaper_adapter, final Subject_adapter subject_adapter, Context context) {
 
 
-        ((MainPPActivity)context).searchfield.addTextChangeListener(new TextWatcher() {
+        ((MainPPActivity)context).searchfield.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -141,6 +143,8 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
 
     ArrayList<Object> listofSubjects = new ArrayList<>();
     public void getListOfSubjects(final Context mycontext){
+        //Need to add Filters for subjects
+        ((MainPPActivity)mycontext).FilterButton.setVisibility(View.INVISIBLE);
         final RecyclerView rv = findViewById(R.id.rv_list);
         rv.setVisibility(View.INVISIBLE);
         rv.setAdapter(null);
@@ -177,10 +181,10 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
 
 
     public void getPapersForSubject(final Boolean intial, final String subjectname, final Context myContext, final RecyclerView rv) {
+        ((MainPPActivity)myContext).FilterButton.setVisibility(View.VISIBLE);
         rv.setVisibility(View.INVISIBLE);
         rv.setAdapter(null);
         showLoading(myContext);
-
         subjectSelected=subjectname;
         String hint = myContext.getString(R.string.paperhint);
         ((MainPPActivity)myContext).searchfield.setHint(hint);
@@ -273,10 +277,11 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
     }
 
     //Method to add adapter to list and initialize a text watcher on the search field
+   public static Pastpaper_adapter pastpaperadapter;
     private void loadPapers(ArrayList<paperObject> mydata, ArrayList<String> Actualnames, ArrayList<String> stringname, Context myContext, RecyclerView rv) {
 
 
-        Pastpaper_adapter pastpaperadapter = new Pastpaper_adapter(mydata, myContext, Actualnames, stringname);
+        pastpaperadapter  = new Pastpaper_adapter(mydata, myContext, Actualnames, stringname);
         rv.setAdapter(pastpaperadapter);
         rv.setVisibility(View.VISIBLE);
         hideLoading(myContext);
@@ -329,6 +334,7 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
         } else {
             paperObject.setType("error");
         }
+
     }
 
     //Method to retrieve List of variants from the papers loaded
@@ -387,29 +393,43 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onBackPressed() {
-
+if(multiviewSubject!=null){
+    DeactivateMultiview(pastpaperadapter,this);
+}else{
         if(subjectSelected!=null){
             getListOfSubjects(this);
             subjectSelected=null;
         }else{
             super.onBackPressed();}
-    }
-    public void setMultiViewAdapter(Context context, paperObject paperObject, String name){
-        RelativeLayout multiviewBox = ((MainPPActivity)context).findViewById(R.id.multview);
-        multiviewBox.setVisibility(View.VISIBLE);
-        ArrayList<paperObject> data = new ArrayList<>();
-        ArrayList<String> namess = new ArrayList<>();
+    }}
 
-        data.add(paperObject);
-        namess.add(name);
-        Log.i(TAG,Integer.toString(data.size()));
+    public void DeactivateMultiview(Pastpaper_adapter pa, Context activity){
+     //   pa.selectedItem.setBackground(activity.getResources().getDrawable(android.R.drawable.dialog_holo_light_frame));
+       // pa.remove.setVisibility(View.INVISIBLE);
+        RelativeLayout layout = ((MainPPActivity)activity).findViewById(R.id.multiview);
+        ((MainPPActivity) activity).multiviewSubject = null;
 
-        multiView_adapter adap = new multiView_adapter(data,context,namess);
-
-
-        RecyclerView rv = ((MainPPActivity)context).findViewById(R.id.multiRecyler);
-        rv.setAdapter(adap);
+        layout.animate().translationX(1000).alpha(0).setDuration(animationTime);
 
 
     }
-}
+    public void setMultiview(Context context, paperObject pp){
+        RelativeLayout layout = ((MainPPActivity)context).findViewById(R.id.multiview);
+        TextView year = ((MainPPActivity)context).findViewById(R.id.year_textView);
+        TextView type = ((MainPPActivity)context).findViewById(R.id.type_textView);
+        TextView month = ((MainPPActivity)context).findViewById(R.id.month_textView);
+        TextView var = ((MainPPActivity)context).findViewById(R.id.variant_textView);
+
+
+        layout.setVisibility(View.VISIBLE);
+
+        layout.animate().translationX(0).alpha(1).setDuration(animationTime);
+
+        year.setText(pp.getYear());
+        type.setText(pp.getType());
+        month.setText(pp.getMonth());
+        var.setText(pp.getVariant());
+
+    }
+
+    }
