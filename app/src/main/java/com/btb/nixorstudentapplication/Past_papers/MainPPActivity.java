@@ -180,6 +180,7 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
     }
 
 
+    //Gets Subjects
     public void getPapersForSubject(final Boolean intial, final String subjectname, final Context myContext, final RecyclerView rv) {
         ((MainPPActivity)myContext).FilterButton.setVisibility(View.VISIBLE);
         rv.setVisibility(View.INVISIBLE);
