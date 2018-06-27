@@ -3,10 +3,8 @@ package com.btb.nixorstudentapplication.BookMyTa;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.btb.nixorstudentapplication.Misc.common_util;
@@ -17,10 +15,8 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ServerTimestamp;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -51,10 +47,10 @@ public class Ta_Dialogue extends Dialog {
     Date timestamp;
 
 
-    public Ta_Dialogue(@NonNull final Context context,TA_Object ta_object) {
+    public Ta_Dialogue(@NonNull final Context context, TA_Object ta_object) {
         super(context);
         this.context = context;
-        setContentView(R.layout.ta_dialogue_layout);
+        setContentView(R.layout.cell_content_layout);
         this.ta_object=ta_object;
         TaName = findViewById(R.id.TA_NAME_DIALOGUE);
         TaID = findViewById((R.id.TA_ID_DIALOGUE));
