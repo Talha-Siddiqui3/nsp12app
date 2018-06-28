@@ -55,10 +55,10 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
                 }
                 for (DocumentChange dc : snapshots.getDocumentChanges()) {
                   //Check whther it is the first time data is recivied from Firebase.
-                    if (isInitialData) {
+                    if (isInitialData)
+                    {
                         //checks if the request is for the logged in user(may or may not be a TA but is a Student)
                         if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(), "name"))) {
-
                             maps.add(dc.getDocument().getData());
                             localIndexList.add(dc.getNewIndex());
                         }

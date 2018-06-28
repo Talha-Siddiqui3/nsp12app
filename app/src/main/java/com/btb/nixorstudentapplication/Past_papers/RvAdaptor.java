@@ -9,11 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.R;
@@ -107,7 +105,7 @@ if(data.equals("error")){
             month= itemView.findViewById(R.id.month_textView);
             variant= itemView.findViewById(R.id.variant_textView);
             type= itemView.findViewById(R.id.type_textView);
-            ratingBar= itemView.findViewById(R.id.ratingBar);
+            ratingBar= itemView.findViewById(R.id.ratingBar_FoldingView);
 
             typeTitle= itemView.findViewById(R.id.typeTitle_textView);
             yearTitle= itemView.findViewById(R.id.yearTitle_textView);

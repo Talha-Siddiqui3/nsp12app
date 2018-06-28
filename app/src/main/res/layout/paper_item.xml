@@ -7,7 +7,7 @@
     android:background="#fff">
 
     <RatingBar
-        android:id="@+id/ratingBar"
+        android:id="@+id/ratingBar_FoldingView"
         style="?android:attr/ratingBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

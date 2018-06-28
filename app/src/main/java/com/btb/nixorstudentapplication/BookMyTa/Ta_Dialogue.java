@@ -22,6 +22,7 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 //Opens when student clicks on any TA for booking
+//Filal not using as now using folding layout
 public class Ta_Dialogue extends Dialog {
     private CollectionReference cr = FirebaseFirestore.getInstance().collection("BookMyTa/BookMyTaDocument/Requests");
 
@@ -55,7 +56,7 @@ public class Ta_Dialogue extends Dialog {
         TaName = findViewById(R.id.TA_NAME_DIALOGUE);
         TaID = findViewById((R.id.TA_ID_DIALOGUE));
         TaSubject=findViewById(R.id.SubjectTA_Dialogue);
-        photoStudent_circleView = findViewById(R.id.photoStudent_circleView_FOR_DIALOGUE);
+        photoStudent_circleView = findViewById(R.id.photoStudent_circleView_FOR_FoldingView);
         TaName.setText(ta_object.getTaName());
         TaID.setText(ta_object.getTaID());
 TaSubject.setText(ta_object.getSubject());

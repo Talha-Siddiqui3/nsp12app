@@ -5,13 +5,16 @@
     android:id="@+id/cell"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    folding-cell:additionalFlipsCount="4"
-    folding-cell:animationDuration="2000"
-    folding-cell:backSideColor="@color/colorPrimary"
-    folding-cell:cameraHeight="30">
+    folding-cell:additionalFlipsCount="3"
+    folding-cell:animationDuration="1550"
+    folding-cell:backSideColor="@color/FlipColor"
+    folding-cell:cameraHeight="30"
+    >
+
 
     <!-- CONTENT (UNFOLDED) LAYOUT (MUST BE AT LEAST 2x times BIGGER than content layout bellow)-->
     <include layout="@layout/cell_content_layout" />
+
 
     <!-- TITLE (FOLDED) LAYOUT (MUST BE AT LEAST 2x times SMALLER than content layout above) -->
     <include layout="@layout/cell_title_layout" />
