@@ -7,29 +7,70 @@
     tools:context=".BookMyTa.Main_Activity_Ta_Tab">
 
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tablayout_id"
+    <com.btb.nixorstudentapplication.GeneralLayout.navigator_header
+        android:id="@+id/nav_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="300dp"
-        android:clickable="true"
-        app:layout_constraintBottom_toTopOf="@+id/viewpager_id"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </com.btb.nixorstudentapplication.GeneralLayout.navigator_header>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tablayout_id"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/toolbar_top_Ta_Tab"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_top_Ta_Tab"
         app:tabMode="fixed">
 
     </android.support.design.widget.TabLayout>
 
+    <com.btb.nixorstudentapplication.GeneralLayout.activity_header
+        android:id="@+id/toolbar_top_Ta_Tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </com.btb.nixorstudentapplication.GeneralLayout.activity_header>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager_id"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true">
+        android:layout_height="0dp"
+
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tablayout_id"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/nav_main"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tablayout_id"
+        app:layout_constraintVertical_bias="1.0">
+
 
     </android.support.v4.view.ViewPager>
 
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp" />
 
 
 </android.support.constraint.ConstraintLayout>
