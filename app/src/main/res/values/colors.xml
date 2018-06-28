@@ -9,4 +9,18 @@
     <color name="contentDividerLine">#e0e0e0</color>
     <color name="FlipColor">#add8e6</color>
     <color name="van_footercolor">#f1f1f1</color>
+    <color name="selected">#fff</color>
+    <color name="notselected">#e4e4e4</color>
+    <color name="header_white">#00ffffff</color>
+
+
+
+    <color name="selected_itemview">#43060606</color>
+    <color name="button_notselected">#a7a7a7</color>
+
+
+
+
+
+
 </resources>
