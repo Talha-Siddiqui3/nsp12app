@@ -24,11 +24,12 @@ public class Main_Activity_Ta_Tab extends AppCompatActivity {
         tablayout = findViewById(R.id.tablayout_id);
         viewPager = findViewById(R.id.viewpager_id);
         activity_header=findViewById(R.id.toolbar_top_Ta_Tab);
-        ViewPageAdaptor adaptor = new ViewPageAdaptor(getSupportFragmentManager());
+        ViewPageAdaptor adaptor = new ViewPageAdaptor(this.getSupportFragmentManager());
         adaptor.AddFragment(new Search_Ta_Fragment(), "Search Ta");
         adaptor.AddFragment(new Student_Requests_For_Ta_Fragment(), "Requests for you");
         adaptor.AddFragment(new Requests_To_Book_Ta_Fragment(), "Your requests for Ta");
         viewPager.setAdapter(adaptor);
+        viewPager.setOffscreenPageLimit(3);
         tablayout.setupWithViewPager(viewPager);
         activity_header.setActivityname("Bookmyta");
 
