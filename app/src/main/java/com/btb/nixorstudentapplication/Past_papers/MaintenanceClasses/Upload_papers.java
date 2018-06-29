@@ -3,7 +3,6 @@ package com.btb.nixorstudentapplication.Past_papers.MaintenanceClasses;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.View;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -11,7 +10,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.BufferedReader;
@@ -28,7 +26,7 @@ public class Upload_papers {
         String s;
         ArrayList<String> PastPapersList = new ArrayList<>();
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(activity.getAssets().open("chem.txt")));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(activity.getAssets().open("Past Papers txt documents/Chemistry(9701).txt")));
 
             while ((s = reader.readLine()) != null) {
 
