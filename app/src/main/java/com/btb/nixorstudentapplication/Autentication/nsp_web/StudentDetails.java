@@ -11,6 +11,16 @@ public class StudentDetails {
     String student_year;
     String student_house;
     String student_profileUrl;
+    String student_guid;
+
+    public String getStudent_guid() {
+        return student_guid;
+    }
+
+    public void setStudent_guid(String student_guid) {
+        this.student_guid = student_guid;
+    }
+
     public StudentDetails() {
     }
 

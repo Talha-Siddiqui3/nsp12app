@@ -121,7 +121,7 @@ if(data.equals("error")){
 
     public void downloadpapers(final String Actualname){
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReferenceFromUrl("gs://nixorstudentapplication.appspot.com/PastPapers/Subjects/Chem/"+Actualname);
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://nixorstudentapplication.appspot.com/PastPapers/Subjects/"+((MainPPActivity)activity).subjectSelected+"/"+Actualname);
         File file1 = new File(Environment.getExternalStorageDirectory() + "/nixorapp/pastpapers/"+Actualname);
         if(file1.exists()==false){
 

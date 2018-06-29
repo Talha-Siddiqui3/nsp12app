@@ -60,15 +60,29 @@ public class ExtractData {
             return null;
         }
 
+
     }
+
+
+
+    public static String Get_Student_GUID(Document logged_user_data){
+String GUID=logged_user_data.location();
+GUID=GUID.substring(43,79);
+return GUID;
+    }
+
+
+
+
+
+
+
     //Generates a Student Object
     public static StudentDetails getStudentObject(Document logged_user_data){
         StudentDetails student = Extract_Basic_Information(logged_user_data);
         student.setStudent_profileUrl(Extract_Display_Photo(logged_user_data));
-
-
-
-
+        student.setStudent_guid(Get_Student_GUID(logged_user_data));
+        Log.i("ABCDEFG",logged_user_data.location());
         return student;
     }
 

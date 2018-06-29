@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.btb.nixorstudentapplication.Autentication.User.AccountType;
 import com.btb.nixorstudentapplication.R;
@@ -139,7 +140,6 @@ public class portal_async extends AsyncTask<String,String,String> {
     public static void ExtractData(Document logged_user_data){
         //Gets the Basic Student Profile. For more information check StudentDetails Object.
         Student_Profile = getStudentObject(logged_user_data);
-
         getCookie(null,null,false);
     }
     //Error Handling for Incorrect CREDS
