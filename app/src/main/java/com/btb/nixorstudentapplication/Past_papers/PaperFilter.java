@@ -1,7 +1,6 @@
 package com.btb.nixorstudentapplication.Past_papers;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,11 +12,9 @@ import android.widget.Spinner;
 import com.btb.nixorstudentapplication.R;
 import com.google.firebase.firestore.Query;
 
-import java.util.ArrayList;
+public class PaperFilter extends Activity implements View.OnClickListener {
 
-public class pastpapers_filter extends Activity implements View.OnClickListener {
-
-    String TAG = "pastpapers_filter";
+    String TAG = "PaperFilter";
     Load_papers load_papers;
     Button apply_button;
     @Override
@@ -31,10 +28,10 @@ public class pastpapers_filter extends Activity implements View.OnClickListener 
         load_papers = new Load_papers();
 
 
-        final String[] years = pastpapers_filter.this.getResources().getStringArray(R.array.listofyears);
+        final String[] years = PaperFilter.this.getResources().getStringArray(R.array.listofyears);
         final String[] variants = load_papers.listOfvariants;
-        final String[] type = pastpapers_filter.this.getResources().getStringArray(R.array.listtype);
-        final String[] month = pastpapers_filter.this.getResources().getStringArray(R.array.listofmonths);
+        final String[] type = PaperFilter.this.getResources().getStringArray(R.array.listtype);
+        final String[] month = PaperFilter.this.getResources().getStringArray(R.array.listofmonths);
 
         Spinner yearspinner = findViewById(R.id.yearspinner);
         final Spinner variantspinner = findViewById(R.id.variantspinner);
@@ -169,7 +166,7 @@ public class pastpapers_filter extends Activity implements View.OnClickListener 
 
     public void populateSpinner(Spinner spinner, String[] data) {
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(pastpapers_filter.this,
+                new ArrayAdapter<String>(PaperFilter.this,
                         android.R.layout.simple_spinner_item, data);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 

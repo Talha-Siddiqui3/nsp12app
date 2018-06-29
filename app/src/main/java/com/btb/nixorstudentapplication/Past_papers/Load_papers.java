@@ -1,10 +1,7 @@
 package com.btb.nixorstudentapplication.Past_papers;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Context;
@@ -221,7 +218,7 @@ public class Load_papers extends AppCompatActivity implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.byVariant:
-                startActivity(new Intent(Load_papers.this, pastpapers_filter.class));
+                startActivity(new Intent(Load_papers.this, PaperFilter.class));
                 break;
 
         }

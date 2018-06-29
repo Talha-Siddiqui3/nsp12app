@@ -44,7 +44,7 @@
 
         </activity>
         <activity
-            android:name=".Past_papers.pastpapers_filter"
+            android:name=".Past_papers.PaperFilter"
             android:theme="@style/AlertDialogCustom" />
         <activity
             android:name=".BookMyTa.Main_Activity_Ta_Tab"
