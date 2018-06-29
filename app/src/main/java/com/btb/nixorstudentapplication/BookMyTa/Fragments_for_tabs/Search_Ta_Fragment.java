@@ -53,8 +53,8 @@ public class Search_Ta_Fragment extends Fragment {
                         map = dc.getDocument().getData();
                         Log.i(TAG, map.toString());
                         ta_objects.add(addDataToObject(ta_object, map.get("Name"), map.get("Days"), map.get("TaID"), map.get("Timings"), map.get("Subject")));
-                    }
-                 else {
+                        AddDataToAdaptor();
+                    } else {
                         switch (dc.getType()) {
                             case ADDED:
 
@@ -63,9 +63,9 @@ public class Search_Ta_Fragment extends Fragment {
                                 AddDataToAdaptor();
                                 break;
 
-                                case REMOVED:
+                            case REMOVED:
                                 break;
-                                case MODIFIED:
+                            case MODIFIED:
                                 break;
 
 
@@ -84,20 +84,19 @@ public class Search_Ta_Fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-Log.i("called","OnCreate CAlled");
+        Log.i("called", "OnCreate CAlled");
         view = inflater.inflate(R.layout.search_ta, container, false);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.search_ta_rv);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rvAdaptor= new RV_Adaptor_3_For_Search_Ta(DisplayTa());
+        rvAdaptor = new RV_Adaptor_3_For_Search_Ta(DisplayTa());
         rv.setAdapter(rvAdaptor);
         return view;
     }
 
+
     public void AddDataToAdaptor() {
 
         rvAdaptor.notifyDataSetChanged();
-
-
     }
 
     //sets TA Object to data received from Firebase

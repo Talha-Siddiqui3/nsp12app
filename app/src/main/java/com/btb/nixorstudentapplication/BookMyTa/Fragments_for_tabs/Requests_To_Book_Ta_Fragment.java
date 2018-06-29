@@ -61,6 +61,7 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
                         if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(), "name"))) {
                             maps.add(dc.getDocument().getData());
                             localIndexList.add(dc.getNewIndex());
+                            DataAddORRemove();
                         }
                     } else {
 

@@ -62,14 +62,14 @@ public class Student_Requests_For_Ta_Fragment extends Fragment {
                             requests.add(dc.getDocument().get("StudentName").toString());
                             localIndexList.add(dc.getNewIndex());
                             DocIds.add(dc.getDocument().getId());
-
+                            DataAddORRemove();
                         }
 
                     } else {
                         switch (dc.getType()) {
                             case ADDED:
                                 if (dc.getDocument().get("TaName").toString().equals(cu.getUserDataLocally(getContext(), "name"))) {
-                                   Log.i(TAG,"WORKING");
+                                    Log.i(TAG, "WORKING");
                                     requests.add(dc.getDocument().get("StudentName").toString());
                                     localIndexList.add(dc.getNewIndex());
                                     DocIds.add(dc.getDocument().getId());
@@ -115,19 +115,19 @@ public class Student_Requests_For_Ta_Fragment extends Fragment {
         view = inflater.inflate(R.layout.student_requests_for_ta, container, false);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.student_requests_for_ta_rv);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-         rvAdaptor = new RV_Adaptor_1(GetRequest(), DocIds);
+        rvAdaptor = new RV_Adaptor_1(GetRequest(), DocIds);
         rv.setAdapter(rvAdaptor);
-        context=getActivity();
+        context = getActivity();
         return view;
     }
 
-//It Updates the Request Status on Firebase when a TA clicks on accept/reject button.
+    //It Updates the Request Status on Firebase when a TA clicks on accept/reject button.
     public static void UpdateRequest(final String requestStatus, String DocId) {
 
         DocumentReference dr = cr.document(DocId);
         dr.update("Status", requestStatus);
         dr.delete();
-        cu.ToasterLong(context,"Request "+requestStatus);
+        cu.ToasterLong(context, "Request " + requestStatus);
     }
 
     //Executes when new requests arrives or old requests removed.
