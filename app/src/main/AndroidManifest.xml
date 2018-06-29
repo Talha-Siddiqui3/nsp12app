@@ -24,7 +24,9 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
 
+            </intent-filter>
         </activity>
         <activity android:name=".Autentication.login_screen" />
         <activity android:name=".Autentication.nsp_web.portal_login" />
@@ -37,9 +39,7 @@
 
         <activity android:name=".Past_papers.MainPPActivity" />
         <activity android:name=".Past_papers.PdfLoad" />
-        <activity
-            android:name=".Past_papers.PaperFilter"
-            android:theme="@style/AlertDialogCustom" />
+
         <activity android:name=".Past_papers.MultiView">
 
         </activity>
