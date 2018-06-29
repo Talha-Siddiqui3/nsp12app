@@ -1,5 +1,7 @@
 package com.btb.nixorstudentapplication.Autentication.nsp_web;
 
+import android.util.Log;
+
 import com.btb.nixorstudentapplication.Misc.common_util;
 import org.jsoup.nodes.Document;
 import static com.btb.nixorstudentapplication.Autentication.nsp_web.portal_async.base_url;

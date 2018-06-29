@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/Monday_Title"
+        android:layout_width="78dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="431dp"
+        android:layout_marginEnd="310dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="200dp"
+        android:text="Monday:"
+        android:textAlignment="textStart"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Tuesday_Title"
+        android:layout_width="78dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="310dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Tuesday:"
+        android:textAlignment="textStart"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Monday_Title" />
+
+    <TextView
+        android:id="@+id/Wednesday_Title"
+        android:layout_width="78dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="310dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Wednesday:"
+        android:textAlignment="textStart"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Tuesday_Title" />
+
+    <TextView
+        android:id="@+id/Thursday_Title"
+        android:layout_width="78dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="310dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Thursday:"
+        android:textAlignment="textStart"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Wednesday_Title" />
+
+    <TextView
+        android:id="@+id/Friday_Title"
+        android:layout_width="78dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="310dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Friday:"
+        android:textAlignment="textStart"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Thursday_Title" />
+
+    <TextView
+        android:id="@+id/Monday_Time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="431dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginStart="214dp"
+        android:layout_marginTop="200dp"
+        android:text="@string/Default_Time_Ta"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Monday_Title"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Tuesday_Time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:layout_marginStart="214dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/Default_Time_Ta"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Tuesday_Title"
+        app:layout_constraintTop_toBottomOf="@+id/Monday_Time" />
+
+    <TextView
+        android:id="@+id/Wednesday_Time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:layout_marginStart="214dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/Default_Time_Ta"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Wednesday_Title"
+        app:layout_constraintTop_toBottomOf="@+id/Tuesday_Time" />
+
+    <TextView
+        android:id="@+id/Thursday_Time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:layout_marginStart="214dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/Default_Time_Ta"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Thursday_Title"
+        app:layout_constraintTop_toBottomOf="@+id/Wednesday_Time" />
+
+    <TextView
+        android:id="@+id/Friday_Time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:layout_marginStart="214dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/Default_Time_Ta"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Friday_Title"
+        app:layout_constraintTop_toBottomOf="@+id/Thursday_Time" />
+
+    <Button
+        android:id="@+id/Submit_Button_Ta_Dialogue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="51dp"
+        android:layout_marginEnd="148dp"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="412dp"
+        android:text="@string/submit_Button_textView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/TA_NAME_DIALOGUE"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="148dp"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="4dp"
+        android:text="Muhammad Talha Siddiqui"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/TA_ID_DIALOGUE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="148dp"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="4dp"
+        android:text="2019172"
+        android:textAlignment="textEnd"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TA_NAME_DIALOGUE" />
+
+
+    <RatingBar
+        android:id="@+id/ratingBar_FoldingView"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="85dp"
+        android:layout_weight="1"
+        android:numStars="5"
+        android:rating="5"
+        app:layout_constraintStart_toEndOf="@+id/photoStudent_circleView_FOR_FoldingView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/photoStudent_circleView_FOR_FoldingView"
+        style="main_studentphoto"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/student_mode"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/SubjectTA_Dialogue"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="8dp"
+        android:text="PhysicsTA"
+        app:layout_constraintStart_toEndOf="@+id/photoStudent_circleView_FOR_FoldingView"
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar_FoldingView" />
+
+
+</android.support.constraint.ConstraintLayout>
+
+
+
+
+
+
+

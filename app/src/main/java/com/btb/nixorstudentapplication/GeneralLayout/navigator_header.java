@@ -11,6 +11,8 @@ import android.widget.RelativeLayout;
 
 import com.btb.nixorstudentapplication.Application_Home.home_screen;
 import com.btb.nixorstudentapplication.Past_papers.MainPPActivity;
+import com.btb.nixorstudentapplication.BookMyTa.Main_Activity_Ta_Tab;
+//import com.btb.nixorstudentapplication.Past_papers.MainPPActivity;
 import com.btb.nixorstudentapplication.R;
 
 import java.util.ArrayList;
@@ -46,6 +48,9 @@ public class navigator_header extends RelativeLayout {
 
         if(context instanceof home_screen){
             allitems.remove("Home");
+        }
+        if(context instanceof Main_Activity_Ta_Tab){
+            allitems.remove("Bookmyta");
         }
 
 

@@ -1,6 +1,7 @@
 package com.btb.nixorstudentapplication.Past_papers;
 
 import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,10 +13,12 @@ import android.widget.Spinner;
 import com.btb.nixorstudentapplication.R;
 import com.google.firebase.firestore.Query;
 
-public class PaperFilter extends Activity implements View.OnClickListener {
+import java.util.ArrayList;
 
-    String TAG = "PaperFilter";
-    MainPPActivity mainPPActivity;
+public class pastpapers_filter extends Activity implements View.OnClickListener {
+
+    String TAG = "pastpapers_filter";
+    Load_papers load_papers;
     Button apply_button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +28,13 @@ public class PaperFilter extends Activity implements View.OnClickListener {
 
         apply_button.setOnClickListener(this);
 
-        mainPPActivity = new MainPPActivity();
+        load_papers = new Load_papers();
 
 
-        final String[] years = PaperFilter.this.getResources().getStringArray(R.array.listofyears);
-        final String[] variants = mainPPActivity.listOfvariants;
-        final String[] type = PaperFilter.this.getResources().getStringArray(R.array.listtype);
-        final String[] month = PaperFilter.this.getResources().getStringArray(R.array.listofmonths);
+        final String[] years = pastpapers_filter.this.getResources().getStringArray(R.array.listofyears);
+        final String[] variants = load_papers.listOfvariants;
+        final String[] type = pastpapers_filter.this.getResources().getStringArray(R.array.listtype);
+        final String[] month = pastpapers_filter.this.getResources().getStringArray(R.array.listofmonths);
 
         Spinner yearspinner = findViewById(R.id.yearspinner);
         final Spinner variantspinner = findViewById(R.id.variantspinner);
@@ -42,10 +45,10 @@ public class PaperFilter extends Activity implements View.OnClickListener {
         populateSpinner(typespinner, type);
         populateSpinner(monthspinner, month);
 
-        yearspinner.setSelection(java.util.Arrays.asList(years).indexOf(mainPPActivity.yearSelection));
-        variantspinner.setSelection(java.util.Arrays.asList(variants).indexOf(mainPPActivity.variantSelection));
-        monthspinner.setSelection(java.util.Arrays.asList(month).indexOf(mainPPActivity.monthSelection));
-        typespinner.setSelection(java.util.Arrays.asList(type).indexOf(mainPPActivity.typeSelection));
+        yearspinner.setSelection(java.util.Arrays.asList(years).indexOf(load_papers.yearSelection));
+        variantspinner.setSelection(java.util.Arrays.asList(variants).indexOf(load_papers.variantSelection));
+        monthspinner.setSelection(java.util.Arrays.asList(month).indexOf(load_papers.monthSelection));
+        typespinner.setSelection(java.util.Arrays.asList(type).indexOf(load_papers.typeSelection));
 
         yearspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -54,8 +57,8 @@ public class PaperFilter extends Activity implements View.OnClickListener {
 
 
                 }else{
-                mainPPActivity.yearSelection = years[position];
-                Log.i(TAG, mainPPActivity.yearSelection);}
+                load_papers.yearSelection = years[position];
+                Log.i(TAG, load_papers.yearSelection);}
 
 
 
@@ -70,8 +73,8 @@ public class PaperFilter extends Activity implements View.OnClickListener {
         monthspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                mainPPActivity.monthSelection = month[position];
-                Log.i(TAG, mainPPActivity.monthSelection);
+                load_papers.monthSelection = month[position];
+                Log.i(TAG, load_papers.monthSelection);
             }
 
             @Override
@@ -83,8 +86,8 @@ public class PaperFilter extends Activity implements View.OnClickListener {
         variantspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                mainPPActivity.variantSelection = variants[position];
-                Log.i(TAG, mainPPActivity.variantSelection);
+                load_papers.variantSelection = variants[position];
+                Log.i(TAG, load_papers.variantSelection);
             }
 
             @Override
@@ -98,12 +101,12 @@ public class PaperFilter extends Activity implements View.OnClickListener {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                if(type[position].equals("Grade Threshold")){
                    variantspinner.setEnabled(false);
-                   mainPPActivity.variantSelection = "All";
+                   load_papers.variantSelection = "All";
 
                }else{
                    variantspinner.setEnabled(true);
-                mainPPActivity.typeSelection = type[position];
-                Log.i(TAG, mainPPActivity.typeSelection);
+                load_papers.typeSelection = type[position];
+                Log.i(TAG, load_papers.typeSelection);
             }}
 
             @Override
@@ -124,34 +127,39 @@ public class PaperFilter extends Activity implements View.OnClickListener {
     }
     public Query buildQuery(Query query) {
         Query queryReturn=query;
-        if(mainPPActivity.yearSelection.equals("All")&& mainPPActivity.monthSelection.equals("All")
-                && mainPPActivity.typeSelection.equals("All")&& mainPPActivity.variantSelection.equals("All")) {
+        if(load_papers.yearSelection.equals("All")&&load_papers.monthSelection.equals("All")
+                &&load_papers.typeSelection.equals("All")&&load_papers.variantSelection.equals("All")) {
             return queryReturn.orderBy("year"); }
-        if(mainPPActivity.yearSelection.equals("All")){
+        if(load_papers.yearSelection.equals("All")){
             queryReturn=   addOrderBy(queryReturn,"year");
         }else{
-            queryReturn=  addEquals(queryReturn,"year", mainPPActivity.yearSelection);
+            queryReturn=  addEquals(queryReturn,"year",load_papers.yearSelection);
         }
-        if(mainPPActivity.monthSelection.equals("All")){
+        if(load_papers.monthSelection.equals("All")){
             queryReturn=addOrderBy(queryReturn,"month");
         }else{
-         switch (mainPPActivity.monthSelection){
+         switch (load_papers.monthSelection){
              case "May/June":queryReturn= addEquals(queryReturn,"month","Summer");break;
              case "October/November":queryReturn= addEquals(queryReturn,"month","Winter");break;
              case "February/March":queryReturn= addEquals(queryReturn,"month","March");break;
-             default:queryReturn= addEquals(queryReturn,"month", mainPPActivity.monthSelection);
+             default:queryReturn= addEquals(queryReturn,"month",load_papers.monthSelection);
          }
         }
-        if(mainPPActivity.typeSelection.equals("All")){
+        if(load_papers.typeSelection.equals("All")){
             queryReturn=   addOrderBy(queryReturn,"type");
         }else{
-            queryReturn=  addEquals(queryReturn,"type", mainPPActivity.typeSelection);
+
+            queryReturn=  addEquals(queryReturn,"type",load_papers.typeSelection);
+
         }
-        if(mainPPActivity.variantSelection.equals("All")){
+        if(load_papers.variantSelection.equals("All")){
             queryReturn=    addOrderBy(queryReturn,"variant");
         }
         else{
-            queryReturn=  addEquals(queryReturn,"variant", mainPPActivity.variantSelection);
+
+
+
+            queryReturn=  addEquals(queryReturn,"variant",load_papers.variantSelection);
         }
 
         return queryReturn;
@@ -161,7 +169,7 @@ public class PaperFilter extends Activity implements View.OnClickListener {
 
     public void populateSpinner(Spinner spinner, String[] data) {
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(PaperFilter.this,
+                new ArrayAdapter<String>(pastpapers_filter.this,
                         android.R.layout.simple_spinner_item, data);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -177,7 +185,7 @@ public class PaperFilter extends Activity implements View.OnClickListener {
     public void setMyQuery(){
 
 
-        mainPPActivity.queryVariable.setBoo(buildQuery(mainPPActivity.queryVariable.isBoo()));
+        load_papers.queryVariable.setBoo(buildQuery(load_papers.queryVariable.isBoo()));
         finish();
 
     }
