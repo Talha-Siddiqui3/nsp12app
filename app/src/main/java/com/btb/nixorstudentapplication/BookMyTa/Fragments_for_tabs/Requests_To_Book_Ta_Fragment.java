@@ -123,8 +123,9 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
 //Simple Recycler View Set up.
         view = inflater.inflate(R.layout.requests_to_book_ta, container, false);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.request_to_book_ta_rv);
-        rvAdaptor = new RV_Adaptor_2(DisplayRequest());
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvAdaptor = new RV_Adaptor_2(DisplayRequest());
+
         rv.setAdapter(rvAdaptor);
 
 

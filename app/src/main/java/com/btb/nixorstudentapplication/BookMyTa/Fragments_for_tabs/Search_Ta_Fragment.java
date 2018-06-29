@@ -29,7 +29,7 @@ import java.util.Map;
 public class Search_Ta_Fragment extends Fragment {
     View view;
     static CollectionReference cr = FirebaseFirestore.getInstance().collection("BookMyTa/BookMyTaDocument/TA Details");
-    RV_Adaptor_3_For_Search_Ta rvAdaptor = new RV_Adaptor_3_For_Search_Ta(DisplayTa());
+    RV_Adaptor_3_For_Search_Ta rvAdaptor;
     boolean isInitialData = true;
     Map<String, Object> map = new HashMap();
     String TAG = "Search_Ta_Fragment";
@@ -87,8 +87,9 @@ public class Search_Ta_Fragment extends Fragment {
 
         view = inflater.inflate(R.layout.search_ta, container, false);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.search_ta_rv);
-        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvAdaptor= new RV_Adaptor_3_For_Search_Ta(DisplayTa());
         rv.setAdapter(rvAdaptor);
         return view;
     }
