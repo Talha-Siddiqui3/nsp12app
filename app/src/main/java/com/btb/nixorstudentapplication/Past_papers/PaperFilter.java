@@ -15,7 +15,7 @@ import com.google.firebase.firestore.Query;
 public class PaperFilter extends Activity implements View.OnClickListener {
 
     String TAG = "PaperFilter";
-    Load_papers load_papers;
+    MainPPActivity mainPPActivity;
     Button apply_button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +25,11 @@ public class PaperFilter extends Activity implements View.OnClickListener {
 
         apply_button.setOnClickListener(this);
 
-        load_papers = new Load_papers();
+        mainPPActivity = new MainPPActivity();
 
 
         final String[] years = PaperFilter.this.getResources().getStringArray(R.array.listofyears);
-        final String[] variants = load_papers.listOfvariants;
+        final String[] variants = mainPPActivity.listOfvariants;
         final String[] type = PaperFilter.this.getResources().getStringArray(R.array.listtype);
         final String[] month = PaperFilter.this.getResources().getStringArray(R.array.listofmonths);
 
@@ -42,10 +42,10 @@ public class PaperFilter extends Activity implements View.OnClickListener {
         populateSpinner(typespinner, type);
         populateSpinner(monthspinner, month);
 
-        yearspinner.setSelection(java.util.Arrays.asList(years).indexOf(load_papers.yearSelection));
-        variantspinner.setSelection(java.util.Arrays.asList(variants).indexOf(load_papers.variantSelection));
-        monthspinner.setSelection(java.util.Arrays.asList(month).indexOf(load_papers.monthSelection));
-        typespinner.setSelection(java.util.Arrays.asList(type).indexOf(load_papers.typeSelection));
+        yearspinner.setSelection(java.util.Arrays.asList(years).indexOf(mainPPActivity.yearSelection));
+        variantspinner.setSelection(java.util.Arrays.asList(variants).indexOf(mainPPActivity.variantSelection));
+        monthspinner.setSelection(java.util.Arrays.asList(month).indexOf(mainPPActivity.monthSelection));
+        typespinner.setSelection(java.util.Arrays.asList(type).indexOf(mainPPActivity.typeSelection));
 
         yearspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -54,8 +54,8 @@ public class PaperFilter extends Activity implements View.OnClickListener {
 
 
                 }else{
-                load_papers.yearSelection = years[position];
-                Log.i(TAG, load_papers.yearSelection);}
+                mainPPActivity.yearSelection = years[position];
+                Log.i(TAG, mainPPActivity.yearSelection);}
 
 
 
@@ -70,8 +70,8 @@ public class PaperFilter extends Activity implements View.OnClickListener {
         monthspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                load_papers.monthSelection = month[position];
-                Log.i(TAG, load_papers.monthSelection);
+                mainPPActivity.monthSelection = month[position];
+                Log.i(TAG, mainPPActivity.monthSelection);
             }
 
             @Override
@@ -83,8 +83,8 @@ public class PaperFilter extends Activity implements View.OnClickListener {
         variantspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                load_papers.variantSelection = variants[position];
-                Log.i(TAG, load_papers.variantSelection);
+                mainPPActivity.variantSelection = variants[position];
+                Log.i(TAG, mainPPActivity.variantSelection);
             }
 
             @Override
@@ -98,12 +98,12 @@ public class PaperFilter extends Activity implements View.OnClickListener {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                if(type[position].equals("Grade Threshold")){
                    variantspinner.setEnabled(false);
-                   load_papers.variantSelection = "All";
+                   mainPPActivity.variantSelection = "All";
 
                }else{
                    variantspinner.setEnabled(true);
-                load_papers.typeSelection = type[position];
-                Log.i(TAG, load_papers.typeSelection);
+                mainPPActivity.typeSelection = type[position];
+                Log.i(TAG, mainPPActivity.typeSelection);
             }}
 
             @Override
@@ -124,39 +124,34 @@ public class PaperFilter extends Activity implements View.OnClickListener {
     }
     public Query buildQuery(Query query) {
         Query queryReturn=query;
-        if(load_papers.yearSelection.equals("All")&&load_papers.monthSelection.equals("All")
-                &&load_papers.typeSelection.equals("All")&&load_papers.variantSelection.equals("All")) {
+        if(mainPPActivity.yearSelection.equals("All")&& mainPPActivity.monthSelection.equals("All")
+                && mainPPActivity.typeSelection.equals("All")&& mainPPActivity.variantSelection.equals("All")) {
             return queryReturn.orderBy("year"); }
-        if(load_papers.yearSelection.equals("All")){
+        if(mainPPActivity.yearSelection.equals("All")){
             queryReturn=   addOrderBy(queryReturn,"year");
         }else{
-            queryReturn=  addEquals(queryReturn,"year",load_papers.yearSelection);
+            queryReturn=  addEquals(queryReturn,"year", mainPPActivity.yearSelection);
         }
-        if(load_papers.monthSelection.equals("All")){
+        if(mainPPActivity.monthSelection.equals("All")){
             queryReturn=addOrderBy(queryReturn,"month");
         }else{
-         switch (load_papers.monthSelection){
+         switch (mainPPActivity.monthSelection){
              case "May/June":queryReturn= addEquals(queryReturn,"month","Summer");break;
              case "October/November":queryReturn= addEquals(queryReturn,"month","Winter");break;
              case "February/March":queryReturn= addEquals(queryReturn,"month","March");break;
-             default:queryReturn= addEquals(queryReturn,"month",load_papers.monthSelection);
+             default:queryReturn= addEquals(queryReturn,"month", mainPPActivity.monthSelection);
          }
         }
-        if(load_papers.typeSelection.equals("All")){
+        if(mainPPActivity.typeSelection.equals("All")){
             queryReturn=   addOrderBy(queryReturn,"type");
         }else{
-
-            queryReturn=  addEquals(queryReturn,"type",load_papers.typeSelection);
-
+            queryReturn=  addEquals(queryReturn,"type", mainPPActivity.typeSelection);
         }
-        if(load_papers.variantSelection.equals("All")){
+        if(mainPPActivity.variantSelection.equals("All")){
             queryReturn=    addOrderBy(queryReturn,"variant");
         }
         else{
-
-
-
-            queryReturn=  addEquals(queryReturn,"variant",load_papers.variantSelection);
+            queryReturn=  addEquals(queryReturn,"variant", mainPPActivity.variantSelection);
         }
 
         return queryReturn;
@@ -182,7 +177,7 @@ public class PaperFilter extends Activity implements View.OnClickListener {
     public void setMyQuery(){
 
 
-        load_papers.queryVariable.setBoo(buildQuery(load_papers.queryVariable.isBoo()));
+        mainPPActivity.queryVariable.setBoo(buildQuery(mainPPActivity.queryVariable.isBoo()));
         finish();
 
     }

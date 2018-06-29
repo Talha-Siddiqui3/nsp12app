@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.btb.nixorstudentapplication.BookMyTa.Main_Activity_Ta_Tab;
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.Past_papers.MainPPActivity;
 import com.btb.nixorstudentapplication.R;
@@ -24,6 +25,7 @@ public class home_screen extends Activity implements View.OnClickListener {
     TextView nameStudent_textView;
     TextView idStudent_textView;
     Button pastPapersIntent;
+    Button bookMyTaIntent;
 
     String TAG = "home_screen";
     common_util common_util = new common_util();
@@ -44,6 +46,8 @@ public class home_screen extends Activity implements View.OnClickListener {
         nameStudent_textView = findViewById(R.id.nameStudent_textView);
         pastPapersIntent = findViewById(R.id.pastPapersIntent);
         pastPapersIntent.setOnClickListener(this);
+        bookMyTaIntent=findViewById(R.id.bookMyTaIntent);
+        bookMyTaIntent.setOnClickListener(this);
 
         db = FirebaseFirestore.getInstance();
         loadStudentDetails();
@@ -91,6 +95,8 @@ public class home_screen extends Activity implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.pastPapersIntent:
                 startActivity(new Intent(home_screen.this, MainPPActivity.class));break;
+            case R.id.bookMyTaIntent:
+                startActivity(new Intent(this,Main_Activity_Ta_Tab.class));
         }
     }
 }
