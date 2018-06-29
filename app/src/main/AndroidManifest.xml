@@ -21,11 +21,10 @@
         </receiver>
 
         <activity android:name=".welcome_screen">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".Autentication.login_screen" />
@@ -39,20 +38,15 @@
 
         <activity android:name=".Past_papers.MainPPActivity" />
         <activity android:name=".Past_papers.PdfLoad" />
-
-        <activity android:name=".Past_papers.MultiView">
-
-        </activity>
+        <activity android:name=".Past_papers.MultiView"></activity>
         <activity
             android:name=".Past_papers.PaperFilter"
             android:theme="@style/AlertDialogCustom" />
         <activity
             android:name=".BookMyTa.Main_Activity_Ta_Tab"
             android:label="@string/title_activity_ta_tab"
-            android:theme="@style/AppTheme.NoActionBar" >
-
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".Nsp_Portal.Nsp_Portal"></activity>
     </application>
 
 </manifest>

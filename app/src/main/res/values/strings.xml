@@ -70,27 +70,13 @@
     <string name="byMonth">Month:</string>
     <string name="byType">Type:</string>
     <string name="apply_button">Apply</string>
-   
-
 
 
     //BookMyTa
-//XMl
+    //XMl
     <string name="submit_Button_textView">Book TA</string>
     <string name="Default_Time_Ta">Unavailable</string>
     <string name="ta_Name">TA Name</string>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     <string name="filter_heading">Filter papers</string>
