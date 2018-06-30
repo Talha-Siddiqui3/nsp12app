@@ -21,7 +21,6 @@
         </receiver>
 
         <activity android:name=".welcome_screen">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,9 +41,8 @@
         <activity
             android:name=".Past_papers.PaperFilter"
             android:theme="@style/AlertDialogCustom" />
-        <activity android:name=".Past_papers.MultiView">
-
-        </activity>
+        <activity android:name=".Past_papers.MultiView"></activity>
+        <activity android:name=".Sharks_on_cloud.MainCloudActivity"></activity>
     </application>
 
 </manifest>

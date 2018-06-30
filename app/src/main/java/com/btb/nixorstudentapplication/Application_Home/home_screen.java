@@ -11,18 +11,19 @@ import android.widget.TextView;
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.Past_papers.MainPPActivity;
 import com.btb.nixorstudentapplication.R;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.MainCloudActivity;
 import com.btb.nixorstudentapplication.User.UserPhoto;
 import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class home_screen extends Activity implements View.OnClickListener {
+public class home_screen extends Activity {
     //XML
     CircleImageView photoStudent_circleView;
     TextView nameStudent_textView;
     TextView idStudent_textView;
-    Button pastPapersIntent;
+
 
     String TAG = "home_screen";
     common_util common_util = new common_util();
@@ -41,8 +42,8 @@ public class home_screen extends Activity implements View.OnClickListener {
         photoStudent_circleView = findViewById(R.id.student_photo);
         idStudent_textView = findViewById(R.id.idStudent_textView);
         nameStudent_textView = findViewById(R.id.nameStudent_textView);
-        pastPapersIntent = findViewById(R.id.pastPapersIntent);
-        pastPapersIntent.setOnClickListener(this);
+
+
 
         db = FirebaseFirestore.getInstance();
         loadStudentDetails();
@@ -83,11 +84,5 @@ public class home_screen extends Activity implements View.OnClickListener {
 
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.pastPapersIntent:
-                startActivity(new Intent(home_screen.this, MainPPActivity.class));break;
-        }
-    }
+
 }

@@ -113,6 +113,7 @@
     </string-array>
 
     <string name="node_subjects">Past Papers/names/</string>
+    <string name="node_soc_all_subjects">SharksOnCloud/AllSubjects/</string>
 
 
     <string name="node_papers">Past Papers/Subjects/</string>

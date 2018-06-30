@@ -146,7 +146,7 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
     //Pretty self explanatory. Downloads the papers.
     public void downloadpapers(final String Actualname, final String secondPaper) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference().child("PastPapers/Subjects/Chem/" + Actualname);
+        StorageReference storageRef = storage.getReference().child("PastPapers/Subjects/"+((MainPPActivity)activity).subjectSelected+"/" + Actualname);
         File localFile = null;
         try {
             String PATH = Environment.getExternalStorageDirectory() + "/nixorapp/pastpapers/";
@@ -208,7 +208,7 @@ public class Pastpaper_adapter extends RecyclerView.Adapter<Pastpaper_adapter.Rv
 
     public void downloadSecondFile(final String Actualname, final String firsPaper) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference().child("PastPapers/Subjects/Chem/" + Actualname);
+        StorageReference storageRef = storage.getReference().child("PastPapers/Subjects/"+((MainPPActivity)activity).subjectSelected+"/" + Actualname);
         File file1 = new File(Environment.getExternalStorageDirectory() + "/nixorapp/pastpapers/" + Actualname);
         if (file1.exists() == false) {
 

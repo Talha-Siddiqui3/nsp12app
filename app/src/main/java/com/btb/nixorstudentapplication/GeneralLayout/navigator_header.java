@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import com.btb.nixorstudentapplication.Application_Home.home_screen;
 import com.btb.nixorstudentapplication.Past_papers.MainPPActivity;
 import com.btb.nixorstudentapplication.R;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.MainCloudActivity;
 
 import java.util.ArrayList;
 
@@ -46,6 +47,10 @@ public class navigator_header extends RelativeLayout {
 
         if(context instanceof home_screen){
             allitems.remove("Home");
+        }
+
+        if(context instanceof MainCloudActivity){
+            allitems.remove("Soc");
         }
 
 
