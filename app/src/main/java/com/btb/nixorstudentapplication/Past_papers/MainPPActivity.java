@@ -84,7 +84,7 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
     }
 
     public void initialize() {
-        activity_header.setActivityname("Pastpapers");
+        activity_header.setActivityname("Past papers");
 
         RelativeLayout layout = findViewById(R.id.multiview);
         layout.animate().translationX(1000);
@@ -147,7 +147,7 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
     ArrayList<Object> listofSubjects = new ArrayList<>();
     public void getListOfSubjects(final Context mycontext){
         //Need to add Filters for subjects
-        ((MainPPActivity)mycontext).FilterButton.setVisibility(View.INVISIBLE);
+        ((MainPPActivity)mycontext).FilterButton.setVisibility(View.GONE);
         final RecyclerView rv = findViewById(R.id.rv_list);
         rv.setVisibility(View.INVISIBLE);
         rv.setAdapter(null);

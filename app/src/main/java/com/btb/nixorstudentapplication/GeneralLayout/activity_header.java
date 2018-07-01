@@ -20,7 +20,7 @@ public class activity_header extends RelativeLayout{
    static CircleImageView displayphoto;
    static TextView displayname;
    static TextView displayid;
-   static TextView nixorpoints;
+
    static TextView activityname;
    Button back_button;
     public activity_header(Context context) {
@@ -37,7 +37,7 @@ public class activity_header extends RelativeLayout{
         displayphoto = rootView.findViewById(R.id.student_photo);
         displayname = rootView.findViewById(R.id.displayname);
         displayid = rootView.findViewById(R.id.displayid);
-        nixorpoints = rootView.findViewById(R.id.nixorpoints);
+
         activityname = rootView.findViewById(R.id.activity_name);
         back_button = rootView.findViewById(R.id.back_button);
 
@@ -64,9 +64,6 @@ public class activity_header extends RelativeLayout{
     }
     private void setStudentID(String id){
         displayid.setText(id);
-    }
-    public void setNixorPoints(String nixorPoints){
-        nixorpoints.setText(nixorPoints);
     }
     public void setActivityname(String activityname1){
         activityname.setText(activityname1);
