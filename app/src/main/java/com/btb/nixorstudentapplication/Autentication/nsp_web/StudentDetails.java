@@ -24,13 +24,14 @@ public class StudentDetails {
     public StudentDetails() {
     }
 
-    public StudentDetails(String student_name, String student_id, String student_email, String student_year, String student_house, String student_profileUrl) {
+    public StudentDetails(String student_name, String student_id, String student_email, String student_year, String student_house, String student_profileUrl,String student_guid) {
         this.student_name = student_name;
         this.student_id = student_id;
         this.student_email = student_email;
         this.student_year = student_year;
         this.student_house = student_house;
         this.student_profileUrl = student_profileUrl;
+        this.student_guid=student_guid;
     }
 
     public String getStudent_name() {

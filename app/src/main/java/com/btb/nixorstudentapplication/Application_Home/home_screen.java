@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.btb.nixorstudentapplication.BookMyTa.Main_Activity_Ta_Tab;
 import com.btb.nixorstudentapplication.Misc.common_util;
+import com.btb.nixorstudentapplication.Nsp_Portal.Nsp_Portal_MainActivity;
 import com.btb.nixorstudentapplication.Past_papers.MainPPActivity;
 import com.btb.nixorstudentapplication.R;
 import com.btb.nixorstudentapplication.User.UserPhoto;
@@ -26,6 +27,7 @@ public class home_screen extends Activity implements View.OnClickListener {
     TextView idStudent_textView;
     Button pastPapersIntent;
     Button bookMyTaIntent;
+    Button nspIntent;
 
     String TAG = "home_screen";
     common_util common_util = new common_util();
@@ -46,8 +48,10 @@ public class home_screen extends Activity implements View.OnClickListener {
         nameStudent_textView = findViewById(R.id.nameStudent_textView);
         pastPapersIntent = findViewById(R.id.pastPapersIntent);
         pastPapersIntent.setOnClickListener(this);
-        bookMyTaIntent=findViewById(R.id.bookMyTaIntent);
+        bookMyTaIntent = findViewById(R.id.bookMyTaIntent);
         bookMyTaIntent.setOnClickListener(this);
+        nspIntent = findViewById(R.id.nsp_portal1);
+        nspIntent.setOnClickListener(this);
 
         db = FirebaseFirestore.getInstance();
         loadStudentDetails();
@@ -94,9 +98,16 @@ public class home_screen extends Activity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.pastPapersIntent:
-                startActivity(new Intent(home_screen.this, MainPPActivity.class));break;
+                startActivity(new Intent(home_screen.this, MainPPActivity.class));
+                break;
             case R.id.bookMyTaIntent:
-                startActivity(new Intent(this,Main_Activity_Ta_Tab.class));
+
+                startActivity(new Intent(this, Main_Activity_Ta_Tab.class));
+                break;
+            case R.id.nsp_portal1:
+
+                startActivity(new Intent(this, Nsp_Portal_MainActivity.class));
+                break;
         }
     }
 }

@@ -190,6 +190,7 @@ public class common_util {
         editor.putString("name", studentDetails.getStudent_name()); // Storing Name
         editor.putString("student_id", studentDetails.getStudent_id()); // Storing studentID
         editor.putString("nsp_photo", studentDetails.getStudent_profileUrl()); // Storing NspPhoto
+        editor.putString("GUID",studentDetails.getStudent_guid());// String Students's GUID
         editor.apply();
     }
     public void saveUserDataLocally(Context context ,String key ,String data){
@@ -219,6 +220,7 @@ public class common_util {
         student.setStudent_house(map.get("student_house").toString());
         //NSP PHOTO NOT FIREBASE FOR FIREBASE USE "photourl"
         student.setStudent_profileUrl(map.get("student_profileUrl").toString());
+        student.setStudent_guid(map.get("student_guid").toString());
         return student;
     }
     public AlertDialog showAlertDialogue(Activity activity, String title, String message){

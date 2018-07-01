@@ -3,7 +3,6 @@ package com.btb.nixorstudentapplication.Past_papers;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Environment;
 
 
@@ -21,14 +20,11 @@ import java.io.File;
 
 public class PdfLoad extends Activity {
 
-common_util common_util = new common_util();
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pdf_load);
+        setContentView(R.layout.activity_pdf_load_pastpapers);
 Intent i=getIntent();
 File file=new File(Environment.getExternalStorageDirectory() + "/nixorapp/pastpapers/"+i.getStringExtra("FileName"));
         PDFView pdfView=findViewById(R.id.pdfView);
@@ -45,8 +41,6 @@ File file=new File(Environment.getExternalStorageDirectory() + "/nixorapp/pastpa
                 // spacing between pages in dp. To define spacing color, set view background
                 .spacing(0)
                 .load();
-
-
 
 
 

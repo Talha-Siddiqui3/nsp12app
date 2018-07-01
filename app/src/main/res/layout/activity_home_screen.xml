@@ -84,4 +84,13 @@
         android:layout_alignParentStart="true"
         android:text="Open Pastpapers" />
 
+    <Button
+        android:id="@+id/nsp_portal1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="160dp"
+        android:text="nsp_portal" />
+
 </RelativeLayout>

@@ -42,7 +42,7 @@ public class ExtractData {
         String Student_year=Format_Student_BasicDetails(table,"<td>Graduating Class :</td>");
         String Student_house=Format_Student_BasicDetails(table,"<td>House :</td>");
         //student_name, String student_ID, String student_email, String student_year, String student_house
-        StudentDetails student = new StudentDetails(Student_name, Student_ID, Student_email,Student_year,Student_house,null);
+        StudentDetails student = new StudentDetails(Student_name, Student_ID, Student_email,Student_year,Student_house,null,null);
         return student;
     }
     //Formats the Student Details
