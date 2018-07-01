@@ -49,13 +49,13 @@ import java.util.Map;
 public class Nsp_Portal_MainActivity extends AppCompatActivity {
 
     private common_util common_util;
-    String Filename;
-    String GUID = "";
-    String TAG;
-    Map<String, Object> map = new HashMap<>();
-    GridView gridView;
-    Nsp_Adaptor nsp_adaptor;
-    List<String> icons;
+    private String Filename;
+    public static String GUID = "";
+    private String TAG;
+    private Map<String, Object> map = new HashMap<>();
+    private GridView gridView;
+    private Nsp_Adaptor nsp_adaptor;
+    private List<String> icons;
 
 
     @Override
@@ -65,58 +65,13 @@ public class Nsp_Portal_MainActivity extends AppCompatActivity {
         icons = new ArrayList<>();
         common_util = new common_util();
         GetGUIDLocally();
-       GetNspIcons();
+        GetNspIcons();
         TAG = "Nsp_Portal_MainActivity";
         gridView = findViewById(R.id.GridView_NspPortal);
-       nsp_adaptor = new Nsp_Adaptor(icons);
-       gridView.setAdapter(nsp_adaptor);
+        nsp_adaptor = new Nsp_Adaptor(icons, this);
+        gridView.setAdapter(nsp_adaptor);
         GetExternalStoragePermission();
         MakePath();
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-               switch (view.getTag().toString()) {
-                   case "Profile":
-                    GetNspData("Profile");
-                       break;
-                   case "Gate Attendance":
-                       GetNspData("Gate%20Attendance");
-                       break;
-                   case "Class Attendance":
-                     GetNspData("Class%20Attendance");
-                       break;
-                   case "Finance":
-                       GetNspData("Finance");
-                       break;
-                   case "Schedule":
-                       GetNspData("Schedule");
-                       break;
-                   case "Student Marks":
-                       GetNspData("Student%20Marks");
-                       break;
-                   case "CIE Grades":
-                       GetNspData("Grades");
-                       break;
-                   case "TA Schedule":
-                       common_util.ToasterLong(Nsp_Portal_MainActivity.this,"NOT AVAILABLE YET");
-                       break;
-                   case "TA Log":
-                       GetNspData("TA%20Log");
-                       break;
-                   default:
-                       common_util.ToasterLong(Nsp_Portal_MainActivity.this,"ERROR");
-                       break;
-
-
-               }
-
-
-            }
-        });
-
-
-
 
 
     }
@@ -125,9 +80,8 @@ public class Nsp_Portal_MainActivity extends AppCompatActivity {
     public void MakePath() {
         File path = new File(Environment.getExternalStorageDirectory() + "/nixorapp/NspDocuments/");
         if (!path.exists())
-
             path.mkdirs();
-        Log.i("ABC", path.toString());
+
     }
 
 
@@ -156,8 +110,8 @@ public class Nsp_Portal_MainActivity extends AppCompatActivity {
 
     public void GetGUIDLocally() {
         GUID = common_util.getUserDataLocally(this, "GUID");
-       Log.i("abcd",GUID);
-        }
+
+    }
 
 
     private void GetExternalStoragePermission() {
@@ -168,7 +122,7 @@ public class Nsp_Portal_MainActivity extends AppCompatActivity {
 
 
     public void GetNspIcons() {
-       String username=common_util.getUserDataLocally(this,"username");
+        String username = common_util.getUserDataLocally(this, "username");
         DocumentReference dr = FirebaseFirestore.getInstance().collection("users").document(username).collection("icons").document("myicons");
         dr.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
@@ -192,12 +146,6 @@ public class Nsp_Portal_MainActivity extends AppCompatActivity {
         });
     }
 
-public void GetNspData(String data){
-    common_util.progressDialogShow(this, "Please Wait");
-    File file1 = new File(Environment.getExternalStorageDirectory() + "/nixorapp/NspDocuments/" + data+".pdf");
-    Nsp_ASyncTask aSyncTask = new Nsp_ASyncTask(file1, this,GUID,data);
-    aSyncTask.execute();
-    }
 
 
 }

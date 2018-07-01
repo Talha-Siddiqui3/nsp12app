@@ -1,5 +1,8 @@
 package com.btb.nixorstudentapplication.Nsp_Portal.Adaptors;
 
+import android.app.Activity;
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,22 +10,65 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.btb.nixorstudentapplication.Misc.common_util;
+import com.btb.nixorstudentapplication.Nsp_Portal.Nsp_ASyncTask;
+import com.btb.nixorstudentapplication.Nsp_Portal.Nsp_Portal_MainActivity;
 import com.btb.nixorstudentapplication.R;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.util.Log.i;
 
 public class Nsp_Adaptor extends BaseAdapter implements View.OnClickListener {
     List<String> iconList = new ArrayList<>();
     private TextView txt;
     private ImageView img;
+    private common_util cu=new common_util();
+    private Activity context;
 
-public Nsp_Adaptor(List<String>iconList){
-    this.iconList=iconList;
+
+public Nsp_Adaptor(List<String>iconList,Activity context) {
+    this.iconList = iconList;
+    this.context = context;
+
 }
     @Override
     public void onClick(View v) {
+        switch (v.getTag().toString()) {
+            case "Profile":
+                GetNspData("Profile");
+                break;
+            case "Gate Attendance":
+                GetNspData("Gate%20Attendance");
+                break;
+            case "Class Attendance":
+                GetNspData("Attendance");
+                break;
+            case "Finance":
+                GetNspData("Finance");
+                break;
+            case "Schedule":
+                GetNspData("Schedule");
+                break;
+            case "Student Marks":
+                GetNspData("Student%20Marks");
+                break;
+            case "CIE Grades":
+                GetNspData("Grades");
+                break;
+            case "TA Schedule":
+               cu.ToasterLong(context, "NOT AVAILABLE YET");
+                break;
+            case "TA Log":
+                GetNspData("TA%20Log");
+                break;
+            default:
+               cu.ToasterLong(context, "ERROR");
+                break;
 
+        }
     }
 
     @Override
@@ -48,10 +94,12 @@ public Nsp_Adaptor(List<String>iconList){
         }
         txt = convertView.findViewById(R.id.icon_text_nsp_portal);
         img = convertView.findViewById(R.id.iconimage_nsp_portal);
-        //txt.setOnClickListener(this);
-        //img.setOnClickListener(this);
+        txt.setOnClickListener(this);
+        img.setOnClickListener(this);
         txt.setText(iconList.get(position));
-        convertView.setTag(iconList.get (position));
+        img.setTag(iconList.get (position));
+        txt.setTag(iconList.get (position));
+
         switch (iconList.get(position)) {
             case "Profile":
                 img.setImageResource(R.drawable.newprofile);
@@ -90,5 +138,15 @@ public Nsp_Adaptor(List<String>iconList){
 
         return convertView;
     }
+
+    public void GetNspData(String data){
+      cu.progressDialogShow(context, "Please Wait");
+        File file1 = new File(Environment.getExternalStorageDirectory() + "/nixorapp/NspDocuments/" + data+".pdf");
+        Nsp_ASyncTask aSyncTask = new Nsp_ASyncTask(file1, context, Nsp_Portal_MainActivity.GUID,data);
+        aSyncTask.execute();
+    }
+
+
+
 
 }
