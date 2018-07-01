@@ -1,7 +1,6 @@
 package com.btb.nixorstudentapplication.Application_Home;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -25,7 +23,6 @@ import com.btb.nixorstudentapplication.BookMyTa.Main_Activity_Ta_Tab;
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.Misc.permission_util;
 import com.btb.nixorstudentapplication.Nsp_Portal.Adaptors.Nsp_Adaptor;
-import com.btb.nixorstudentapplication.Nsp_Portal.Nsp_Portal_MainActivity;
 import com.btb.nixorstudentapplication.Past_papers.MainPPActivity;
 import com.btb.nixorstudentapplication.R;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.MainCloudActivity;
@@ -119,13 +116,13 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
     }
 
     }
-
+    //Nsp Stuff. Do your commenting here
     public void intializeNSP(){
         icons = new ArrayList<>();
         common_util = new common_util();
         GetGUIDLocally();
         GetNspIcons();
-        TAG = "Nsp_Portal_MainActivity";
+        TAG = "oldActivity";
         gridView = findViewById(R.id.GridView_NspPortal);
         nsp_adaptor = new Nsp_Adaptor(icons, this);
         gridView.setAdapter(nsp_adaptor);
@@ -174,6 +171,28 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
         });
     }
 
+
+//In case we need GUID from FIrebase
+    /*public void GetGUIDFireStore() {
+        String userName = common_util.extractUsername(this, "talha.siddiqui@nixorcollege.edu.pk");
+        DocumentReference dr = FirebaseFirestore.getInstance().collection("users").document(userName);
+        dr.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful())
+
+                {
+
+                    GUID = task.getResult().get("student_guid").toString();
+                } else {
+                    Log.i(TAG, "Couldn't get GUID");
+
+                }
+            }
+        });
+    }
+*/
 
 
     public void loadStudentDetails() {

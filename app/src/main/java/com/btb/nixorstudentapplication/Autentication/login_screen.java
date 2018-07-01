@@ -83,6 +83,7 @@ public class login_screen extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
         splash_screen = findViewById(R.id.splash_screen);
+        splash_screen.setVisibility(View.VISIBLE);
         //Intialize var
         permission_util = new permission_util();
             //XMl

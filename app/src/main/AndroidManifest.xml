@@ -50,12 +50,8 @@
             android:name=".BookMyTa.Main_Activity_Ta_Tab"
             android:label="@string/title_activity_ta_tab"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Nsp_Portal.Nsp_Portal_MainActivity">
 
-
-           </activity>
-
-        <activity android:name=".Nsp_Portal.Nsp_Portal_PDF_LOADER"></activity>
+        <activity android:name=".Nsp_Portal.NspPortalPdf"></activity>
         <activity android:name=".Sharks_on_cloud.MainCloudActivity"></activity>
     </application>
 

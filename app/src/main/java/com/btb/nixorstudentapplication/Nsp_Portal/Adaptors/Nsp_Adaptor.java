@@ -2,7 +2,6 @@ package com.btb.nixorstudentapplication.Nsp_Portal.Adaptors;
 
 import android.app.Activity;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,7 @@ import android.widget.TextView;
 
 import com.btb.nixorstudentapplication.Application_Home.home_screen;
 import com.btb.nixorstudentapplication.Misc.common_util;
-import com.btb.nixorstudentapplication.Nsp_Portal.Nsp_ASyncTask;
-import com.btb.nixorstudentapplication.Nsp_Portal.Nsp_Portal_MainActivity;
+import com.btb.nixorstudentapplication.Nsp_Portal.NspASyncTask;
 import com.btb.nixorstudentapplication.R;
 
 import java.io.File;
@@ -143,7 +141,7 @@ public Nsp_Adaptor(List<String>iconList,Activity context) {
     public void GetNspData(String data){
       cu.progressDialogShow(context, "Please Wait");
         File file1 = new File(Environment.getExternalStorageDirectory() + "/nixorapp/NspDocuments/" + data+".pdf");
-        Nsp_ASyncTask aSyncTask = new Nsp_ASyncTask(file1, context, home_screen.GUID,data);
+        NspASyncTask aSyncTask = new NspASyncTask(file1, context, home_screen.GUID,data);
         aSyncTask.execute();
     }
 

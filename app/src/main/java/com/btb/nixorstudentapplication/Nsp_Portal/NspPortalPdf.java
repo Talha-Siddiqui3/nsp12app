@@ -3,23 +3,20 @@ package com.btb.nixorstudentapplication.Nsp_Portal;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
-import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.R;
 import com.github.barteksc.pdfviewer.PDFView;
 
 import java.io.File;
 
-public class Nsp_Portal_PDF_LOADER extends Activity {
+public class NspPortalPdf extends Activity {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nsp__portal__pdf__loader);
+        setContentView(R.layout.nsp_portal__pdf);
         Intent i = getIntent();
 
         File file = new File(Environment.getExternalStorageDirectory() + "/nixorapp/NspDocuments/" + i.getStringExtra("FileName"));

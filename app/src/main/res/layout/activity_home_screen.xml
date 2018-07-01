@@ -57,8 +57,6 @@
     </android.support.v7.widget.Toolbar>
 
 
-
-
     <GridView
         android:id="@+id/GridView_NspPortal"
         android:layout_width="match_parent"
@@ -66,6 +64,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/idStudent_textView"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:layout_marginTop="30dp"
         android:columnWidth="100dp"
         android:divider="@android:color/transparent"
