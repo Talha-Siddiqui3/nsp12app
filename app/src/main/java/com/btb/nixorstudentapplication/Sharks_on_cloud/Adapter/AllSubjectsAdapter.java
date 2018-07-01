@@ -53,7 +53,8 @@ public class AllSubjectsAdapter extends RecyclerView.Adapter<AllSubjectsAdapter.
        holder.item_name.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
-              // MainCloudActivity mainPPActivity = new MainPPActivity();
+               ((MainCloudActivity)activity).getAllBuckets(activity,allitems.get(position).toString());
+               // MainCloudActivity mainPPActivity = new MainPPActivity();
              //  mainPPActivity.getPapersForSubject(true,allitems.get(position).toString(),activity, rv);
            }
        });

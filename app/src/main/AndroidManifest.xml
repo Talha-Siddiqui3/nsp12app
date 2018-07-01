@@ -41,8 +41,10 @@
         <activity
             android:name=".Past_papers.PaperFilter"
             android:theme="@style/AlertDialogCustom" />
-        <activity android:name=".Past_papers.MultiView"></activity>
-        <activity android:name=".Sharks_on_cloud.MainCloudActivity"></activity>
+        <activity android:name=".Past_papers.MultiView" />
+        <activity android:name=".Sharks_on_cloud.MainCloudActivity" />
+        <activity android:name=".Sharks_on_cloud.ImageViewer.ImageViewer" />
+        <activity android:name=".Sharks_on_cloud.upload_activity"></activity>
     </application>
 
 </manifest>
