@@ -9,14 +9,22 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.btb.nixorstudentapplication.Misc.common_util;
+import com.mklimek.sslutilsandroid.SslUtils;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Date;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
 
 public class Nsp_ASyncTask extends AsyncTask<Void, Void, Void> {
     private com.btb.nixorstudentapplication.Misc.common_util common_util;
@@ -48,9 +56,27 @@ private String data;
         }
 
         try {
-            new DefaultHttpClient().execute(new HttpGet("https://nsp.braincrop.net/Students/Reports/"+GUID+"?meth="+data))
-                    .getEntity().writeTo(
-                    new FileOutputStream(file1));
+            String URL_string = "https://nsp.braincrop.net/Students/Reports/"+GUID+"?meth="+data;
+            SSLContext sslContext = SslUtils.getSslContextForCertificateFile(context, "nixor.cer");
+            java.net.URL url = new URL(URL_string);
+            HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
+            connection.setDoInput(true);
+            connection.setSSLSocketFactory(sslContext.getSocketFactory());
+            connection.connect();
+
+            InputStream inputStream = connection.getInputStream();
+            FileOutputStream fos = new FileOutputStream(file1);
+
+            byte[] buffer = new byte[1024];//Set buffer type
+            int len1 = 0;//init length
+            while ((len1 = inputStream.read(buffer)) != -1) {
+                fos.write(buffer, 0, len1);//Write new file
+            }
+
+            //Close all connection after doing task
+            fos.close();
+            inputStream.close();
+
         } catch (Exception e) {
             GetDataxception = e;
             e.printStackTrace();

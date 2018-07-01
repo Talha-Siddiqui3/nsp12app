@@ -33,7 +33,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:padding="10dp"
-        app:srcCompat="@drawable/newprofile" />
+        />
 
     <!-- Artist Name -->
 
