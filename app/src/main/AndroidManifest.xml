@@ -31,7 +31,9 @@
         </activity>
         <activity android:name=".Autentication.login_screen" />
         <activity android:name=".Autentication.nsp_web.portal_login" />
-        <activity android:name=".Application_Home.home_screen" />
+        <activity android:name=".Application_Home.home_screen"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <activity android:name=".Autentication.User.AccountType" />
 
         <meta-data
@@ -54,6 +56,7 @@
            </activity>
 
         <activity android:name=".Nsp_Portal.Nsp_Portal_PDF_LOADER"></activity>
+        <activity android:name=".Sharks_on_cloud.MainCloudActivity"></activity>
     </application>
 
 </manifest>

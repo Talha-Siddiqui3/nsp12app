@@ -8,11 +8,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
@@ -25,6 +28,7 @@ import com.btb.nixorstudentapplication.Nsp_Portal.Adaptors.Nsp_Adaptor;
 import com.btb.nixorstudentapplication.Nsp_Portal.Nsp_Portal_MainActivity;
 import com.btb.nixorstudentapplication.Past_papers.MainPPActivity;
 import com.btb.nixorstudentapplication.R;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.MainCloudActivity;
 import com.btb.nixorstudentapplication.User.UserPhoto;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -41,7 +45,7 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class home_screen extends Activity {
+public class home_screen extends AppCompatActivity implements View.OnClickListener {
     //XML
     CircleImageView photoStudent_circleView;
     TextView nameStudent_textView;
@@ -66,29 +70,56 @@ public class home_screen extends Activity {
     private Nsp_Adaptor nsp_adaptor;
     private List<String> icons;
 
-    private DrawerLayout drawer;
+    private DrawerLayout mDrawerLayout;
+    private Button menu_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
 
+
+
         //XML
         photoStudent_circleView = findViewById(R.id.student_photo);
         idStudent_textView = findViewById(R.id.idStudent_textView);
         nameStudent_textView = findViewById(R.id.nameStudent_textView);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        menu_button = findViewById(R.id.menu_button);
 
-
-
-       // drawer = (DrawerLayout) findViewById(R.id.drawerLayout);
-
-
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        menu_button.setOnClickListener(this);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                       mDrawerLayout.closeDrawers();
+                        switch (menuItem.getItemId()){
+                            case R.id.pp:startActivity(new Intent(home_screen.this, MainPPActivity.class));break;
+                            case R.id.soc:startActivity(new Intent(home_screen.this, MainCloudActivity.class));break;
+                            case R.id.ta:startActivity(new Intent(home_screen.this, Main_Activity_Ta_Tab.class));break;
+                        }
+                        return true;
+                    }
+                });
 
         db = FirebaseFirestore.getInstance();
         loadStudentDetails();
         common_util.checkActivation(home_screen.this, username);
         intializeNSP();
     }
+    public void onClick(View view) {
+    switch (view.getId()) {
+        case R.id.menu_button:
+            mDrawerLayout.openDrawer(GravityCompat.START);
+
+    }
+
+    }
+
     public void intializeNSP(){
         icons = new ArrayList<>();
         common_util = new common_util();
@@ -180,5 +211,15 @@ public class home_screen extends Activity {
 
     }
 
-
+    @Override
+    public void onBackPressed() {
+        if(mDrawerLayout!=null){
+            if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+                mDrawerLayout.closeDrawers();
+            }else{
+                super.onBackPressed();
+            }
+        }else{
+        super.onBackPressed();}
+    }
 }

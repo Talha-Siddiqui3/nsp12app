@@ -17,9 +17,13 @@
 
             <item
                 android:id="@+id/ta"
-                android:fontFamily="@font/assistant_extralight"
 
                 android:title="BookMyTA" />
+            android:fontFamily="@font/assistant_extralight"
+            <item
+                android:id="@+id/soc"
+                android:fontFamily="@font/assistant_extralight"
+                android:title="Sharks on Cloud" />
         </menu>
     </item>
 

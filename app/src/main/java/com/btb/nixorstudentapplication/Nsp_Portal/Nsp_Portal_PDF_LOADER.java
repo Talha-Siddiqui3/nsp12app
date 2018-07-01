@@ -1,5 +1,6 @@
 package com.btb.nixorstudentapplication.Nsp_Portal;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +13,7 @@ import com.github.barteksc.pdfviewer.PDFView;
 
 import java.io.File;
 
-public class Nsp_Portal_PDF_LOADER extends AppCompatActivity {
+public class Nsp_Portal_PDF_LOADER extends Activity {
 
 
     @Override
