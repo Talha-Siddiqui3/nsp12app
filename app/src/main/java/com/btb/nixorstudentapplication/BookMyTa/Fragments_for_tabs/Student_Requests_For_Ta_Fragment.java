@@ -132,7 +132,7 @@ public class Student_Requests_For_Ta_Fragment extends Fragment {
         cu.ToasterLong(context,"Request "+requestStatus);
     }
 
-    //Executes when new requests arrives or old requests removed.
+    //Executes when new requests arrives or old requests removed..
     public void DataAddORRemove() {
         rvAdaptor.notifyDataSetChanged();
     }
