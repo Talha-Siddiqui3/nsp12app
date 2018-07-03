@@ -2,93 +2,110 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/header_size"
-    android:background="@color/colorPrimary"
-    android:paddingBottom="10dp">
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary">
 
-    <TextView
-        android:id="@+id/nixorpoints"
-        style="@style/sub_headings"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/head"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/student_photo"
-        android:layout_below="@+id/displayid"
-        android:layout_marginLeft="10dp"
-        android:layout_toEndOf="@+id/student_photo"
-        android:paddingLeft="5dp"
-        android:text="@string/nixorpoints_textView"
-        android:textAlignment="center"
-        android:textColor="#fff"
-        android:textSize="12sp"
-        android:visibility="visible" />
-
-    <TextView
-        android:id="@+id/displayname"
-        style="@style/sub_headings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginLeft="10dp"
-        android:layout_toEndOf="@+id/student_photo"
-        android:paddingStart="5dp"
-        android:text="Hassan Anjum Abbasi"
-        android:textAlignment="textStart"
-        android:textColor="#fff"
-        android:textSize="15sp" />
-
-    <TextView
-        android:id="@+id/displayid"
-        style="@style/sub_headings"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_alignStart="@+id/displayname"
-        android:layout_below="@+id/displayname"
-        android:paddingStart="5dp"
-        android:text="2019618"
-        android:textAlignment="textStart"
-        android:textColor="#fff"
-        android:textSize="15sp" />
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/student_photo"
-        style="main_studentphoto"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="5dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="5dp"
-        android:src="@drawable/sample" />
-
-    <Button
-        android:id="@+id/imageView4"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:background="@drawable/parent_mode" />
+        android:background="@color/colorPrimary">
 
-    <TextView
-        android:id="@+id/activity_name"
-        style="@style/headings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/displayname"
-        android:layout_alignStart="@+id/nixorpoints"
-        android:layout_marginBottom="5dp"
-        android:paddingLeft="5dp"
-        android:text="Past Papers"
-        android:textColor="#fff"
-        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/displayname"
+            style="@style/sub_headings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/student_photo"
+            android:paddingStart="20dp"
+            android:text="Hassan Anjum Abbasi"
+            android:textAlignment="textStart"
+            android:textColor="#fff"
+            android:textSize="15sp" />
 
-    <Button
-        android:id="@+id/back_button"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/imageView4"
-        android:layout_marginStart="14dp"
-        android:background="@drawable/back_white" />
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/back_button"
+            android:layout_marginEnd="15dp"
+            app:srcCompat="@drawable/menu" />
+
+        <TextView
+            android:id="@+id/displayid"
+            style="@style/sub_headings"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_alignStart="@+id/displayname"
+            android:layout_below="@+id/displayname"
+            android:paddingStart="20dp"
+            android:text="2019618"
+            android:textAlignment="textStart"
+            android:textColor="#fff"
+            android:textSize="14sp" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/student_photo"
+            style="main_studentphoto"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="54dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/sample" />
+
+        <Button
+            android:id="@+id/back_button"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/back_white" />
+
+        <TextView
+            android:id="@+id/nixorpoints"
+            style="@style/sub_headings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/displayname"
+            android:layout_below="@+id/displayid"
+            android:paddingLeft="20dp"
+            android:text="@string/nixorpoints_textView"
+            android:textAlignment="center"
+            android:textColor="#fff"
+            android:textSize="10sp"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:layout_alignEnd="@+id/displayname"
+            android:layout_alignParentBottom="false"
+            android:layout_below="@+id/displayname"
+            android:src="@drawable/nixorsharkdark" />
+
+        <TextView
+            android:id="@+id/activity_name"
+            style="@style/headings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/displayname"
+            android:layout_below="@+id/student_photo"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="20dp"
+            android:text="Past Papers"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+    </RelativeLayout>
 
 </RelativeLayout>

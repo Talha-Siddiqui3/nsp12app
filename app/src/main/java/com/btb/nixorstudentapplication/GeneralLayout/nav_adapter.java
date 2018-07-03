@@ -1,6 +1,8 @@
 package com.btb.nixorstudentapplication.GeneralLayout;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,7 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.btb.nixorstudentapplication.Application_Home.home_screen;
+import com.btb.nixorstudentapplication.Past_papers.MainPPActivity;
 import com.btb.nixorstudentapplication.R;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.MainCloudActivity;
 
 import java.util.ArrayList;
 
@@ -49,6 +54,34 @@ public class nav_adapter extends RecyclerView.Adapter<nav_adapter.Rv_ViewHolder>
 
 
         }
+        holder.item_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(activity instanceof home_screen){
+                switch(allitems.get(position)){
+                    case "Home":activity.startActivity(new Intent(activity,home_screen.class));break;
+                    case "Pastpapers":activity.startActivity(new Intent(activity,MainPPActivity.class));break;
+                    //case "Carpool":holder.item_icon.setImageResource(R.drawable.carpool);break;
+                   // case "Chat":holder.item_icon.setImageResource(R.drawable.chat);break;
+                    case "Soc":activity.startActivity(new Intent(activity,MainCloudActivity.class)); break;
+                  //  case "Bookmyta":holder.item_icon.setImageResource(R.drawable.bookmyta);break;
+
+                }
+
+            }else{
+                    switch(allitems.get(position)){
+                        case "Home":activity.startActivity(new Intent(activity,home_screen.class));((Activity)activity).finish();break;
+                        case "Pastpapers":activity.startActivity(new Intent(activity,MainPPActivity.class));((Activity)activity).finish();break;
+                        //case "Carpool":holder.item_icon.setImageResource(R.drawable.carpool);break;
+                        // case "Chat":holder.item_icon.setImageResource(R.drawable.chat);break;
+                        case "Soc":activity.startActivity(new Intent(activity,MainCloudActivity.class)); ((Activity)activity).finish();break;
+                        //  case "Bookmyta":holder.item_icon.setImageResource(R.drawable.bookmyta);break;
+
+                    }
+
+                }
+            }
+        });
 
 
 

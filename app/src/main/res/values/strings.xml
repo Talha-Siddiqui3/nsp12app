@@ -226,6 +226,8 @@
     <string name="section_format">Hello World from section: %1$d</string>
 
     <string name="node_subjects">Past Papers/names/</string>
+    <string name="node_soc_all_subjects">SharksOnCloud/AllSubjects/</string>
+    <string name="mainUserNode">users/</string>
 
 
     <string name="node_papers">Past Papers/Subjects/</string>
@@ -250,4 +252,9 @@
     <string name="Soc">Sharks on Cloud</string>
     <string name="Portal">Portal</string>
     <string name="Carpool">Nixor Carpool</string>
+
+
+    //ImageViewer
+    //Java
+    <string name="lastImageSelected">No more images</string>
 </resources>

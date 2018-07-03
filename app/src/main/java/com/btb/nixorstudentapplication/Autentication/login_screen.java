@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.btb.nixorstudentapplication.Application_Home.home_screen;
@@ -69,7 +70,7 @@ public class login_screen extends Activity implements View.OnClickListener {
     EditText phone_entry;
     Button send_code;
     Button verify_code;
-
+    RelativeLayout splash_screen;
     TextView code_timer;
     //Permission
     private static String[] PERMISSIONS = {
@@ -81,6 +82,8 @@ public class login_screen extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
+        splash_screen = findViewById(R.id.splash_screen);
+        splash_screen.setVisibility(View.VISIBLE);
         //Intialize var
         permission_util = new permission_util();
             //XMl
@@ -95,6 +98,7 @@ public class login_screen extends Activity implements View.OnClickListener {
         verify_code.setOnClickListener(this);
 
         initialize();
+
     }
     public void initialize() {
 
@@ -102,7 +106,6 @@ public class login_screen extends Activity implements View.OnClickListener {
         permission_util.getPermissions(login_screen.this, PERMISSIONS);
         ui_Updates();
         verification_callback();
-
 
 
     }
@@ -211,8 +214,8 @@ send_code.setEnabled(false);
 
 
     private void signInComplete(){
-        String loginSuccessfulText = getString(R.string.phoneAuthSuccess);
-        common_util.ToasterShort(login_screen.this,loginSuccessfulText);
+        //String loginSuccessfulText = getString(R.string.phoneAuthSuccess);
+       // common_util.ToasterShort(login_screen.this,loginSuccessfulText);
         if(FbUser==null)FbUser=FirebaseAuth.getInstance().getCurrentUser();
         checkUserHistory(FbUser.getUid());
     }
@@ -378,6 +381,7 @@ send_code.setEnabled(false);
             Log.i(TAG,"User Logged in");
             signInComplete();
         }else{
+            splash_screen.setVisibility(View.GONE);
             if(beingverified){
                 sendCode();
 

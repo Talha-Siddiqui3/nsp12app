@@ -5,31 +5,33 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.util.Log;
 
 import com.btb.nixorstudentapplication.Misc.common_util;
-
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+import com.mklimek.sslutilsandroid.SslUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Date;
 
-public class Nsp_ASyncTask extends AsyncTask<Void, Void, Void> {
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+
+public class NspASyncTask extends AsyncTask<Void, Void, Void> {
     private com.btb.nixorstudentapplication.Misc.common_util common_util;
     private File file1;
     private Activity context;
-    private String TAG = "Nsp_ASyncTask";
+    private String TAG = "NspASyncTask";
     private Exception GetDataxception;
     private common_util cu = new common_util();
     private AlertDialog alertDialog;
 private String GUID;
 private String data;
 
-    public Nsp_ASyncTask(File file1, Activity context,String GUID,String data) {
+    public NspASyncTask(File file1, Activity context, String GUID, String data) {
         this.file1 = file1;
         this.context = context;
         this.GUID=GUID;
@@ -48,9 +50,27 @@ private String data;
         }
 
         try {
-            new DefaultHttpClient().execute(new HttpGet("https://nsp.braincrop.net/Students/Reports/"+GUID+"?meth="+data))
-                    .getEntity().writeTo(
-                    new FileOutputStream(file1));
+            String URL_string = "https://nsp.braincrop.net/Students/Reports/"+GUID+"?meth="+data;
+            SSLContext sslContext = SslUtils.getSslContextForCertificateFile(context, "nixor.cer");
+            java.net.URL url = new URL(URL_string);
+            HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
+            connection.setDoInput(true);
+            connection.setSSLSocketFactory(sslContext.getSocketFactory());
+            connection.connect();
+
+            InputStream inputStream = connection.getInputStream();
+            FileOutputStream fos = new FileOutputStream(file1);
+
+            byte[] buffer = new byte[1024];//Set buffer type
+            int len1 = 0;//init length
+            while ((len1 = inputStream.read(buffer)) != -1) {
+                fos.write(buffer, 0, len1);//Write new file
+            }
+
+            //Close all connection after doing task
+            fos.close();
+            inputStream.close();
+
         } catch (Exception e) {
             GetDataxception = e;
             e.printStackTrace();
@@ -67,7 +87,7 @@ private String data;
         super.onPostExecute(aVoid);
 
         if (GetDataxception == null) {
-            Intent i = new Intent(context, Nsp_Portal_PDF_LOADER.class);
+            Intent i = new Intent(context, NspPortalPdf.class);
             i.putExtra("FileName", data+".pdf");
             cu.progressDialogHide();
             context.startActivity(i);
@@ -85,7 +105,7 @@ private String data;
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Show older version",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Intent i = new Intent(context, Nsp_Portal_PDF_LOADER.class);
+                                    Intent i = new Intent(context, NspPortalPdf.class);
                                     i.putExtra("FileName", data+".pdf");
 
                                     context.startActivity(i);

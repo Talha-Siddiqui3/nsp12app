@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/thumbnail"
-    android:layout_width="100dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
@@ -10,20 +10,20 @@
 
     <!-- Title Of Song-->
 
-<TextView android:id="@+id/icon_text_nsp_portal"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignParentTop="true"
-    android:layout_centerHorizontal="true"
-    android:fontFamily="@font/assistant_extralight"
-    android:maxLines="1"
-    android:text="Gate Attendance"
-    android:textAlignment="center"
-    android:textColor="#000"
-    android:textSize="12sp"
-    android:textStyle="bold"
-    android:typeface="sans"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/icon_text_nsp_portal"
+        style="@style/sub_headings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:maxLines="1"
+        android:text="Gate Attendance"
+        android:textAlignment="center"
+        android:textColor="#000"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:typeface="sans" />
 
     <ImageView
         android:id="@+id/iconimage_nsp_portal"
@@ -32,12 +32,11 @@
         android:layout_below="@+id/icon_text_nsp_portal"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:padding="10dp"
-        app:srcCompat="@drawable/newprofile" />
+        android:padding="5dp" />
 
     <!-- Artist Name -->
 
 
     <!-- Rightend Arrow -->
 
-    </RelativeLayout>
+</RelativeLayout>

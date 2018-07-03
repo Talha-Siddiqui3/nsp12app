@@ -2,7 +2,6 @@ package com.btb.nixorstudentapplication.Nsp_Portal.Adaptors;
 
 import android.app.Activity;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +9,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.btb.nixorstudentapplication.Application_Home.home_screen;
 import com.btb.nixorstudentapplication.Misc.common_util;
-import com.btb.nixorstudentapplication.Nsp_Portal.Nsp_ASyncTask;
-import com.btb.nixorstudentapplication.Nsp_Portal.Nsp_Portal_MainActivity;
+import com.btb.nixorstudentapplication.Nsp_Portal.NspASyncTask;
 import com.btb.nixorstudentapplication.R;
 
 import java.io.File;
@@ -108,22 +107,22 @@ public Nsp_Adaptor(List<String>iconList,Activity context) {
                 img.setImageResource(R.drawable.gateattendance);
                 break;
             case "Class Attendance":
-                img.setImageResource(R.drawable.class_attendance);
+                img.setImageResource(R.drawable.newattendance);
                 break;
             case "Finance":
-                img.setImageResource(R.drawable.finance);
+                img.setImageResource(R.drawable.newfinance);
                 break;
             case "Schedule":
-                img.setImageResource(R.drawable.schedule_image);
+                img.setImageResource(R.drawable.newschedule);
                 break;
             case "Student Marks":
-                img.setImageResource(R.drawable.studentmarks);
+                img.setImageResource(R.drawable.newstudentmarks);
                 break;
             case "CIE Grades":
-                img.setImageResource(R.drawable.cie_grades);
+                img.setImageResource(R.drawable.newstudentmarks);
                 break;
             case "TA Schedule":
-                img.setImageResource(R.drawable.tascheduleicon);
+                img.setImageResource(R.drawable.taicon);
                 break;
             case "TA Log":
                 img.setImageResource(R.drawable.talogicon);
@@ -142,7 +141,7 @@ public Nsp_Adaptor(List<String>iconList,Activity context) {
     public void GetNspData(String data){
       cu.progressDialogShow(context, "Please Wait");
         File file1 = new File(Environment.getExternalStorageDirectory() + "/nixorapp/NspDocuments/" + data+".pdf");
-        Nsp_ASyncTask aSyncTask = new Nsp_ASyncTask(file1, context, Nsp_Portal_MainActivity.GUID,data);
+        NspASyncTask aSyncTask = new NspASyncTask(file1, context, home_screen.GUID,data);
         aSyncTask.execute();
     }
 

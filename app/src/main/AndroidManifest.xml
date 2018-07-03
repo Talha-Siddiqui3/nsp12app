@@ -7,7 +7,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+
     <application
+        android:name=".Misc.StarterApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -29,7 +31,9 @@
         </activity>
         <activity android:name=".Autentication.login_screen" />
         <activity android:name=".Autentication.nsp_web.portal_login" />
-        <activity android:name=".Application_Home.home_screen" />
+        <activity android:name=".Application_Home.home_screen"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <activity android:name=".Autentication.User.AccountType" />
 
         <meta-data
@@ -46,12 +50,9 @@
             android:name=".BookMyTa.Main_Activity_Ta_Tab"
             android:label="@string/title_activity_ta_tab"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Nsp_Portal.Nsp_Portal_MainActivity">
 
-
-           </activity>
-
-        <activity android:name=".Nsp_Portal.Nsp_Portal_PDF_LOADER"></activity>
+        <activity android:name=".Nsp_Portal.NspPortalPdf"></activity>
+        <activity android:name=".Sharks_on_cloud.MainCloudActivity"></activity>
     </application>
 
 </manifest>

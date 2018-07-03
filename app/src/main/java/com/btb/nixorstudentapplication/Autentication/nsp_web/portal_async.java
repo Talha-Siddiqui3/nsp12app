@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.btb.nixorstudentapplication.Autentication.User.AccountType;
 import com.btb.nixorstudentapplication.R;
@@ -17,6 +16,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.mklimek.sslutilsandroid.SslUtils;
+
+import javax.net.ssl.SSLContext;
 
 import static com.btb.nixorstudentapplication.Autentication.nsp_web.ExtractData.getStudentObject;
 
@@ -40,7 +42,7 @@ public class portal_async extends AsyncTask<String,String,String> {
     protected String doInBackground(String... strings) {
         common_util = new common_util();
 
-        return  getCookie(strings[0],strings[1],true);
+        return  getCookie(strings[0],strings[1],true, context);
 
     }
 
@@ -74,9 +76,13 @@ public class portal_async extends AsyncTask<String,String,String> {
     }
 
 
-    private static String getCookie(String username_log, String password_log, Boolean login){
+    private static String getCookie(String username_log, String password_log, Boolean login, Context context){
         try{
-            Connection.Response loginForm = Jsoup.connect(login_url)
+            SSLContext sslContext = SslUtils.getSslContextForCertificateFile(context, "nixor.cer");
+            Connection.Response loginForm;
+
+                    loginForm = Jsoup.connect(login_url)
+                            .sslSocketFactory(sslContext.getSocketFactory())
                     .method(Connection.Method.GET)
                     .timeout(timeout)
                     .execute();
@@ -85,9 +91,9 @@ public class portal_async extends AsyncTask<String,String,String> {
             //Using token to login.
             // System.out.println(homepage_html_code);
             if(login){
-             return  initiateLogin(loginForm, asp_verification_token, username_log,password_log);
+             return  initiateLogin(loginForm, asp_verification_token, username_log,password_log,context);
             }else{
-                logoff(loginForm);
+                logoff(loginForm,context);
             }
             //initiateLogin(loginForm, asp_verification_token, username_log,password_log);}
 
@@ -100,11 +106,15 @@ public class portal_async extends AsyncTask<String,String,String> {
       return null;
     }
     //Attempts a login using a post request
-    public  static String initiateLogin(Connection.Response cookie_file, String asp_token, String username_log, String password_log ){
+    public  static String initiateLogin(Connection.Response cookie_file, String asp_token, String username_log, String password_log, Context context ){
         try{
+            SSLContext sslContext = SslUtils.getSslContextForCertificateFile(context, "nixor.cer");
+
+
             Connection.Response logged = Jsoup.connect(login_url)
                     .method(Connection.Method.POST)
                     .timeout(timeout)
+                    .sslSocketFactory(sslContext.getSocketFactory())
                     .cookies(cookie_file.cookies())
                     .data("Email",username_log )
                     .data("Password", password_log)
@@ -126,7 +136,7 @@ public class portal_async extends AsyncTask<String,String,String> {
                 if(userid.toString().contains("Student Details")){
 
                     encode_text("Login Successful");
-                    ExtractData(userid);
+                    ExtractData(userid,context);
                     return "logged";
                 }
             }
@@ -137,10 +147,11 @@ public class portal_async extends AsyncTask<String,String,String> {
     return null;
     }
     //On Successful login, Data Extraction Methods are called
-    public static void ExtractData(Document logged_user_data){
+    public static void ExtractData(Document logged_user_data, Context context){
         //Gets the Basic Student Profile. For more information check StudentDetails Object.
         Student_Profile = getStudentObject(logged_user_data);
-        getCookie(null,null,false);
+
+        getCookie(null,null,false,context);
     }
     //Error Handling for Incorrect CREDS
     public static void incorrectCreds(String username_failed, String password_failed){
@@ -153,12 +164,14 @@ public class portal_async extends AsyncTask<String,String,String> {
         return text;
     }
 
-    public static void logoff(Connection.Response cookie_file){
+    public static void logoff(Connection.Response cookie_file, Context context){
 
         try{
+            SSLContext sslContext = SslUtils.getSslContextForCertificateFile(context, "nixor.cer");
             Connection.Response logged = Jsoup.connect(logout_url)
                     .method(Connection.Method.POST)
                     .timeout(timeout)
+                    .sslSocketFactory(sslContext.getSocketFactory())
                     .cookies(cookie_file.cookies())
                     .data("__RequestVerificationToken", asp_verification_token)
                     .data("form-control", "Log Out")
