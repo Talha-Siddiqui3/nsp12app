@@ -62,7 +62,7 @@ public class Student_Requests_For_Ta_Fragment extends Fragment {
                             requests.add(dc.getDocument().get("StudentName").toString());
                             localIndexList.add(dc.getNewIndex());
                             DocIds.add(dc.getDocument().getId());
-
+                             DataAddORRemove();
                         }
 
                     } else {
@@ -74,8 +74,9 @@ public class Student_Requests_For_Ta_Fragment extends Fragment {
                                     localIndexList.add(dc.getNewIndex());
                                     DocIds.add(dc.getDocument().getId());
                                     DataAddORRemove();
-                                    break;
+
                                 }
+                                break;
                             case REMOVED:
                                 if (dc.getDocument().get("TaName").toString().equals(cu.getUserDataLocally(getContext(), "name"))) {
                                     //Common loop for both REMOVED and MODIFIED cases
@@ -89,8 +90,9 @@ public class Student_Requests_For_Ta_Fragment extends Fragment {
                                         }
                                     }
                                     DataAddORRemove();
-                                    break;
+
                                 }
+                                break;
                             case MODIFIED:
                                 break;
 

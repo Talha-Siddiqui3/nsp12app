@@ -53,8 +53,8 @@ public class Search_Ta_Fragment extends Fragment {
                         map = dc.getDocument().getData();
                         Log.i(TAG, map.toString());
                         ta_objects.add(addDataToObject(ta_object, map.get("Name"), map.get("Days"), map.get("TaID"), map.get("Timings"), map.get("Subject")));
-                    }
-                 else {
+                        AddDataToAdaptor();
+                    } else {
                         switch (dc.getType()) {
                             case ADDED:
 
