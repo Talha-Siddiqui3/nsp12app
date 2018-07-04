@@ -1,6 +1,7 @@
 package com.btb.nixorstudentapplication.BookMyTa.Fragments_for_tabs;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +17,11 @@ import com.btb.nixorstudentapplication.BookMyTa.Adaptors.RV_Adaptor_1;
 import com.btb.nixorstudentapplication.BookMyTa.Main_Activity_Ta_Tab;
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.R;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
@@ -23,24 +29,32 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //CLASS specific to TAs ONLY
 //It receives all the requests send by students to logged in TA.
-//Allows to accept/reject request
+//Allows TA to accept/reject request
 
 public class Student_Requests_For_Ta_Fragment extends Fragment {
     static String TAG = "Student_Requests_For_Ta_Fragment";
     View view;
-    static CollectionReference cr = FirebaseFirestore.getInstance().collection("BookMyTa/BookMyTaDocument/Requests");
+    private static CollectionReference cr = FirebaseFirestore.getInstance().collection("BookMyTa/BookMyTaDocument/Requests");
     List<String> DocIds = new ArrayList<>();
     RV_Adaptor_1 rvAdaptor;
     static common_util cu = new common_util();
     boolean isInitialData = true;
     List<Integer> localIndexList = new ArrayList<>();
     static Context context;
+
+
 
     public Student_Requests_For_Ta_Fragment() {
     }
@@ -62,14 +76,14 @@ public class Student_Requests_For_Ta_Fragment extends Fragment {
                             requests.add(dc.getDocument().get("StudentName").toString());
                             localIndexList.add(dc.getNewIndex());
                             DocIds.add(dc.getDocument().getId());
-                             DataAddORRemove();
+                            DataAddORRemove();
                         }
 
                     } else {
                         switch (dc.getType()) {
                             case ADDED:
                                 if (dc.getDocument().get("TaName").toString().equals(cu.getUserDataLocally(getContext(), "name"))) {
-                                   Log.i(TAG,"WORKING");
+                                    Log.i(TAG, "WORKING");
                                     requests.add(dc.getDocument().get("StudentName").toString());
                                     localIndexList.add(dc.getNewIndex());
                                     DocIds.add(dc.getDocument().getId());
@@ -115,27 +129,30 @@ public class Student_Requests_For_Ta_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.student_requests_for_ta, container, false);
+        context = getActivity();
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.student_requests_for_ta_rv);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-         rvAdaptor = new RV_Adaptor_1(GetRequest(), DocIds);
+        rvAdaptor = new RV_Adaptor_1(GetRequest(), DocIds,getActivity());
         rv.setAdapter(rvAdaptor);
-        context=getActivity();
+
         return view;
     }
 
+    //Retired method
 //It Updates the Request Status on Firebase when a TA clicks on accept/reject button.
-    public static void UpdateRequest(final String requestStatus, String DocId) {
-
+   /* public static void UpdateRequest(final String requestStatus, String DocId) {
         DocumentReference dr = cr.document(DocId);
         dr.update("Status", requestStatus);
-        dr.delete();
+        //dr.delete();
         cu.ToasterLong(context,"Request "+requestStatus);
-    }
+   //Log.i("abc",addMessage(DocId,"talha siddiqui").toString());
 
+    }
+*/
     //Executes when new requests arrives or old requests removed..
     public void DataAddORRemove() {
         rvAdaptor.notifyDataSetChanged();
     }
 
+    }
 
-}
