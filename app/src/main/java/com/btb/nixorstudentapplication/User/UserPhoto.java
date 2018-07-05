@@ -78,7 +78,7 @@ public class UserPhoto {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
 
-        StorageReference photoURLRef = storageRef.child("display_photo/"+username+"/dp.jpg");
+        final StorageReference photoURLRef = storageRef.child("display_photo/"+username+"/dp.jpg");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
@@ -91,7 +91,7 @@ public class UserPhoto {
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-               String photourl = taskSnapshot.getDownloadUrl().toString();
+               String photourl = photoURLRef.getDownloadUrl().toString();
                 ((home_screen)context).db.collection("users").document(username).update("photourl",photourl);
                  common_util.saveUserDataLocally(context,"photourl",photourl);
                setDisplay(photourl,context);

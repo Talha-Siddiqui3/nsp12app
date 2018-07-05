@@ -11,6 +11,16 @@ public class StudentDetails {
     String student_year;
     String student_house;
     String student_profileUrl;
+    String student_registrationtoken;
+
+    public String getStudent_registrationtoken() {
+        return student_registrationtoken;
+    }
+
+    public void setStudent_registrationtoken(String student_registrationtoken) {
+        this.student_registrationtoken = student_registrationtoken;
+    }
+
     public StudentDetails() {
     }
 
@@ -21,6 +31,7 @@ public class StudentDetails {
         this.student_year = student_year;
         this.student_house = student_house;
         this.student_profileUrl = student_profileUrl;
+
     }
 
     public String getStudent_name() {

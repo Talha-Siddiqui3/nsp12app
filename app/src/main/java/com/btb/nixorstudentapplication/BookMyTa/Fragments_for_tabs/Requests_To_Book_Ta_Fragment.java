@@ -72,8 +72,9 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
                                     localIndexList.add(dc.getNewIndex());//adds Firebase's recieved data's index number to a localIndexList array.
                                     DataAddORRemove();
                                     isDataAdded = true;
-                                    break;
+
                                 }
+                                break;
                             case REMOVED:
                                 if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(), "name"))) {
                                     //Common loop for both REMOVED and MODIFIED cases
@@ -88,8 +89,9 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
                                     }
                                     DataAddORRemove();
                                    isDataRemoved = true;
-                                    break;
+
                                 }
+                                break;
                             case MODIFIED:
                                 //Additional check that modifies only executes when neither ADD or REMOVES executes
                                 if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(), "name")) &&  isDataAdded == false &&  isDataRemoved == false) {
@@ -101,8 +103,9 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
                                     }
                                     isDataAdded = false;
                                     isDataRemoved = false;
-                                    break;
+
                                 }
+                                break;
                         }
                     }
 
