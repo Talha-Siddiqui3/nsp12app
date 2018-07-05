@@ -50,7 +50,7 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorPrimaryDark" />
 <activity android:name=".Application_Home.home_screen"
-
+    android:theme="@style/AppTheme.NoActionBar"
     />
         <activity android:name=".welcome_screen">
             <intent-filter>
