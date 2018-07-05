@@ -3,6 +3,10 @@ package com.btb.nixorstudentapplication.Autentication.nsp_web;
 import android.util.Log;
 
 import com.btb.nixorstudentapplication.Misc.common_util;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import org.jsoup.nodes.Document;
 import static com.btb.nixorstudentapplication.Autentication.nsp_web.portal_async.base_url;
 
@@ -65,12 +69,13 @@ public class ExtractData {
     public static StudentDetails getStudentObject(Document logged_user_data){
         StudentDetails student = Extract_Basic_Information(logged_user_data);
         student.setStudent_profileUrl(Extract_Display_Photo(logged_user_data));
-
-
-
+        String  tokenForMessageing= FirebaseInstanceId.getInstance().getToken();
+        student.setStudent_registrationtoken(tokenForMessageing);
 
         return student;
     }
+
+
 
 
 }

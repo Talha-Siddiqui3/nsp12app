@@ -35,7 +35,6 @@ public class RV_Adaptor_1 extends RecyclerView.Adapter<RV_Adaptor_1.Rv_ViewHolde
     LinearLayout buttonLayout;
     LinearLayout statusLayout;
     String TAG = "RV_Adaptor_1";
-    String RequestStatusText;
     common_util cu = new common_util();
     private FirebaseFunctions mFunctions = FirebaseFunctions.getInstance();
     Activity context;
@@ -58,6 +57,9 @@ public class RV_Adaptor_1 extends RecyclerView.Adapter<RV_Adaptor_1.Rv_ViewHolde
     @Override
     public void onBindViewHolder(@NonNull Rv_ViewHolder holder, int position) {
         holder.txt.setText(StudentName.get(position));
+        RequestStatus.setTag("requestStatus" + Integer.toString(position));
+        buttonLayout.setTag("buttonlayout" + Integer.toString(position));
+        statusLayout.setTag("statuslayout" + Integer.toString(position));
 
     }
 
@@ -82,36 +84,40 @@ public class RV_Adaptor_1 extends RecyclerView.Adapter<RV_Adaptor_1.Rv_ViewHolde
     class Rv_ViewHolder extends RecyclerView.ViewHolder {
         TextView txt;
 
-        public Rv_ViewHolder(View itemView) {
+        public Rv_ViewHolder(final View itemView) {
             super(itemView);
-            RequestStatusText = "Pending";
             txt = itemView.findViewById(R.id.Student_Name);
             AcceptRequest = itemView.findViewById(R.id.Accept_Request);
             RejectRequest = itemView.findViewById(R.id.Reject_Request);
             RequestStatus = itemView.findViewById(R.id.Request_Status_student_request_for_ta);
-            RequestStatus.setText(RequestStatusText);
+
             buttonLayout = itemView.findViewById(R.id.linearlayout_for_buttons_bookmyta);
+
             statusLayout = itemView.findViewById(R.id.linearlayout_for_status_bookmyta);
+
             //Both buttons return status and corresponding DocId for selected request
 
             AcceptRequest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    UpdateRequest("Accepted", DocIds.get(getAdapterPosition()));
-                    AcceptRequest.setEnabled(false);
-                    RejectRequest.setEnabled(false);
-                    buttonLayout.setVisibility(View.GONE);
-                    statusLayout.setVisibility(View.VISIBLE);
+Log.i("ABC",String.valueOf(getAdapterPosition()));
+                    //AcceptRequest.setEnabled(false);
+                    //RejectRequest.setEnabled(false);
+                    itemView.findViewWithTag("buttonlayout" + Integer.toString(getAdapterPosition())).setVisibility(View.GONE);
+                    itemView.findViewWithTag("statuslayout" + Integer.toString(getAdapterPosition())).setVisibility(View.VISIBLE);
+                    TextView tempRequestStatus = itemView.findViewWithTag("requestStatus" + Integer.toString(getAdapterPosition()));
+                    UpdateRequest("Accepted", DocIds.get(getAdapterPosition()), tempRequestStatus);
                 }
             });
             RejectRequest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    UpdateRequest("Rejected", DocIds.get(getAdapterPosition()));
-                    AcceptRequest.setEnabled(false);
-                    RejectRequest.setEnabled(false);
-                    buttonLayout.setVisibility(View.GONE);
-                    statusLayout.setVisibility(View.VISIBLE);
+                    //AcceptRequest.setEnabled(false);
+                    //RejectRequest.setEnabled(false);
+                    itemView.findViewWithTag("buttonlayout" + Integer.toString(getAdapterPosition())).setVisibility(View.GONE);
+                    itemView.findViewWithTag("statuslayout" + Integer.toString(getAdapterPosition())).setVisibility(View.VISIBLE);
+                    TextView tempRequestStatus = itemView.findViewWithTag("requestStatus" + Integer.toString(getAdapterPosition()));
+                    UpdateRequest("Rejected", DocIds.get(getAdapterPosition()), tempRequestStatus);
                 }
             });
 
@@ -121,7 +127,7 @@ public class RV_Adaptor_1 extends RecyclerView.Adapter<RV_Adaptor_1.Rv_ViewHolde
 
     }
 
-    public void UpdateRequest(final String requestStatus, String DocId) {
+    public void UpdateRequest(final String requestStatus, String DocId, final TextView tempRequestStatus) {
         // Create the arguments to the callable function.
 
         Map<String, Object> data = new HashMap<>();
@@ -131,16 +137,16 @@ public class RV_Adaptor_1 extends RecyclerView.Adapter<RV_Adaptor_1.Rv_ViewHolde
         Log.i(TAG, "method executed");
 
         mFunctions
-                .getHttpsCallable("callableFunctionandroid")
+                .getHttpsCallable("bookMyTa_ForTa_Function")
                 .call(data)
                 .addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
                     @Override
                     public void onSuccess(HttpsCallableResult httpsCallableResult) {
                         Map<String, Object> recieveddata = new HashMap<>();
-                        recieveddata = ((HashMap<String, Object>) httpsCallableResult.getData());
-                        Log.i(TAG, recieveddata.get("RequestStatus").toString());
-                        cu.ToasterLong(context, recieveddata.get("RequestStatus").toString());
-                        RequestStatus.setText (recieveddata.get("RequestStatus").toString());
+                        //recieveddata = ((HashMap<String, Object>) httpsCallableResult.getData());
+                       // Log.i(TAG, recieveddata.get("RequestStatus").toString());
+                        cu.ToasterLong(context, "Request "+requestStatus);
+                        tempRequestStatus.setText("Request "+requestStatus);
 
                     }
                 })
@@ -149,7 +155,7 @@ public class RV_Adaptor_1 extends RecyclerView.Adapter<RV_Adaptor_1.Rv_ViewHolde
                     public void onFailure(@NonNull Exception e) {
                         Log.i(TAG, "FAIlED");
                         cu.ToasterLong(context, "Failed to connect to server");
-                        RequestStatus.setText ("Failed to connect to server");
+                        tempRequestStatus.setText("Failed to connect to server");
 
                     }
                 });
