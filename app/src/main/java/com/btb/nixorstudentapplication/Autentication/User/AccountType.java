@@ -58,8 +58,17 @@ public void setAccountLink(final String mode){
     public void onClick(View view) {
         switch (view.getId()){
 
-case R.id.studentmode_button:       activateStudent();break;
-case R.id.parentmode_button:       activateParent();break;
+case R.id.studentmode_button:
+    activateStudent();
+    uploadFirebaseToken();
+    break;
+case R.id.parentmode_button:
+    activateParent();
+    break;
         }
+    }
+
+    private void uploadFirebaseToken() {
+
     }
 }
