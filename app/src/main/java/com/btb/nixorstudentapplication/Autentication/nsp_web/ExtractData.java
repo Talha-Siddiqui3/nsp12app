@@ -3,9 +3,6 @@ package com.btb.nixorstudentapplication.Autentication.nsp_web;
 import android.util.Log;
 
 import com.btb.nixorstudentapplication.Misc.common_util;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.jsoup.nodes.Document;
 import static com.btb.nixorstudentapplication.Autentication.nsp_web.portal_async.base_url;
@@ -15,19 +12,21 @@ import static com.btb.nixorstudentapplication.Autentication.nsp_web.portal_async
  */
 
 public class ExtractData {
+     static String TAG ="ExtractData";
+
     //Gets the PhotoURL
-    public static String Extract_Display_Photo(Document logged_user_data){
+    public static String Extract_Display_Photo(Document logged_user_data) {
 
 
         common_util.encode_text("Extracting Picture URL");
-        String  profile_image_url= logged_user_data.getElementsByClass("profile-image")
-                .html().replace("<img src=\"","").replace("\" alt=\"Not Found\">","");
-        profile_image_url = base_url+profile_image_url;
+        String profile_image_url = logged_user_data.getElementsByClass("profile-image")
+                .html().replace("<img src=\"", "").replace("\" alt=\"Not Found\">", "");
+        profile_image_url = base_url + profile_image_url;
         System.out.println(profile_image_url);
         return profile_image_url;
     }
     //Gets the Student Details
-    public static StudentDetails Extract_Basic_Information(Document logged_user_data){
+    public static StudentDetails Extract_Basic_Information(Document logged_user_data) {
 
 
         //table table-profile
@@ -46,7 +45,7 @@ public class ExtractData {
         String Student_year=Format_Student_BasicDetails(table,"<td>Graduating Class :</td>");
         String Student_house=Format_Student_BasicDetails(table,"<td>House :</td>");
         //student_name, String student_ID, String student_email, String student_year, String student_house
-        StudentDetails student = new StudentDetails(Student_name, Student_ID, Student_email,Student_year,Student_house,null);
+        StudentDetails student = new StudentDetails(Student_name, Student_ID, Student_email, Student_year, Student_house, null, null);
         return student;
     }
     //Formats the Student Details
@@ -65,13 +64,21 @@ public class ExtractData {
         }
 
     }
+
+
+    public static String Get_Student_GUID(Document logged_user_data) {
+        String GUID = logged_user_data.location();
+        GUID = GUID.substring(43, 79);
+        return GUID;
+    }
+
+
     //Generates a Student Object
-    public static StudentDetails getStudentObject(Document logged_user_data){
+    public static StudentDetails getStudentObject(Document logged_user_data) {
         StudentDetails student = Extract_Basic_Information(logged_user_data);
         student.setStudent_profileUrl(Extract_Display_Photo(logged_user_data));
-        String  tokenForMessageing= FirebaseInstanceId.getInstance().getToken();
-        student.setStudent_registrationtoken(tokenForMessageing);
-
+        student.setStudent_guid(Get_Student_GUID(logged_user_data));
+        Log.i(TAG, logged_user_data.location());
         return student;
     }
 

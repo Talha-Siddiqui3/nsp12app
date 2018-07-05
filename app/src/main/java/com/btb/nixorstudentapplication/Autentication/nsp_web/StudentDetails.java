@@ -11,27 +11,27 @@ public class StudentDetails {
     String student_year;
     String student_house;
     String student_profileUrl;
-    String student_registrationtoken;
+    String student_guid;
 
-    public String getStudent_registrationtoken() {
-        return student_registrationtoken;
+    public String getStudent_guid() {
+        return student_guid;
     }
 
-    public void setStudent_registrationtoken(String student_registrationtoken) {
-        this.student_registrationtoken = student_registrationtoken;
+    public void setStudent_guid(String student_guid) {
+        this.student_guid = student_guid;
     }
 
     public StudentDetails() {
     }
 
-    public StudentDetails(String student_name, String student_id, String student_email, String student_year, String student_house, String student_profileUrl) {
+    public StudentDetails(String student_name, String student_id, String student_email, String student_year, String student_house, String student_profileUrl,String student_guid) {
         this.student_name = student_name;
         this.student_id = student_id;
         this.student_email = student_email;
         this.student_year = student_year;
         this.student_house = student_house;
         this.student_profileUrl = student_profileUrl;
-
+        this.student_guid=student_guid;
     }
 
     public String getStudent_name() {
