@@ -49,7 +49,9 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorPrimaryDark" />
-<activity android:name=".Application_Home.home_screen">
+<activity android:name=".Application_Home.home_screen"
+
+    />
         <activity android:name=".welcome_screen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -61,9 +63,7 @@
         <activity android:name=".Autentication.login_screen" />
         <activity android:name=".Autentication.nsp_web.portal_login" />
 
-        <activity android:name=".Application_Home.home_screen"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
+
         <activity android:name=".Autentication.User.AccountType" />
 
         <meta-data
