@@ -14,6 +14,7 @@ import com.btb.nixorstudentapplication.Past_papers.MainPPActivity;
 import com.btb.nixorstudentapplication.BookMyTa.Main_Activity_Ta_Tab;
 //import com.btb.nixorstudentapplication.Past_papers.MainPPActivity;
 import com.btb.nixorstudentapplication.R;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.MainCloudActivity;
 
 import java.util.ArrayList;
 
@@ -51,6 +52,10 @@ public class navigator_header extends RelativeLayout {
         }
         if(context instanceof Main_Activity_Ta_Tab){
             allitems.remove("Bookmyta");
+        }
+
+        if(context instanceof MainCloudActivity){
+            allitems.remove("Soc");
         }
 
 

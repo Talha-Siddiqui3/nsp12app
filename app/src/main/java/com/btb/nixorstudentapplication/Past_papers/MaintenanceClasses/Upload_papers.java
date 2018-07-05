@@ -20,13 +20,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Upload_papers {
-    String TAG ="Upload_papers";
+    static String TAG = "Upload_papers";
 
-    public void readDataFromFile(Activity activity) {
+    public static void readDataFromFile(Activity activity,String subjectName) {
         String s;
         ArrayList<String> PastPapersList = new ArrayList<>();
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(activity.getAssets().open("Past Papers txt documents/Chemistry(9701).txt")));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(activity.getAssets().open("Past Papers txt documents/"+subjectName+".txt")));
 
             while ((s = reader.readLine()) != null) {
 
@@ -40,11 +40,11 @@ public class Upload_papers {
         }
 
         Log.i(TAG, Integer.toString(PastPapersList.size()));
-        StringManipulate(PastPapersList);
+        StringManipulate(PastPapersList,subjectName);
 
     }
 
-    public void StringManipulate(ArrayList<String> Data) {
+    public static void StringManipulate(ArrayList<String> Data,String subjectName) {
         String month[] = new String[Data.size() + 1];
         String type[] = new String[Data.size() + 1];
         String variant[] = new String[Data.size() + 1];
@@ -132,14 +132,14 @@ public class Upload_papers {
         }
 
 
-        uploadData(Data, month, year, type, variant);
+        uploadData(Data, month, year, type, variant,subjectName);
     }
 
 
-    public void uploadData(ArrayList<String> data, String month[], String year[], String type[],
-                           String variant[]) {
+    public static void uploadData(ArrayList<String> data, String month[], String year[], String type[],
+                                  String variant[],String subjectName) {
 
-        CollectionReference cr = FirebaseFirestore.getInstance().collection("Past Papers/Subjects/Chem");
+        CollectionReference cr = FirebaseFirestore.getInstance().collection("Past Papers/Subjects/"+subjectName);
         //hashmap moved outside loop
         HashMap<String, Object> map = new HashMap<String, Object>();
         for (int x = 0; x < data.size(); x++) {
@@ -157,22 +157,22 @@ public class Upload_papers {
     }
 
 
-    public void uploadData(Map<String,Object> map, String doc) {
+    public void uploadData(Map<String, Object> map, String doc) {
 
-        DocumentReference cr = FirebaseFirestore.getInstance().collection("Past Papers/Subjects/Chem").document(doc);
+        DocumentReference cr = FirebaseFirestore.getInstance().collection("Past Papers/Subjects/Chemfdaf").document(doc);
         //hashmap moved outside loop
 
         cr.update(map);
-            Log.i(TAG, "DONE");
+        Log.i(TAG, "DONE");
+    }
+
+    ArrayList<DocumentSnapshot> errordocs = new ArrayList();
+
+    public void changeErrors() {
+        for (DocumentSnapshot documentSnapshot : errordocs) {
+
+
         }
-
-ArrayList<DocumentSnapshot> errordocs = new ArrayList();
-    public void changeErrors(){
-        for(DocumentSnapshot documentSnapshot: errordocs){
-
-
-        }
-
 
 
     }
@@ -181,6 +181,7 @@ ArrayList<DocumentSnapshot> errordocs = new ArrayList();
     ArrayList<String> types = new ArrayList<>();
     ArrayList<String> variants = new ArrayList<>();
     ArrayList<String> months = new ArrayList<>();
+
     public void repair(final String changeValue, final String oldvalue, final String newValue) {
         final CollectionReference cr = FirebaseFirestore.getInstance().collection("Past Papers/Subjects/Chem");
         cr.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -192,14 +193,15 @@ ArrayList<DocumentSnapshot> errordocs = new ArrayList();
                         map = document.getData();
 
                         if (map.get("name") != null) {
-                            if(map.get(changeValue)!=null){
-                            if(map.get(changeValue).equals(oldvalue)) {
-                               map.put(changeValue,newValue);
-                             uploadData(map,document.getId());
-                             Log.i(TAG,map.get("name").toString());
-                            }
+                            if (map.get(changeValue) != null) {
+                                if (map.get(changeValue).equals(oldvalue)) {
+                                    map.put(changeValue, newValue);
+                                    uploadData(map, document.getId());
+                                    Log.i(TAG, map.get("name").toString());
+                                }
 
-                        }}
+                            }
+                        }
                     }
 
 
@@ -218,25 +220,28 @@ ArrayList<DocumentSnapshot> errordocs = new ArrayList();
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot document : task.getResult()) {
                         map = document.getData();
-                        try{
-                            if(map.get("year")!=null){
-                                if(!years.contains(map.get("year").toString())){
+                        try {
+                            if (map.get("year") != null) {
+                                if (!years.contains(map.get("year").toString())) {
                                     years.add(map.get("year").toString());
-                                }}
-                            if(map.get("type")!=null){
-                                if(!types.contains(map.get("type").toString())){
+                                }
+                            }
+                            if (map.get("type") != null) {
+                                if (!types.contains(map.get("type").toString())) {
                                     types.add(map.get("type").toString());
-                                }}
-                            if(map.get("month")!=null){
-                                if(!months.contains(map.get("mont").toString())){
+                                }
+                            }
+                            if (map.get("month") != null) {
+                                if (!months.contains(map.get("mont").toString())) {
                                     months.add(map.get("month").toString());
-                                }}
-                            if(map.get("variant")!=null) {
+                                }
+                            }
+                            if (map.get("variant") != null) {
                                 if (!variants.contains(map.get("variant").toString())) {
                                     variants.add(map.get("variant").toString());
                                 }
                             }
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
 
                         }/*
@@ -250,20 +255,20 @@ ArrayList<DocumentSnapshot> errordocs = new ArrayList();
 
                         }}*/
                     }
-                    for(String x: years){
-                        Log.i(TAG,x);
+                    for (String x : years) {
+                        Log.i(TAG, x);
                     }
 
-                    for(String x: variants){
-                        Log.i(TAG,x);
+                    for (String x : variants) {
+                        Log.i(TAG, x);
                     }
 
-                    for(String x: types){
-                        Log.i(TAG,x);
+                    for (String x : types) {
+                        Log.i(TAG, x);
                     }
 
-                    for(String x: months){
-                        Log.i(TAG,x);
+                    for (String x : months) {
+                        Log.i(TAG, x);
                     }
 
 

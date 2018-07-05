@@ -5,6 +5,7 @@ import android.util.Log;
 import com.btb.nixorstudentapplication.Misc.common_util;
 
 import org.jsoup.nodes.Document;
+
 import static com.btb.nixorstudentapplication.Autentication.nsp_web.portal_async.base_url;
 
 /**
@@ -25,6 +26,7 @@ public class ExtractData {
         System.out.println(profile_image_url);
         return profile_image_url;
     }
+
     //Gets the Student Details
     public static StudentDetails Extract_Basic_Information(Document logged_user_data) {
 
@@ -39,29 +41,31 @@ public class ExtractData {
 
         String table = logged_user_data.getElementsByClass("table table-profile").toString();
         common_util.encode_text("Extracting Basic Details");
-        String Student_name=Format_Student_BasicDetails(table,"<td>Student Name :</td>");
-        String Student_ID=Format_Student_BasicDetails(table,"<td>Student ID :</td>");
-        String Student_email=Format_Student_BasicDetails(table,"<td>Email Address : </td>");
-        String Student_year=Format_Student_BasicDetails(table,"<td>Graduating Class :</td>");
-        String Student_house=Format_Student_BasicDetails(table,"<td>House :</td>");
+        String Student_name = Format_Student_BasicDetails(table, "<td>Student Name :</td>");
+        String Student_ID = Format_Student_BasicDetails(table, "<td>Student ID :</td>");
+        String Student_email = Format_Student_BasicDetails(table, "<td>Email Address : </td>");
+        String Student_year = Format_Student_BasicDetails(table, "<td>Graduating Class :</td>");
+        String Student_house = Format_Student_BasicDetails(table, "<td>House :</td>");
         //student_name, String student_ID, String student_email, String student_year, String student_house
         StudentDetails student = new StudentDetails(Student_name, Student_ID, Student_email, Student_year, Student_house, null, null);
         return student;
     }
+
     //Formats the Student Details
-    public static String Format_Student_BasicDetails(String table, String type){
+    public static String Format_Student_BasicDetails(String table, String type) {
         //System.out.println(type);
         //Error handling Required
-        try{
+        try {
             String[] first_break = table.split(type);
             String[] second_break = first_break[1].split("</tr>");
-            String student_detail = second_break[0].replace("<td>","").replace("</td>","").replaceAll("(?m)^[ \t]*\r?\n", "").trim();
+            String student_detail = second_break[0].replace("<td>", "").replace("</td>", "").replaceAll("(?m)^[ \t]*\r?\n", "").trim();
             System.out.println(student_detail);
             return student_detail;
-        }catch(Exception e){
-            System.out.println("Couldn't get: "+ type);
+        } catch (Exception e) {
+            System.out.println("Couldn't get: " + type);
             return null;
         }
+
 
     }
 

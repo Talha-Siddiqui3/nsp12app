@@ -24,6 +24,7 @@ import com.btb.nixorstudentapplication.GeneralLayout.activity_header;
 import com.btb.nixorstudentapplication.Misc.permission_util;
 import com.btb.nixorstudentapplication.Past_papers.Adapter.Pastpaper_adapter;
 import com.btb.nixorstudentapplication.Past_papers.Adapter.Subject_adapter;
+import com.btb.nixorstudentapplication.Past_papers.MaintenanceClasses.Upload_papers;
 import com.btb.nixorstudentapplication.Past_papers.Objects.paperObject;
 import com.btb.nixorstudentapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -78,10 +79,12 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
         GetExternalStoragePermission();
         getListOfSubjects(MainPPActivity.this);
         // GetDataFireBase(true);
-        initialize(); }
+        initialize();
+      // Upload_papers.readDataFromFile(this,"Economics(9708)");
+    }
 
     public void initialize() {
-        activity_header.setActivityname("Pastpapers");
+        activity_header.setActivityname("Past papers");
 
         RelativeLayout layout = findViewById(R.id.multiview);
         layout.animate().translationX(1000);
@@ -144,7 +147,7 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
     ArrayList<Object> listofSubjects = new ArrayList<>();
     public void getListOfSubjects(final Context mycontext){
         //Need to add Filters for subjects
-        ((MainPPActivity)mycontext).FilterButton.setVisibility(View.INVISIBLE);
+        ((MainPPActivity)mycontext).FilterButton.setVisibility(View.GONE);
         final RecyclerView rv = findViewById(R.id.rv_list);
         rv.setVisibility(View.INVISIBLE);
         rv.setAdapter(null);
@@ -186,7 +189,7 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
         rv.setVisibility(View.INVISIBLE);
         rv.setAdapter(null);
         showLoading(myContext);
-        subjectSelected=subjectname;
+         subjectSelected=subjectname;
         String hint = myContext.getString(R.string.paperhint);
         ((MainPPActivity)myContext).searchfield.setHint(hint);
         paperUrlArrayList = new ArrayList<>();

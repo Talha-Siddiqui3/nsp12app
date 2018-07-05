@@ -1,31 +1,55 @@
 package com.btb.nixorstudentapplication.Application_Home;
 
-import android.app.Activity;
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import com.btb.nixorstudentapplication.BookMyTa.Main_Activity_Ta_Tab;
 import com.btb.nixorstudentapplication.Misc.common_util;
+import com.btb.nixorstudentapplication.Misc.permission_util;
+import com.btb.nixorstudentapplication.Nsp_Portal.Adaptors.Nsp_Adaptor;
 import com.btb.nixorstudentapplication.Past_papers.MainPPActivity;
 import com.btb.nixorstudentapplication.R;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.MainCloudActivity;
 import com.btb.nixorstudentapplication.User.UserPhoto;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class home_screen extends Activity implements View.OnClickListener {
+public class home_screen extends AppCompatActivity implements View.OnClickListener {
     //XML
     CircleImageView photoStudent_circleView;
     TextView nameStudent_textView;
     TextView idStudent_textView;
     Button pastPapersIntent;
     Button bookMyTaIntent;
+    Button nspIntent;
 
     String TAG = "home_screen";
     common_util common_util = new common_util();
@@ -35,24 +59,140 @@ public class home_screen extends Activity implements View.OnClickListener {
     public static String StudentID;
     public static FirebaseFirestore db;
 
+    //NSP
+
+    public static String GUID = "";
+    private Map<String, Object> map = new HashMap<>();
+    private GridView gridView;
+    private Nsp_Adaptor nsp_adaptor;
+    private List<String> icons;
+
+    private DrawerLayout mDrawerLayout;
+    private Button menu_button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
 
+
+
         //XML
         photoStudent_circleView = findViewById(R.id.student_photo);
         idStudent_textView = findViewById(R.id.idStudent_textView);
         nameStudent_textView = findViewById(R.id.nameStudent_textView);
-        pastPapersIntent = findViewById(R.id.pastPapersIntent);
-        pastPapersIntent.setOnClickListener(this);
-        bookMyTaIntent=findViewById(R.id.bookMyTaIntent);
-        bookMyTaIntent.setOnClickListener(this);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        menu_button = findViewById(R.id.menu_button);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        menu_button.setOnClickListener(this);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                       mDrawerLayout.closeDrawers();
+                        switch (menuItem.getItemId()){
+                            case R.id.pp:startActivity(new Intent(home_screen.this, MainPPActivity.class));break;
+                            case R.id.soc:startActivity(new Intent(home_screen.this, MainCloudActivity.class));break;
+                            case R.id.ta:startActivity(new Intent(home_screen.this, Main_Activity_Ta_Tab.class));break;
+                        }
+                        return true;
+                    }
+                });
 
         db = FirebaseFirestore.getInstance();
         loadStudentDetails();
         common_util.checkActivation(home_screen.this, username);
+        intializeNSP();
     }
+    public void onClick(View view) {
+    switch (view.getId()) {
+        case R.id.menu_button:
+            mDrawerLayout.openDrawer(GravityCompat.START);
+
+    }
+
+    }
+    //Nsp Stuff. Do your commenting here
+    public void intializeNSP(){
+        icons = new ArrayList<>();
+        common_util = new common_util();
+        GetGUIDLocally();
+        GetNspIcons();
+        TAG = "oldActivity";
+        gridView = findViewById(R.id.GridView_NspPortal);
+        nsp_adaptor = new Nsp_Adaptor(icons, this);
+        gridView.setAdapter(nsp_adaptor);
+        GetExternalStoragePermission();
+        MakePath();
+
+
+    }
+    public void MakePath() {
+        File path = new File(Environment.getExternalStorageDirectory() + "/nixorapp/NspDocuments/");
+        if (!path.exists())
+            path.mkdirs();
+
+    }
+    public void GetGUIDLocally() {
+        GUID = common_util.getUserDataLocally(this, "GUID");
+
+    }
+    private void GetExternalStoragePermission() {
+        permission_util permission_util = new permission_util();
+        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+        permission_util.getPermissions(this, permissions);
+    }
+    public void GetNspIcons() {
+        String username = common_util.getUserDataLocally(this, "username");
+        DocumentReference dr = FirebaseFirestore.getInstance().collection("users").document(username).collection("icons").document("myicons");
+        dr.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful())
+
+                {
+                    map = task.getResult().getData();
+                    for (int i = 0; i < map.size(); i++) {
+
+                        Log.i(TAG, map.get(Integer.toString(i)).toString());
+                        icons.add(i, map.get(Integer.toString(i)).toString());
+                    }
+
+                    nsp_adaptor.notifyDataSetChanged();
+                } else {
+                    Log.i(TAG, "cant get data");
+                }
+            }
+        });
+    }
+
+
+//In case we need GUID from FIrebase
+    /*public void GetGUIDFireStore() {
+        String userName = common_util.extractUsername(this, "talha.siddiqui@nixorcollege.edu.pk");
+        DocumentReference dr = FirebaseFirestore.getInstance().collection("users").document(userName);
+        dr.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful())
+
+                {
+
+                    GUID = task.getResult().get("student_guid").toString();
+                } else {
+                    Log.i(TAG, "Couldn't get GUID");
+
+                }
+            }
+        });
+    }
+*/
 
 
     public void loadStudentDetails() {
@@ -91,12 +231,14 @@ public class home_screen extends Activity implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.pastPapersIntent:
-                startActivity(new Intent(home_screen.this, MainPPActivity.class));break;
-            case R.id.bookMyTaIntent:
-                startActivity(new Intent(this,Main_Activity_Ta_Tab.class));
-        }
+    public void onBackPressed() {
+        if(mDrawerLayout!=null){
+            if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+                mDrawerLayout.closeDrawers();
+            }else{
+                super.onBackPressed();
+            }
+        }else{
+        super.onBackPressed();}
     }
 }

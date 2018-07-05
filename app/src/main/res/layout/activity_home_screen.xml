@@ -1,19 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Use DrawerLayout as root container for activity -->
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
+    android:background="@color/backgroundColor"
+    android:paddingBottom="5dp"
     tools:context=".Application_Home.home_screen">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:layout_alignParentTop="true"
-        android:background="@color/main_header"
-        android:src="@drawable/nav_header" />
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar" >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="18dp"
+                android:src="@drawable/nixorshark" />
+
+            <TextView
+                android:id="@+id/nixorpoints_textView"
+                style="@style/sub_headings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:gravity="right"
+                android:text="@string/nixorpoints_textView"
+                android:textColor="#fff"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/menu_button"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/menu" />
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+
+    <GridView
+        android:id="@+id/GridView_NspPortal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/idStudent_textView"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="30dp"
+        android:columnWidth="100dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="12.0sp"
+        android:gravity="center"
+        android:horizontalSpacing="10dp"
+        android:numColumns="auto_fit"
+        android:scrollbarThumbVertical="@android:color/transparent"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="10dp" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/student_photo"
@@ -22,7 +84,7 @@
         android:layout_height="@dimen/main_studentphoto"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="35dp"
         android:src="@drawable/student_mode" />
 
     <TextView
@@ -32,8 +94,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/student_photo"
         android:layout_centerHorizontal="true"
-        android:text="Student Name"
-        android:textColor="#fff" />
+        android:text="Student Name" />
 
     <TextView
         android:id="@+id/idStudent_textView"
@@ -43,45 +104,17 @@
         android:layout_below="@+id/nameStudent_textView"
         android:layout_centerHorizontal="true"
         android:text="Student ID"
-        android:textColor="#fff"
         android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/nixorpoints_textView"
-        style="@style/sub_headings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/nixorpoints_textView"
-        android:textColor="#fff"
-        android:textSize="14sp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/van_footerHeight"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:background="@color/van_footercolor"
-        android:orientation="horizontal">
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/bookMyTaIntent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="13dp"
-        android:text="Open BookMyTa" />
-
-    <Button
-        android:id="@+id/pastPapersIntent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:text="Open Pastpapers" />
 
 </RelativeLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:menu="@menu/drawer_menu"
+        />
+</android.support.v4.widget.DrawerLayout>
