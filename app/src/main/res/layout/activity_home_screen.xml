@@ -25,12 +25,12 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:id="@+id/movingshark"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="18dp"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/nixorpoints_textView"
                 android:src="@drawable/nixorshark" />
 
             <TextView
@@ -38,9 +38,8 @@
                 style="@style/sub_headings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="16dp"
                 android:gravity="right"
                 android:text="@string/nixorpoints_textView"
                 android:textColor="#fff"
@@ -50,8 +49,9 @@
                 android:id="@+id/menu_button"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
                 android:background="@drawable/menu" />
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
@@ -64,8 +64,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/idStudent_textView"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
         android:layout_marginTop="30dp"
         android:columnWidth="100dp"
         android:divider="@android:color/transparent"
@@ -73,19 +71,10 @@
         android:gravity="center"
         android:horizontalSpacing="10dp"
         android:numColumns="auto_fit"
+        android:paddingTop="20dp"
         android:scrollbarThumbVertical="@android:color/transparent"
         android:stretchMode="columnWidth"
         android:verticalSpacing="10dp" />
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/student_photo"
-        style="main_studentphoto"
-        android:layout_width="@dimen/main_studentphoto"
-        android:layout_height="@dimen/main_studentphoto"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="35dp"
-        android:src="@drawable/student_mode" />
 
     <TextView
         android:id="@+id/nameStudent_textView"
@@ -106,6 +95,24 @@
         android:text="Student ID"
         android:textSize="12sp" />
 
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/imageView6"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/bubbles" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/student_photo"
+        style="main_studentphoto"
+        android:layout_width="@dimen/main_studentphoto"
+        android:layout_height="@dimen/main_studentphoto"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:src="@drawable/student_mode" />
+
 
 </RelativeLayout>
 
@@ -113,8 +120,8 @@
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
+        android:layout_gravity="end"
         android:fitsSystemWindows="true"
-        app:menu="@menu/drawer_menu"
-        />
+        app:headerLayout="@layout/drawer_header"
+        app:menu="@menu/drawer_menu" />
 </android.support.v4.widget.DrawerLayout>
