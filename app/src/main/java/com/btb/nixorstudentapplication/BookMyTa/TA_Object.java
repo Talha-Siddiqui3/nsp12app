@@ -1,21 +1,33 @@
 package com.btb.nixorstudentapplication.BookMyTa;
 //OBJECT for storing all TA DATA
 
-import java.util.List;
-
 public class TA_Object {
-    private String TaName,Days,TaID,Timings,Subject;
-    private List<String> TaFirebaseTokens;
+    private String TaName;
+    private String Days;
+    private String TaID;
+    private String Timings;
+    private String Subject;
+    private String TaUserName;
+    private String StudentUserName;
 
-    public List<String> getTaFirebaseTokens() {
-        return TaFirebaseTokens;
+    public String getStudentUserName() {
+        return StudentUserName;
     }
 
-    public void setTaFirebaseTokens(List<String> taFirebaseTokens) {
-        TaFirebaseTokens = taFirebaseTokens;
+    public void setStudentUserName(String studentUserName) {
+        StudentUserName = studentUserName;
     }
 
-    public TA_Object()
+    public String getTaUserName() {
+        return TaUserName;
+    }
+
+    public void setTaUserName(String taUserName) {
+        TaUserName = taUserName;
+    }
+
+
+public TA_Object()
 {
 
 }

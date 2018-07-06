@@ -48,7 +48,7 @@ public class RV_Adaptor_3_For_Search_Ta extends RecyclerView.Adapter<RV_Adaptor_
         return new Rv_ViewHolder(view);
     }
 
-    //sets name id  timings etc
+    //sets name id  timings etc for displating.
     @Override
     public void onBindViewHolder(@NonNull final RV_Adaptor_3_For_Search_Ta.Rv_ViewHolder holder, final int position) {
         Log.i(TAG, ta_objects.get(position).getTaName());
@@ -124,8 +124,8 @@ public class RV_Adaptor_3_For_Search_Ta extends RecyclerView.Adapter<RV_Adaptor_
         map.put("TaName", ta_objects.get(position).getTaName());
         map.put("StudentName", cu.getUserDataLocally(context, "name"));
         map.put("latestUpdateTimestamp", FieldValue.serverTimestamp());
-        map.put("TaFirebaseTokens",ta_objects.get(position).getTaFirebaseTokens());
-        
+        map.put("TaUserName", ta_objects.get(position).getTaUserName());
+        map.put("StudentUserName", ta_objects.get(position).getStudentUserName());
         cr.add(map);
     }
 

@@ -186,6 +186,15 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
         });
         */
         icons.add("Profile");
+        icons.add("Gate Attendance");
+        icons.add("Class Attendance");
+        icons.add("Finance");
+        icons.add("Schedule");
+        icons.add("Student Marks");
+        icons.add("CIE Grades");
+        icons.add("TA Schedule");
+        icons.add("TA Log");
+
 
 //        nsp_adaptor.notifyDataSetChanged();
     }

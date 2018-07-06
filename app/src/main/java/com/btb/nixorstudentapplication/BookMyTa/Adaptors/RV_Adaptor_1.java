@@ -13,12 +13,14 @@ import android.widget.TextView;
 
 
 import com.btb.nixorstudentapplication.BookMyTa.Fragments_for_tabs.Student_Requests_For_Ta_Fragment;
+import com.btb.nixorstudentapplication.BookMyTa.Main_Activity_Ta_Tab;
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.HttpsCallableResult;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +53,7 @@ public class RV_Adaptor_1 extends RecyclerView.Adapter<RV_Adaptor_1.Rv_ViewHolde
     public Rv_ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.student_request_for_ta_layout, parent, false);
+
         return new Rv_ViewHolder(view);
     }
 
@@ -125,14 +128,14 @@ public class RV_Adaptor_1 extends RecyclerView.Adapter<RV_Adaptor_1.Rv_ViewHolde
 
 
     }
-
+//CALLING CLOUD FUNCTION
     public void UpdateRequest(final String requestStatus, String DocId, final TextView tempRequestStatus) {
         // Create the arguments to the callable function.
 
         Map<String, Object> data = new HashMap<>();
-
         data.put("newdocid", DocId);
         data.put("status", requestStatus);
+        data.put("TaUserName",cu.getUserDataLocally(context,"username"));
         Log.i(TAG, "method executed");
 
         mFunctions
