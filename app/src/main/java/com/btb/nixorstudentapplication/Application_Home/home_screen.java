@@ -33,6 +33,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -70,11 +72,12 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
     private DrawerLayout mDrawerLayout;
     private Button menu_button;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
-
 
 
         //XML
@@ -93,11 +96,17 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                       mDrawerLayout.closeDrawers();
-                        switch (menuItem.getItemId()){
-                            case R.id.pp:startActivity(new Intent(home_screen.this, MainPPActivity.class));break;
-                            case R.id.soc:startActivity(new Intent(home_screen.this, MainCloudActivity.class));break;
-                            case R.id.ta:startActivity(new Intent(home_screen.this, Main_Activity_Ta_Tab.class));break;
+                        mDrawerLayout.closeDrawers();
+                        switch (menuItem.getItemId()) {
+                            case R.id.pp:
+                                startActivity(new Intent(home_screen.this, MainPPActivity.class));
+                                break;
+                            case R.id.soc:
+                                startActivity(new Intent(home_screen.this, MainCloudActivity.class));
+                                break;
+                            case R.id.ta:
+                                startActivity(new Intent(home_screen.this, Main_Activity_Ta_Tab.class));
+                                break;
                         }
                         return true;
                     }
@@ -107,17 +116,20 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
         loadStudentDetails();
         common_util.checkActivation(home_screen.this, username);
         intializeNSP();
+
     }
+
     public void onClick(View view) {
-    switch (view.getId()) {
-        case R.id.menu_button:
-            mDrawerLayout.openDrawer(GravityCompat.START);
+        switch (view.getId()) {
+            case R.id.menu_button:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+
+        }
 
     }
 
-    }
     //Nsp Stuff. Do your commenting here
-    public void intializeNSP(){
+    public void intializeNSP() {
         icons = new ArrayList<>();
         common_util = new common_util();
         GetGUIDLocally();
@@ -129,25 +141,28 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
         GetExternalStoragePermission();
         MakePath();
 
-
     }
+
     public void MakePath() {
         File path = new File(Environment.getExternalStorageDirectory() + "/nixorapp/NspDocuments/");
         if (!path.exists())
             path.mkdirs();
 
     }
+
     public void GetGUIDLocally() {
         GUID = common_util.getUserDataLocally(this, "GUID");
 
     }
+
     private void GetExternalStoragePermission() {
         permission_util permission_util = new permission_util();
         String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
         permission_util.getPermissions(this, permissions);
     }
+
     public void GetNspIcons() {
-        String username = common_util.getUserDataLocally(this, "username");
+       /* String username = common_util.getUserDataLocally(this, "username");
         DocumentReference dr = FirebaseFirestore.getInstance().collection("users").document(username).collection("icons").document("myicons");
         dr.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
@@ -169,6 +184,10 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
                 }
             }
         });
+        */
+        icons.add("Profile");
+
+//        nsp_adaptor.notifyDataSetChanged();
     }
 
 
@@ -232,13 +251,19 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onBackPressed() {
-        if(mDrawerLayout!=null){
-            if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+        if (mDrawerLayout != null) {
+            if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
                 mDrawerLayout.closeDrawers();
-            }else{
+            } else {
                 super.onBackPressed();
             }
-        }else{
-        super.onBackPressed();}
+        } else {
+            super.onBackPressed();
+        }
     }
+
+
+
+
+
 }

@@ -100,7 +100,6 @@ public class RV_Adaptor_1 extends RecyclerView.Adapter<RV_Adaptor_1.Rv_ViewHolde
             AcceptRequest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-Log.i("ABC",String.valueOf(getAdapterPosition()));
                     //AcceptRequest.setEnabled(false);
                     //RejectRequest.setEnabled(false);
                     itemView.findViewWithTag("buttonlayout" + Integer.toString(getAdapterPosition())).setVisibility(View.GONE);
