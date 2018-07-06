@@ -52,14 +52,14 @@ public class Search_Ta_Fragment extends Fragment {
                     if (isInitialData) {
                         map = dc.getDocument().getData();
                         Log.i(TAG, map.toString());
-                        ta_objects.add(addDataToObject(ta_object, map.get("Name"), map.get("Days"), map.get("TaID"), map.get("Timings"), map.get("Subject")));
+                        ta_objects.add(addDataToObject(ta_object, map.get("Name"), map.get("Days"), map.get("TaID"), map.get("Timings"), map.get("Subject"),map.get("TaFirebaseTokens")));
                         AddDataToAdaptor();
                     } else {
                         switch (dc.getType()) {
                             case ADDED:
 
                                 map = dc.getDocument().getData();
-                                addDataToObject(ta_object, map.get("Name"), map.get("Days"), map.get("TaID"), map.get("Timings"), map.get("Subject"));
+                                addDataToObject(ta_object, map.get("Name"), map.get("Days"), map.get("TaID"), map.get("Timings"), map.get("Subject"),map.get("TaFirebaseTokens"));
                                 AddDataToAdaptor();
                                 break;
 
@@ -100,12 +100,13 @@ public class Search_Ta_Fragment extends Fragment {
     }
 
     //sets TA Object to data received from Firebase
-    public TA_Object addDataToObject(TA_Object ta_object, Object Ta_Name, Object Days, Object TaId, Object Timings, Object Subject) {
+    public TA_Object addDataToObject(TA_Object ta_object, Object Ta_Name, Object Days, Object TaId, Object Timings, Object Subject,Object TaFirebaseTokens) {
         ta_object.setDays(Days.toString());
         ta_object.setSubject(Subject.toString());
         ta_object.setTaID(TaId.toString());
         ta_object.setTimings(Timings.toString());
         ta_object.setTaName(Ta_Name.toString());
+        ta_object.setTaFirebaseTokens((ArrayList<String>)TaFirebaseTokens);
         return ta_object;
     }
 }

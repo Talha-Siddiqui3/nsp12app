@@ -124,6 +124,8 @@ public class RV_Adaptor_3_For_Search_Ta extends RecyclerView.Adapter<RV_Adaptor_
         map.put("TaName", ta_objects.get(position).getTaName());
         map.put("StudentName", cu.getUserDataLocally(context, "name"));
         map.put("latestUpdateTimestamp", FieldValue.serverTimestamp());
+        map.put("TaFirebaseTokens",ta_objects.get(position).getTaFirebaseTokens());
+        
         cr.add(map);
     }
 
