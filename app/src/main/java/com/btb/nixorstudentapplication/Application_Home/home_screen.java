@@ -240,7 +240,7 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
     }
 
     public void GetNspIcons() {
-        String username = common_util.getUserDataLocally(this, "username");
+     /*   String username = common_util.getUserDataLocally(this, "username");
         DocumentReference dr = FirebaseFirestore.getInstance().collection("users").document(username).collection("icons").document("myicons");
         dr.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
@@ -262,6 +262,8 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
                 }
             }
         });
+    */
+     icons.add("Profile");
     }
 
 
