@@ -3,8 +3,8 @@ package com.btb.nixorstudentapplication.Application_Home;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -13,11 +13,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.btb.nixorstudentapplication.BookMyTa.Main_Activity_Ta_Tab;
@@ -34,16 +36,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -63,6 +62,7 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
     public static String Studentname;
     public static String StudentID;
     public static FirebaseFirestore db;
+    ImageView movingshark;
 
     //NSP
 
@@ -74,8 +74,6 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
 
     private DrawerLayout mDrawerLayout;
     private Button menu_button;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +87,9 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
         nameStudent_textView = findViewById(R.id.nameStudent_textView);
         mDrawerLayout = findViewById(R.id.drawer_layout);
         menu_button = findViewById(R.id.menu_button);
-
+        movingshark = findViewById(R.id.movingshark);
+        moveShark();
+        animateShark();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
@@ -119,15 +119,89 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
         loadStudentDetails();
         common_util.checkActivation(home_screen.this, username);
         intializeNSP();
-
     }
 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.menu_button:
-                mDrawerLayout.openDrawer(GravityCompat.START);
+                mDrawerLayout.openDrawer(GravityCompat.END);
 
         }
+    }
+    static Boolean directionback = false;
+    static Boolean initialAnimation =true;
+    public void moveShark(){
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        final int width = displayMetrics.widthPixels-15;
+      int animTime = 0;
+        if(!initialAnimation){
+            animTime =15000;
+        }
+    new CountDownTimer(animTime, 1000) {
+
+        public void onTick(long millisUntilFinished) {
+
+        }
+
+        public void onFinish() {
+            initialAnimation=false;
+            directionback=false;
+            movingshark.animate().translationX(width).setDuration(15000);
+            new CountDownTimer(15000, 1000) {
+
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                public void onFinish() {
+                    directionback=true;
+                    movingshark.animate().translationX(0).setDuration(15000);
+                    moveShark();
+
+                }
+            }.start();
+        }
+    }.start();
+
+
+
+
+
+
+
+}
+    public void animateShark() {
+
+
+
+           new CountDownTimer(100, 1000) {
+               Boolean sharkset =true;
+               public void onTick(long millisUntilFinished) {
+
+               }
+
+               public void onFinish() {
+                   if(sharkset){
+                       if(directionback){
+                           movingshark.setImageResource(R.drawable.nixorsharkoriginal2back);
+                       }else{
+                       movingshark.setImageResource(R.drawable.nixorsharkoriginal2);}
+                       sharkset=true;
+                       animateShark();
+                   }else{
+                       if(directionback){
+                       movingshark.setImageResource(R.drawable.nixorsharkback);}
+                       else{
+                           movingshark.setImageResource(R.drawable.nixorsharkoriginal);
+                       }
+                       sharkset =false;
+                       animateShark();
+                   }
+               }
+           }.start();
+
+
 
     }
 
@@ -143,6 +217,7 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
         gridView.setAdapter(nsp_adaptor);
         GetExternalStoragePermission();
         MakePath();
+
 
     }
 
@@ -165,7 +240,7 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
     }
 
     public void GetNspIcons() {
-       /* String username = common_util.getUserDataLocally(this, "username");
+     /*   String username = common_util.getUserDataLocally(this, "username");
         DocumentReference dr = FirebaseFirestore.getInstance().collection("users").document(username).collection("icons").document("myicons");
         dr.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
@@ -187,18 +262,8 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
                 }
             }
         });
-        */
-        icons.add("Profile");
-        icons.add("Gate Attendance");
-        icons.add("Class Attendance");
-        icons.add("Finance");
-        icons.add("Schedule");
-        icons.add("Student Marks");
-        icons.add("CIE Grades");
-        icons.add("TA Schedule");
-        icons.add("TA Log");
-
-
+    */
+     icons.add("Profile");
     }
 
 
@@ -272,9 +337,4 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
             super.onBackPressed();
         }
     }
-
-
-
-
-
 }

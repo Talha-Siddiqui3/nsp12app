@@ -17,7 +17,7 @@
     </style>
 
     <style name="sub_headings">
-        <item name="android:fontFamily">@font/assistant</item>
+        <item name="android:fontFamily">@font/assistant_extralight</item>
         <item name="android:textColor">#000</item>
         <item name="android:textSize">20sp</item>
     </style>
