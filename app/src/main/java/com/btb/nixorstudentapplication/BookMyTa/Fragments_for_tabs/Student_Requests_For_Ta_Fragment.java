@@ -134,7 +134,6 @@ public class Student_Requests_For_Ta_Fragment extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvAdaptor = new RV_Adaptor_1(GetRequest(), DocIds,getActivity());
         rv.setAdapter(rvAdaptor);
-
         return view;
     }
 

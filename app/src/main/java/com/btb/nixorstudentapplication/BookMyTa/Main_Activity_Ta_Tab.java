@@ -24,6 +24,7 @@ public class Main_Activity_Ta_Tab extends AppCompatActivity {
     private activity_header activity_header;
     public static int i=1;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

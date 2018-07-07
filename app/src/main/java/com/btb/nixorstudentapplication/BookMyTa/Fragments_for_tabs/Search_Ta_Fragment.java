@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.btb.nixorstudentapplication.BookMyTa.Adaptors.RV_Adaptor_3_For_Search_Ta;
 import com.btb.nixorstudentapplication.BookMyTa.TA_Object;
+import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.R;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
@@ -33,6 +34,7 @@ public class Search_Ta_Fragment extends Fragment {
     boolean isInitialData = true;
     Map<String, Object> map = new HashMap();
     String TAG = "Search_Ta_Fragment";
+    private common_util cu=new common_util();
 
 
     public Search_Ta_Fragment() {
@@ -52,14 +54,14 @@ public class Search_Ta_Fragment extends Fragment {
                     if (isInitialData) {
                         map = dc.getDocument().getData();
                         Log.i(TAG, map.toString());
-                        ta_objects.add(addDataToObject(ta_object, map.get("Name"), map.get("Days"), map.get("TaID"), map.get("Timings"), map.get("Subject")));
+                        ta_objects.add(addDataToObject(ta_object, map.get("Name"), map.get("Days"), map.get("TaID"), map.get("Timings"), map.get("Subject"),map.get("TaUserName")));
                         AddDataToAdaptor();
                     } else {
                         switch (dc.getType()) {
                             case ADDED:
 
                                 map = dc.getDocument().getData();
-                                addDataToObject(ta_object, map.get("Name"), map.get("Days"), map.get("TaID"), map.get("Timings"), map.get("Subject"));
+                                addDataToObject(ta_object, map.get("Name"), map.get("Days"), map.get("TaID"), map.get("Timings"), map.get("Subject"),map.get("TaUserName"));
                                 AddDataToAdaptor();
                                 break;
 
@@ -100,12 +102,14 @@ public class Search_Ta_Fragment extends Fragment {
     }
 
     //sets TA Object to data received from Firebase
-    public TA_Object addDataToObject(TA_Object ta_object, Object Ta_Name, Object Days, Object TaId, Object Timings, Object Subject) {
+    public TA_Object addDataToObject(TA_Object ta_object, Object Ta_Name, Object Days, Object TaId, Object Timings, Object Subject,Object TaUserName) {
         ta_object.setDays(Days.toString());
         ta_object.setSubject(Subject.toString());
         ta_object.setTaID(TaId.toString());
         ta_object.setTimings(Timings.toString());
         ta_object.setTaName(Ta_Name.toString());
+        ta_object.setTaUserName(TaUserName.toString());
+        ta_object.setStudentUserName(cu.getUserDataLocally(getContext(),"username"));
         return ta_object;
     }
 }

@@ -93,7 +93,7 @@ public class Requests_To_Book_Ta_Fragment extends Fragment {
                                 }
                                 break;
                             case MODIFIED:
-                                //Additional check that modifies only executes when neither ADD or REMOVES executes
+                                //Additional check that modified only executes when neither ADD or REMOVES executes
                                 if (dc.getDocument().get("StudentName").toString().equals(cu.getUserDataLocally(getContext(), "name")) &&  isDataAdded == false &&  isDataRemoved == false) {
                                     for (int i = 0; i < localIndexList.size(); i++) {
                                         if (localIndexList.get(i) == dc.getOldIndex()) {
