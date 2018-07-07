@@ -70,7 +70,20 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".Past_papers.MainPPActivity" />
+        <activity android:name=".Past_papers.MainPPActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+
+
+
+
+
+
+
         <activity android:name=".Past_papers.PdfLoad" />
         <activity android:name=".Past_papers.MultiView" />
         <activity

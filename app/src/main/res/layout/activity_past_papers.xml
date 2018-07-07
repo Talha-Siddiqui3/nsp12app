@@ -120,11 +120,11 @@
             android:id="@+id/rv_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/nav_main"
-            android:layout_below="@+id/search_filter"
+            android:layout_below="@+id/LinearLayoutPastPapers"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
+            android:labelFor="@+id/below"
             tools:ignore="NotSibling" />
 
         <RelativeLayout
@@ -169,6 +169,75 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true" />
+
+        <LinearLayout
+            android:id="@+id/LinearLayoutPastPapers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/search_filter"
+            android:layout_margin="1dp"
+            android:layout_marginTop="0dp"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+
+            <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/segmented2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:checkedButton="@+id/AllButton_PastPapers"
+                android:orientation="horizontal"
+                segmentedgroup:sc_border_width="2dp"
+                segmentedgroup:sc_corner_radius="10dp"
+                segmentedgroup:sc_tint_color="@color/colorPrimary"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="169dp">
+
+                <RadioButton
+                    android:id="@+id/AllButton_PastPapers"
+                    style="@style/RadioButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="All"
+                    android:textAlignment="center"
+
+                    />
+
+                <RadioButton
+                    android:id="@+id/button22"
+                    style="@style/RadioButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Sciences"
+                    android:textAlignment="center" />
+
+                <RadioButton
+                    android:id="@+id/button23"
+                    style="@style/RadioButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Commerce"
+                    android:textAlignment="center" />
+
+
+                <RadioButton
+                    android:id="@+id/button24"
+                    style="@style/RadioButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Other"
+                    android:textAlignment="center" />
+
+
+            </info.hoang8f.android.segmented.SegmentedGroup>
+
+
+        </LinearLayout>
 
 
     </RelativeLayout>

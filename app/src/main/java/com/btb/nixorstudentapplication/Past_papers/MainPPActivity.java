@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,6 +42,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
+
+import info.hoang8f.android.segmented.SegmentedGroup;
 
 public class MainPPActivity extends Activity implements View.OnClickListener {
     String TAG = "MainPPActivity";
@@ -78,6 +81,10 @@ public class MainPPActivity extends Activity implements View.OnClickListener {
         FilterButton.setOnClickListener(this);
         GetExternalStoragePermission();
         getListOfSubjects(MainPPActivity.this);
+
+
+
+
         // GetDataFireBase(true);
         initialize();
       // Upload_papers.readDataFromFile(this,"Economics(9708)");
