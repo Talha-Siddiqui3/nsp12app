@@ -79,7 +79,13 @@
         <activity
             android:name=".BookMyTa.Main_Activity_Ta_Tab"
             android:label="@string/title_activity_ta_tab"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" >
+           <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+               <category android:name="android.intent.category.LAUNCHER" />
+
+           </intent-filter>
+        </activity>
 
         <activity android:name=".Nsp_Portal.NspPortalPdf"></activity>
         <activity android:name=".Sharks_on_cloud.MainCloudActivity"></activity>

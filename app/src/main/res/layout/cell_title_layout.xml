@@ -1,88 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/cell_title_layout"
+    android:id="@+id/Outer_Layout"
     android:layout_width="match_parent"
-    android:layout_height="100dp">
+    android:layout_height="wrap_content">
 
 
-    <LinearLayout
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/cell_title_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical">
+        android:layout_height="100dp"
+        android:layout_marginBottom="7dp"
+        android:background="@color/colorPrimary">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+        <TextView
+            android:id="@+id/Teaches_FoldingVIew_Folded"
+            android:layout_width="140dp"
+
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/TA_NAME_FoldingView_Folded"
+            android:layout_below="@+id/TA_NAME_FoldingView_Folded"
+            android:layout_weight="1"
+            android:paddingTop="10dp"
+            android:text="Physics"
+            android:textAlignment="textStart"
+            android:textColor="@android:color/white"
+            android:textSize="17sp" />
 
-            <TextView
-                android:id="@+id/TA_NAME_TITLE_FoldingVIew"
-                android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/TA_NAME_FoldingView_Folded"
+            android:layout_width="240dp"
 
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="0dp"
-                android:layout_weight="1"
-                android:text="TA Name"
-                android:textAlignment="viewStart"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/TA_NAME_FoldingView_Folded"
-                android:layout_width="match_parent"
-
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_weight="1"
-                android:text="adsa"
-                android:textAlignment="viewStart"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_alignParentEnd="true"
+            android:layout_alignStart="@+id/student_photo"
+            android:layout_marginStart="85dp"
+            android:layout_marginTop="17dp"
+            android:text="Muhammad Talha Siddiqui"
+            android:textAlignment="textStart"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/student_photo"
+            style="main_studentphoto"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="17dp"
+            android:src="@drawable/sample" />
 
-            <TextView
-                android:id="@+id/Teaches_Title_FoldingView_Folded"
-                android:layout_width="match_parent"
+    </RelativeLayout>
 
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="0dp"
-                android:layout_weight="1"
-                android:text="Teaches:"
-                android:textAlignment="viewStart"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/Teaches_FoldingVIew_Folded"
-                android:layout_width="match_parent"
-
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="0dp"
-                android:layout_weight="1"
-                android:text="Chem"
-                android:textAlignment="viewStart"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-    </LinearLayout>
 
 </RelativeLayout>
-
-
-
