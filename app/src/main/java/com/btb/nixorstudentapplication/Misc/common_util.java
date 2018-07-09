@@ -213,11 +213,11 @@ public class common_util {
     public StudentDetails hashMapStudentDetails(HashMap map){
         StudentDetails student = new StudentDetails();
         student.setStudent_email(map.get("student_email").toString());
-        student.setStudent_house(map.get("student_house").toString());
+//        student.setStudent_house(map.get("student_house").toString());
         student.setStudent_name(map.get("student_name").toString());
         student.setStudent_year(map.get("student_year").toString());
         student.setStudent_id(map.get("student_id").toString());
-        student.setStudent_house(map.get("student_house").toString());
+//        student.setStudent_house(map.get("student_house").toString());
         //NSP PHOTO NOT FIREBASE FOR FIREBASE USE "photourl"
         student.setStudent_profileUrl(map.get("student_profileUrl").toString());
         student.setStudent_guid(map.get("student_guid").toString());

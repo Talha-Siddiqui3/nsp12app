@@ -86,7 +86,6 @@ public class Search_Ta_Fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        Log.i("called", "OnCreate CAlled");
         view = inflater.inflate(R.layout.search_ta, container, false);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.search_ta_rv);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));

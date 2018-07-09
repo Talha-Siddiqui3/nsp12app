@@ -90,6 +90,7 @@
             android:layout_height="wrap_content">
 
             <EditText
+
                 android:id="@+id/password_editText"
                 style="@style/text_entry"
                 android:layout_width="match_parent"

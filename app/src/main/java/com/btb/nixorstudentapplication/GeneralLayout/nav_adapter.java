@@ -13,7 +13,8 @@ import android.widget.ImageView;
 import com.btb.nixorstudentapplication.Application_Home.home_screen;
 import com.btb.nixorstudentapplication.Past_papers.MainPPActivity;
 import com.btb.nixorstudentapplication.R;
-import com.btb.nixorstudentapplication.Sharks_on_cloud.MainCloudActivity;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.Soc_Main;
+
 
 import java.util.ArrayList;
 
@@ -63,7 +64,7 @@ public class nav_adapter extends RecyclerView.Adapter<nav_adapter.Rv_ViewHolder>
                     case "Pastpapers":activity.startActivity(new Intent(activity,MainPPActivity.class));break;
                     //case "Carpool":holder.item_icon.setImageResource(R.drawable.carpool);break;
                    // case "Chat":holder.item_icon.setImageResource(R.drawable.chat);break;
-                    case "Soc":activity.startActivity(new Intent(activity,MainCloudActivity.class)); break;
+                    case "Soc":activity.startActivity(new Intent(activity,Soc_Main.class)); break;
                   //  case "Bookmyta":holder.item_icon.setImageResource(R.drawable.bookmyta);break;
 
                 }
@@ -74,7 +75,7 @@ public class nav_adapter extends RecyclerView.Adapter<nav_adapter.Rv_ViewHolder>
                         case "Pastpapers":activity.startActivity(new Intent(activity,MainPPActivity.class));((Activity)activity).finish();break;
                         //case "Carpool":holder.item_icon.setImageResource(R.drawable.carpool);break;
                         // case "Chat":holder.item_icon.setImageResource(R.drawable.chat);break;
-                        case "Soc":activity.startActivity(new Intent(activity,MainCloudActivity.class)); ((Activity)activity).finish();break;
+                        case "Soc":activity.startActivity(new Intent(activity,Soc_Main.class)); ((Activity)activity).finish();break;
                         //  case "Bookmyta":holder.item_icon.setImageResource(R.drawable.bookmyta);break;
 
                     }

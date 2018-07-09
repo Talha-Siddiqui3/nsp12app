@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
-
     <application
         android:name=".Misc.StarterApplication"
         android:allowBackup="true"
@@ -23,62 +22,51 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".Notifications.MyFirebaseMessagingService">
+        <service android:name=".Notifications.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".Notifications.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
-        <service
-            android:name=".Notifications.MyFirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-            </intent-filter>
-        </service>
-
-
-
-        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
-     See README(https://goo.gl/l4GJaQ) for more. -->
+        <!--
+     Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/shark_image" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <!--
+             Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorPrimaryDark" />
-<activity android:name=".Application_Home.home_screen"
-    android:theme="@style/AppTheme.NoActionBar"
-    />
+
+        <activity
+            android:name=".Application_Home.home_screen"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".welcome_screen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-</activity>
-
+        </activity>
         <activity android:name=".Autentication.login_screen" />
         <activity android:name=".Autentication.nsp_web.portal_login" />
-
-
         <activity android:name=".Autentication.User.AccountType" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".Past_papers.MainPPActivity"/>
-
-
-
-
-
-
-
-
+        <activity android:name=".Past_papers.MainPPActivity" />
         <activity android:name=".Past_papers.PdfLoad" />
         <activity android:name=".Past_papers.MultiView" />
         <activity
@@ -87,16 +75,12 @@
         <activity
             android:name=".BookMyTa.Main_Activity_Ta_Tab"
             android:label="@string/title_activity_ta_tab"
-            android:theme="@style/AppTheme.NoActionBar" >
-           <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-               <category android:name="android.intent.category.LAUNCHER" />
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".Nsp_Portal.NspPortalPdf" />
 
-           </intent-filter>
+        <activity android:name=".Sharks_on_cloud.Soc_Main"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
-        <activity android:name=".Nsp_Portal.NspPortalPdf"></activity>
-        <activity android:name=".Sharks_on_cloud.MainCloudActivity"></activity>
     </application>
 
 </manifest>

@@ -81,6 +81,7 @@ public class portal_async extends AsyncTask<String,String,String> {
             SSLContext sslContext = SslUtils.getSslContextForCertificateFile(context, "nixor.cer");
             Connection.Response loginForm;
 
+
                     loginForm = Jsoup.connect(login_url)
                             .sslSocketFactory(sslContext.getSocketFactory())
                     .method(Connection.Method.GET)

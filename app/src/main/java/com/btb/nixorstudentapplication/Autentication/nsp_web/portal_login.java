@@ -57,7 +57,8 @@ private String password;
     }
 
     private void initiatelogin() {
-        if(email_editText.getText()!=null&&password_editText.getText()!=null){
+        if(!email_editText.getText().toString().equals("")&&!password_editText.getText().toString().equals("")){
+Log.i("ABC",email_editText.getText().toString()+"123");
           email=  email_editText.getText().toString();
           email += getString(R.string.domain_textView);
             Log.i(TAG,email);
@@ -66,7 +67,9 @@ private String password;
             portal_async login = new portal_async(this);
             login.execute(creds);
 
-
+        }
+        else{
+            common_util.ToasterShort(this,"Please enter both email and passsword");
         }
     }
 

@@ -28,7 +28,7 @@ import com.btb.nixorstudentapplication.Misc.permission_util;
 import com.btb.nixorstudentapplication.Nsp_Portal.Adaptors.Nsp_Adaptor;
 import com.btb.nixorstudentapplication.Past_papers.MainPPActivity;
 import com.btb.nixorstudentapplication.R;
-import com.btb.nixorstudentapplication.Sharks_on_cloud.MainCloudActivity;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.Soc_Main;
 import com.btb.nixorstudentapplication.User.UserPhoto;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -36,6 +36,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -105,7 +106,7 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
                                 startActivity(new Intent(home_screen.this, MainPPActivity.class));
                                 break;
                             case R.id.soc:
-                                startActivity(new Intent(home_screen.this, MainCloudActivity.class));
+                                startActivity(new Intent(home_screen.this, Soc_Main.class));
                                 break;
                             case R.id.ta:
                                 startActivity(new Intent(home_screen.this, Main_Activity_Ta_Tab.class));
@@ -128,79 +129,77 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
 
         }
     }
+
     static Boolean directionback = false;
-    static Boolean initialAnimation =true;
-    public void moveShark(){
+    static Boolean initialAnimation = true;
+
+    public void moveShark() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        final int width = displayMetrics.widthPixels-15;
-      int animTime = 0;
-        if(!initialAnimation){
-            animTime =15000;
+        final int width = displayMetrics.widthPixels - 15;
+        int animTime = 0;
+        if (!initialAnimation) {
+            animTime = 15000;
         }
-    new CountDownTimer(animTime, 1000) {
+        new CountDownTimer(animTime, 1000) {
 
-        public void onTick(long millisUntilFinished) {
+            public void onTick(long millisUntilFinished) {
 
-        }
+            }
 
-        public void onFinish() {
-            initialAnimation=false;
-            directionback=false;
-            movingshark.animate().translationX(width).setDuration(15000);
-            new CountDownTimer(15000, 1000) {
+            public void onFinish() {
+                initialAnimation = false;
+                directionback = false;
+                movingshark.animate().translationX(width).setDuration(15000);
+                new CountDownTimer(15000, 1000) {
 
-                public void onTick(long millisUntilFinished) {
+                    public void onTick(long millisUntilFinished) {
 
-                }
+                    }
 
-                public void onFinish() {
-                    directionback=true;
-                    movingshark.animate().translationX(0).setDuration(15000);
-                    moveShark();
+                    public void onFinish() {
+                        directionback = true;
+                        movingshark.animate().translationX(0).setDuration(15000);
+                        moveShark();
 
-                }
-            }.start();
-        }
-    }.start();
-
-
+                    }
+                }.start();
+            }
+        }.start();
 
 
+    }
 
-
-
-}
     public void animateShark() {
 
 
+        new CountDownTimer(100, 1000) {
+            Boolean sharkset = true;
 
-           new CountDownTimer(100, 1000) {
-               Boolean sharkset =true;
-               public void onTick(long millisUntilFinished) {
+            public void onTick(long millisUntilFinished) {
 
-               }
+            }
 
-               public void onFinish() {
-                   if(sharkset){
-                       if(directionback){
-                           movingshark.setImageResource(R.drawable.nixorsharkoriginal2back);
-                       }else{
-                       movingshark.setImageResource(R.drawable.nixorsharkoriginal2);}
-                       sharkset=true;
-                       animateShark();
-                   }else{
-                       if(directionback){
-                       movingshark.setImageResource(R.drawable.nixorsharkback);}
-                       else{
-                           movingshark.setImageResource(R.drawable.nixorsharkoriginal);
-                       }
-                       sharkset =false;
-                       animateShark();
-                   }
-               }
-           }.start();
-
+            public void onFinish() {
+                if (sharkset) {
+                    if (directionback) {
+                        movingshark.setImageResource(R.drawable.nixorsharkoriginal2back);
+                    } else {
+                        movingshark.setImageResource(R.drawable.nixorsharkoriginal2);
+                    }
+                    sharkset = true;
+                    animateShark();
+                } else {
+                    if (directionback) {
+                        movingshark.setImageResource(R.drawable.nixorsharkback);
+                    } else {
+                        movingshark.setImageResource(R.drawable.nixorsharkoriginal);
+                    }
+                    sharkset = false;
+                    animateShark();
+                }
+            }
+        }.start();
 
 
     }
@@ -263,7 +262,18 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
             }
         });
     */
-     icons.add("Profile");
+        Log.i("ABCD", FirebaseInstanceId.getInstance().getToken());
+        icons.add("Profile");
+        icons.add("Gate Attendance");
+        icons.add("Class Attendance");
+        icons.add("Finance");
+        icons.add("Schedule");
+        icons.add("Student Marks");
+        icons.add("CIE Grades");
+        icons.add("TA Schedule");
+        icons.add("TA Log");
+
+
     }
 
 

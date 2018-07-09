@@ -305,6 +305,7 @@ send_code.setEnabled(false);
             Log.w(TAG, "onVerificationFailed", e);
             beingverified=false;
             String errorcode="999";
+            Log.i(TAG,e.toString()+"123");
             updateInstanceState();
             if (e instanceof FirebaseAuthInvalidCredentialsException) {
                errorcode="0001";

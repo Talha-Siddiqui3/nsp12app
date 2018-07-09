@@ -48,6 +48,7 @@ Log.i("USERNAME",username);
 
     //Checks if copy saved in Firebase
     public void checkIfPhotoSavedToFirebase(final String username, final Context context) {
+      Log.i("ABCDEFG","checkIfPhotoSavedToFirebase");
         ((home_screen) context).db.collection("users").document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
