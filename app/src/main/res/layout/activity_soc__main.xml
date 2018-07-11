@@ -6,10 +6,70 @@
     android:layout_height="match_parent"
     tools:context=".Sharks_on_cloud.Soc_Main">
 
+    <LinearLayout
+        android:id="@+id/LinearLayoutSoc_Subjects"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar_top"
+        android:layout_margin="1dp"
+        android:layout_marginTop="0dp"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+
+        <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/segmented_soc_subjects"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:checkedButton="@+id/MySubjects_Button"
+            android:orientation="horizontal"
+            segmentedgroup:sc_border_width="2dp"
+            segmentedgroup:sc_corner_radius="10dp"
+            segmentedgroup:sc_tint_color="@color/colorPrimary"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="169dp">
+
+            <RadioButton
+                android:id="@+id/MySubjects_Button"
+                style="@style/RadioButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="MySubjects"
+                android:textAlignment="center"
+
+                android:visibility="invisible" />
+
+            <RadioButton
+                android:id="@+id/Others_Button"
+                style="@style/RadioButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Others"
+                android:textAlignment="center"
+                android:visibility="invisible" />
+
+
+            <RadioButton
+                android:id="@+id/All_Button"
+                style="@style/RadioButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="All"
+                android:textAlignment="center"
+                android:visibility="invisible" />
+
+
+        </info.hoang8f.android.segmented.SegmentedGroup>
+    </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar_top">
+        android:layout_below="@+id/LinearLayoutSoc_Subjects">
 
         <ProgressBar
             android:id="@+id/loading_soc"

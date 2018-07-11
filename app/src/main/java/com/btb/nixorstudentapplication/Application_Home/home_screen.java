@@ -32,10 +32,14 @@ import com.btb.nixorstudentapplication.Sharks_on_cloud.Soc_Main;
 import com.btb.nixorstudentapplication.User.UserPhoto;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.File;
@@ -80,6 +84,7 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+
 
 
         //XML
@@ -347,4 +352,25 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
             super.onBackPressed();
         }
     }
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
