@@ -46,7 +46,7 @@ public class Subject_Adaptor_SOC extends RecyclerView.Adapter<Subject_Adaptor_SO
 
     @Override
     public void onClick(View view) {
-        Soc_Main.isCurrentlyRunning="Classes";//To provide functionality for OnBackPressed;
+        Soc_Main.isCurrentlyRunning="Buckets";//To provide functionality for OnBackPressed;
         Soc_Main.ClearData();// cleaing previous data of adadptor
         TextView tempSubjectName = (TextView) view;
         Buckets buckets = new Buckets(Soc_Main.context, Soc_Main.v, tempSubjectName.getText().toString());//naviagating to new page through a new class and passing clicked subject name

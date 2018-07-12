@@ -22,11 +22,10 @@ import info.hoang8f.android.segmented.SegmentedGroup;
 public class Subjects_homescreen implements View.OnClickListener {
     private static ArrayList<String> AllSubjectNames;
     private static ArrayList<String> MySubjectNames;
-    //private static ArrayList<String> OtherSubjectNames;
     private static Subject_Adaptor_SOC subject_adaptor;
     private Button mySubjects;
-    private Button others;
-    private Button all;
+    private Button AS;
+    private Button A2;
     public static SegmentedGroup subjectButtons;//so that Classes class can turn on//off buttons
     public static String button_Selected;
     common_util cu = new common_util();
@@ -38,13 +37,13 @@ public class Subjects_homescreen implements View.OnClickListener {
 
     private void initializeButtons(final View v) {
         mySubjects = v.findViewById(R.id.MySubjects_Button);
-        others = v.findViewById(R.id.Others_Button);
-        all = v.findViewById(R.id.All_Button);
+        AS = v.findViewById(R.id.AS_Button);
+        A2 = v.findViewById(R.id.A2_Button);
         subjectButtons = v.findViewById(R.id.segmented_soc_subjects);
         subjectButtons.setVisibility(View.VISIBLE);
         mySubjects.setOnClickListener(this);
-        others.setOnClickListener(this);
-        all.setOnClickListener(this);
+        AS.setOnClickListener(this);
+        A2.setOnClickListener(this);
     }
 
 
@@ -57,7 +56,7 @@ public class Subjects_homescreen implements View.OnClickListener {
                     GetAllSubjects(v, context);
                     DocumentSnapshot doc = task.getResult();
                     MySubjectNames = (ArrayList<String>) doc.get("student_subjects");
-                    GetAllSubjects(v,context);
+                    GetAllSubjects(v, context);
                 } else {
                     Soc_Main.HideLoading();
                     cu.ToasterLong(context, "Error retrieving data from Server");
@@ -70,7 +69,7 @@ public class Subjects_homescreen implements View.OnClickListener {
 
     private void GetAllSubjects(final View v, final Context context) {
         AllSubjectNames = new ArrayList<>();
-        Soc_Main.socRoot.document("A2").collection("Subject").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        Soc_Main.socRoot.document("A2").collection("Subjects").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 AllSubjectNames = new ArrayList<>();
@@ -93,20 +92,9 @@ public class Subjects_homescreen implements View.OnClickListener {
 
     }
 
-/*
-    private void GetOtherSubjects() {
-
-        OtherSubjectNames = new ArrayList<>();
-        for (int i = 0; i < AllSubjectNames.size(); i++) {
-
-            if (!MySubjectNames.contains(AllSubjectNames.get(i))) {
-                OtherSubjectNames.add(AllSubjectNames.get(i));
-            }
-        }}
-*/
 
 
-//Made this public as it is called onBackPressed too from Classes class.
+//Made this public as it is called onBackPressed too from Buckets class.
 
     public static void initializeAdaptorMySubjects() {
         subject_adaptor = new Subject_Adaptor_SOC(MySubjectNames);
@@ -119,25 +107,20 @@ public class Subjects_homescreen implements View.OnClickListener {
 
     }
 
-   /* private static void initializeAdaptorOtherSubjects() {
-        subject_adaptor = new Subject_Adaptor_SOC(OtherSubjectNames);
-        Soc_Main.setAdaptor_Generic(subject_adaptor);
-
-    }
-*/
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.MySubjects_Button:
                 initializeAdaptorMySubjects();
+                button_Selected="A2";//TODO:CHANGE THIS.REMOVED HARDCODED
                 break;
             case R.id.AS_Button:
-                button_Selected="AS";
+                button_Selected = "AS";
                 initializeAdaptorAllSubjects();
                 break;
             case R.id.A2_Button:
-                button_Selected="A2";
+                button_Selected = "A2";
                 initializeAdaptorAllSubjects();
                 break;
         }

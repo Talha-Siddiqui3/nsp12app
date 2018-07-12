@@ -11,7 +11,6 @@ import android.widget.ProgressBar;
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.R;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes.Buckets;
-import com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes.Names;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes.Subjects_homescreen;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -68,12 +67,14 @@ public class Soc_Main extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-       switch(isCurrentlyRunning){
-          case "Subjects_homescreen":super.onBackPressed();
-           case "Classes":
-               Buckets.OnBackPressed(v);
-           case  "Names": Names.OnBackPressed(v);
-       }
+        switch (isCurrentlyRunning) {
+            case "Subjects_homescreen":
+                super.onBackPressed();
+           break;
+            case "Buckets":
+                Buckets.OnBackPressed(v);
+
+        }
 
 
     }

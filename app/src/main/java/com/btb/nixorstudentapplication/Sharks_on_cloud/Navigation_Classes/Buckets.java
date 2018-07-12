@@ -10,8 +10,11 @@ import com.btb.nixorstudentapplication.R;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Adaptors.Buckets_Adaptor;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Soc_Main;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 
 import java.util.ArrayList;
@@ -34,8 +37,9 @@ public class Buckets implements View.OnClickListener {
     public Buckets(Activity context, View v, String subjectName) {
         this.context = context;
         RemovePreviousButtons(v);
-        GetUserClasses(v);
         this.subjectName = subjectName;
+        GetAllBuckets(v);
+
     }
 
 
@@ -66,21 +70,26 @@ public class Buckets implements View.OnClickListener {
 //What if we save the user's subjects in shared prefs. and add a refresh button to get subjects from server.
     //haan good point
     //MARK: It gets current Students's classes only
-    private void GetUserClasses(final View v) {
-        MyClassesNames = new ArrayList<>();
-        Soc_Main.usersRoot.document(Soc_Main.username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+    private void GetAllBuckets(final View v) {
+        allBuckets = new ArrayList<>();
+        Soc_Main.socRoot.document(Subjects_homescreen.button_Selected).collection("Subjects").document(subjectName)
+                .collection("Buckets").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot doc = task.getResult();
-                    MyClassesNames = (ArrayList<String>) doc.get("student_classes");
-                    GetASClasses(v);
-                } else {
-                    cu.ToasterLong(context, "Error retrieving data from Server");
-
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (int i = 0; i < queryDocumentSnapshots.getDocuments().size(); i++) {
+                    DocumentSnapshot doc = queryDocumentSnapshots.getDocuments().get(i);
+                    allBuckets.add(doc.getId());
                 }
+                initializeAdaptorAllBuckets();
+                initializeButtons(v);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+           cu.ToasterLong(context,"Error retrieving data form Server");
             }
         });
+
     }
 
     //Orrr you could use remote config for this, Because kaafi rare hoga ke update hoon all subjects and if you ever want to tou you can use remote config. Check docs for
@@ -88,38 +97,21 @@ public class Buckets implements View.OnClickListener {
     //MARK: It gets AS all classes.
 
 
-
     //Names calls this methoid to implement onBackPressed feature
-    public static void initializeAdaptorMyClasses() {
-        bucketsAdaptor = new Buckets_Adaptor(MyClassesNames);
+    public static void initializeAdaptorAllBuckets() {
+        bucketsAdaptor = new Buckets_Adaptor(allBuckets);
         Soc_Main.setAdaptor_Generic(bucketsAdaptor);
     }
 
-    private void initializeAdaptorASClasses() {
-        bucketsAdaptor = new Buckets_Adaptor(myClassBuckets);
-        Soc_Main.setAdaptor_Generic(bucketsAdaptor);
-
-    }
-
-    private void initializeAdaptorA2Classes() {
-        bucketsAdaptor = new Buckets_Adaptor(A2ClassesNames);
-        //here use context and like for example
-        Soc_Main.setAdaptor_Generic(bucketsAdaptor);
-
-    }
 
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.my_bucket_button:
-                initializeAdaptorMyClasses();
+                initializeAdaptorAllBuckets();
                 break;
-            case R.id.AS_Classes:
-                initializeAdaptorASClasses();
-                break;
-            case R.id.A2_Classes:
-                initializeAdaptorA2Classes();
+
         }
     }
 
