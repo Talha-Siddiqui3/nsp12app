@@ -61,7 +61,7 @@ public class Ta_Dialogue extends Dialog {
         TaID.setText(ta_object.getTaID());
 TaSubject.setText(ta_object.getSubject());
         //loading TA Picture
-        Glide.with(context).load(cu.getUserDataLocally(context, "nsp_photo")).into(photoStudent_circleView);
+        Glide.with(context).load(cu.getUserDataLocally(context, "photourl")).into(photoStudent_circleView);
 
 
         BookTa = findViewById(R.id.Submit_Button_Ta_Dialogue);

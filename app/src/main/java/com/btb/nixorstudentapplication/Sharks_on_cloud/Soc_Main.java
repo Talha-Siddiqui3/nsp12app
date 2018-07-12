@@ -1,173 +1,80 @@
 package com.btb.nixorstudentapplication.Sharks_on_cloud;
 
-import android.support.annotation.NonNull;
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.R;
-import com.btb.nixorstudentapplication.Sharks_on_cloud.Adaptors.Subject_Adaptor;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes.Buckets;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes.Names;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes.Subjects_homescreen;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+public class Soc_Main extends AppCompatActivity {
 
-public class Soc_Main extends AppCompatActivity implements View.OnClickListener {
-    private Subject_Adaptor subject_adaptor;
-    private RecyclerView rv;
-    public static CollectionReference crSubjects = FirebaseFirestore.getInstance().collection("/SharksOnCloud/AllSubjects/SubjectNames");
-    public static CollectionReference crUsers = FirebaseFirestore.getInstance().collection("/users");
-    private common_util cu = new common_util();
-    private ArrayList<String> AllSubjectNames;
-    private ArrayList<String> MySubjectNames;
-    private ArrayList<String> OtherSubjectNames;
-    private ProgressBar loading;
-    private Button mySubjects;
-    private Button others;
-    private Button all;
-    private String username;
+    private static RecyclerView rv;
+    public static CollectionReference socRoot = FirebaseFirestore.getInstance().collection("/SharksOnCloud");
+    public static CollectionReference usersRoot = FirebaseFirestore.getInstance().collection("/users");
+    private static common_util cu = new common_util();
+    public static View v;
+    private static ProgressBar loading;
+    public static Activity context;
+    public static String isCurrentlyRunning = "Subjects_homescreen";//the class which is currently running in screen
 
-
+    public static String username;
+//Bro wessay this isn't wrong but when using object oriented (Is the spelling right? :p) use objects rather than imports. so
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_soc__main);
+        v = getLayoutInflater().inflate(R.layout.activity_soc__main, null);
+        setContentView(v);
         loading = findViewById(R.id.loading_soc);
+        context = this;
         rv = (RecyclerView) findViewById(R.id.rectcler_view_soc);
         rv.setLayoutManager(new LinearLayoutManager(this));
         SetUserName();
-        GetUserSubjects();
-        }
-
-
-    private void initializeButtons() {
-        mySubjects = findViewById(R.id.MySubjects_Button);
-        others = findViewById(R.id.Others_Button);
-        all = findViewById(R.id.All_Button);
-        mySubjects.setVisibility(View.VISIBLE);
-        others.setVisibility(View.VISIBLE);
-        all.setVisibility(View.VISIBLE);
-        mySubjects.setOnClickListener(this);
-        others.setOnClickListener(this);
-        all.setOnClickListener(this);
+        new Subjects_homescreen(this, v);
     }
+
 
     private void SetUserName() {
         username = cu.getUserDataLocally(this, "username");
     }
 
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.MySubjects_Button:
-                initializeAdaptorMySubjects();
-                break;
-            case R.id.All_Button:
-                initializeAdaptorAllSubjects();
-                break;
-            case R.id.Others_Button:
-                initializeAdaptorOtherSubjects();
-        }
-
-
-    }
-
-
-    private void GetUserSubjects() {
-        MySubjectNames = new ArrayList<>();
-        crUsers.document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    GetAllSubjects();
-                    DocumentSnapshot doc = task.getResult();
-                    MySubjectNames = (ArrayList<String>) doc.get("student_subjects");
-                } else {
-                    HideLoading();
-                    cu.ToasterLong(Soc_Main.this, "Error retrieving data from Server");
-
-                }
-            }
-        });
-    }
-
-
-    private void GetAllSubjects() {
-        AllSubjectNames = new ArrayList<>();
-        crSubjects.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                AllSubjectNames = new ArrayList<>();
-                if (task.isSuccessful()) {
-                    for (int i = 0; i < task.getResult().getDocuments().size(); i++) {
-                        DocumentSnapshot doc = task.getResult().getDocuments().get(i);
-                        AllSubjectNames.add(doc.getId());
-                    }
-                    GetOtherSubjects();
-                    initializeAdaptorMySubjects();
-                    initializeButtons();
-                    HideLoading();
-                } else {
-                    HideLoading();
-                    cu.ToasterLong(Soc_Main.this, "Error retrieving data from Server");
-                }
-
-
-            }
-        });
-
-    }
-
-
-    private void GetOtherSubjects() {
-
-        OtherSubjectNames = new ArrayList<>();
-        for (int i = 0; i < AllSubjectNames.size(); i++) {
-
-            if (!MySubjectNames.contains(AllSubjectNames.get(i))) {
-                OtherSubjectNames.add(AllSubjectNames.get(i));
-            }
-        }
-
-
-    }
-
-    private void initializeAdaptorMySubjects() {
-        subject_adaptor = new Subject_Adaptor(MySubjectNames);
-        rv.setAdapter(subject_adaptor);
-
-    }
-
-    private void initializeAdaptorAllSubjects() {
-        subject_adaptor = new Subject_Adaptor(AllSubjectNames);
-        rv.setAdapter(subject_adaptor);
-
-    }
-
-    private void initializeAdaptorOtherSubjects() {
-        subject_adaptor = new Subject_Adaptor(OtherSubjectNames);
-        rv.setAdapter(subject_adaptor);
-
-    }
-
-    public void ShowLoading() {
+    public static void ShowLoading() {
         loading.setVisibility(View.VISIBLE);
     }
 
-    public void HideLoading() {
+    public static void HideLoading() {
         loading.setVisibility(View.INVISIBLE);
+    }
+
+    public static void setAdaptor_Generic(RecyclerView.Adapter adaptor) {
+        rv.setAdapter(adaptor);
+    }
+
+    public static void ClearData() {
+        rv.setAdapter(null);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+       switch(isCurrentlyRunning){
+          case "Subjects_homescreen":super.onBackPressed();
+           case "Classes":
+               Buckets.OnBackPressed(v);
+           case  "Names": Names.OnBackPressed(v);
+       }
+
+
     }
 }

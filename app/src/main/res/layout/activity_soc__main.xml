@@ -17,6 +17,55 @@
         android:visibility="visible">
 
 
+        <info.hoang8f.android.segmented.SegmentedGroup
+            android:id="@+id/segmented_soc_classes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:checkedButton="@+id/my_bucket_button"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:sc_border_width="2dp"
+            app:sc_corner_radius="10dp"
+            app:sc_tint_color="@color/colorPrimary"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="169dp">
+
+            <RadioButton
+                android:id="@+id/my_bucket_button"
+                style="@style/RadioButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="MyClasses"
+                android:textAlignment="center"
+
+                android:visibility="visible" />
+
+            <RadioButton
+                android:id="@+id/most_recent_soc"
+                style="@style/RadioButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Most Recent"
+                android:textAlignment="center"
+                android:visibility="visible" />
+
+
+            <RadioButton
+                android:id="@+id/top_rated_soc"
+                style="@style/RadioButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Top Rated"
+                android:textAlignment="center"
+                android:visibility="visible" />
+
+
+        </info.hoang8f.android.segmented.SegmentedGroup>
+
         <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
             android:id="@+id/segmented_soc_subjects"
             android:layout_width="match_parent"
@@ -24,6 +73,7 @@
             android:layout_margin="10dp"
             android:checkedButton="@+id/MySubjects_Button"
             android:orientation="horizontal"
+            android:visibility="invisible"
             segmentedgroup:sc_border_width="2dp"
             segmentedgroup:sc_corner_radius="10dp"
             segmentedgroup:sc_tint_color="@color/colorPrimary"
@@ -39,28 +89,28 @@
                 android:text="MySubjects"
                 android:textAlignment="center"
 
-                android:visibility="invisible" />
+                android:visibility="visible" />
 
             <RadioButton
-                android:id="@+id/Others_Button"
+                android:id="@+id/AS_Button"
                 style="@style/RadioButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Others"
+                android:text="AS"
                 android:textAlignment="center"
-                android:visibility="invisible" />
+                android:visibility="visible" />
 
 
             <RadioButton
-                android:id="@+id/All_Button"
+                android:id="@+id/A2_Button"
                 style="@style/RadioButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="All"
+                android:text="A2"
                 android:textAlignment="center"
-                android:visibility="invisible" />
+                android:visibility="visible" />
 
 
         </info.hoang8f.android.segmented.SegmentedGroup>

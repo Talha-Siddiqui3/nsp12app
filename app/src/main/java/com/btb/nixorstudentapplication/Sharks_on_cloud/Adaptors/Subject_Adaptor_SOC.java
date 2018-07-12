@@ -8,18 +8,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.btb.nixorstudentapplication.R;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes.Buckets;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.Soc_Main;
 
 import java.util.ArrayList;
 
 
-public class Subject_Adaptor extends RecyclerView.Adapter<Subject_Adaptor.Rv_ViewHolder> {
+public class Subject_Adaptor_SOC extends RecyclerView.Adapter<Subject_Adaptor_SOC.Rv_ViewHolder> implements View.OnClickListener {
     ArrayList<String> SubjectNames;
 
 
-    public Subject_Adaptor( ArrayList<String> SubjectNames){
-        this.SubjectNames=SubjectNames;
+    public Subject_Adaptor_SOC(ArrayList<String> SubjectNames) {
+        this.SubjectNames = SubjectNames;
     }
-
 
 
     @NonNull
@@ -33,6 +34,7 @@ public class Subject_Adaptor extends RecyclerView.Adapter<Subject_Adaptor.Rv_Vie
     @Override
     public void onBindViewHolder(@NonNull Rv_ViewHolder holder, int position) {
         holder.subjectname.setText(SubjectNames.get(position));
+        holder.subjectname.setOnClickListener(this);
     }
 
 
@@ -42,8 +44,19 @@ public class Subject_Adaptor extends RecyclerView.Adapter<Subject_Adaptor.Rv_Vie
     }
 
 
+    @Override
+    public void onClick(View view) {
+        Soc_Main.isCurrentlyRunning="Classes";//To provide functionality for OnBackPressed;
+        Soc_Main.ClearData();// cleaing previous data of adadptor
+        TextView tempSubjectName = (TextView) view;
+        Buckets buckets = new Buckets(Soc_Main.context, Soc_Main.v, tempSubjectName.getText().toString());//naviagating to new page through a new class and passing clicked subject name
+
+    }
+
+
     class Rv_ViewHolder extends RecyclerView.ViewHolder {
         TextView subjectname;
+
 
         public Rv_ViewHolder(View itemView) {
             super(itemView);

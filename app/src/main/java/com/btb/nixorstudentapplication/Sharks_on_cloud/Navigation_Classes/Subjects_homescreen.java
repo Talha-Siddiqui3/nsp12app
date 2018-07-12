@@ -1,0 +1,146 @@
+package com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes;
+
+import android.app.Activity;
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.view.View;
+import android.widget.Button;
+
+import com.btb.nixorstudentapplication.Misc.common_util;
+import com.btb.nixorstudentapplication.R;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.Adaptors.Subject_Adaptor_SOC;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.Soc_Main;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+
+import info.hoang8f.android.segmented.SegmentedGroup;
+
+public class Subjects_homescreen implements View.OnClickListener {
+    private static ArrayList<String> AllSubjectNames;
+    private static ArrayList<String> MySubjectNames;
+    //private static ArrayList<String> OtherSubjectNames;
+    private static Subject_Adaptor_SOC subject_adaptor;
+    private Button mySubjects;
+    private Button others;
+    private Button all;
+    public static SegmentedGroup subjectButtons;//so that Classes class can turn on//off buttons
+    public static String button_Selected;
+    common_util cu = new common_util();
+
+    public Subjects_homescreen(Activity context, View v) {
+        GetUserSubjects(v, context);
+    }
+
+
+    private void initializeButtons(final View v) {
+        mySubjects = v.findViewById(R.id.MySubjects_Button);
+        others = v.findViewById(R.id.Others_Button);
+        all = v.findViewById(R.id.All_Button);
+        subjectButtons = v.findViewById(R.id.segmented_soc_subjects);
+        subjectButtons.setVisibility(View.VISIBLE);
+        mySubjects.setOnClickListener(this);
+        others.setOnClickListener(this);
+        all.setOnClickListener(this);
+    }
+
+
+    private void GetUserSubjects(final View v, final Context context) {
+        MySubjectNames = new ArrayList<>();
+        Soc_Main.usersRoot.document(Soc_Main.username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    GetAllSubjects(v, context);
+                    DocumentSnapshot doc = task.getResult();
+                    MySubjectNames = (ArrayList<String>) doc.get("student_subjects");
+                    GetAllSubjects(v,context);
+                } else {
+                    Soc_Main.HideLoading();
+                    cu.ToasterLong(context, "Error retrieving data from Server");
+
+                }
+            }
+        });
+    }
+
+
+    private void GetAllSubjects(final View v, final Context context) {
+        AllSubjectNames = new ArrayList<>();
+        Soc_Main.socRoot.document("A2").collection("Subject").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                AllSubjectNames = new ArrayList<>();
+                if (task.isSuccessful()) {
+                    for (int i = 0; i < task.getResult().getDocuments().size(); i++) {
+                        DocumentSnapshot doc = task.getResult().getDocuments().get(i);
+                        AllSubjectNames.add(doc.getId());
+                    }
+                    initializeAdaptorMySubjects();
+                    initializeButtons(v);
+                    Soc_Main.HideLoading();
+                } else {
+                    Soc_Main.HideLoading();
+                    cu.ToasterLong(context, "Error retrieving data from Server");
+                }
+
+
+            }
+        });
+
+    }
+
+/*
+    private void GetOtherSubjects() {
+
+        OtherSubjectNames = new ArrayList<>();
+        for (int i = 0; i < AllSubjectNames.size(); i++) {
+
+            if (!MySubjectNames.contains(AllSubjectNames.get(i))) {
+                OtherSubjectNames.add(AllSubjectNames.get(i));
+            }
+        }}
+*/
+
+
+//Made this public as it is called onBackPressed too from Classes class.
+
+    public static void initializeAdaptorMySubjects() {
+        subject_adaptor = new Subject_Adaptor_SOC(MySubjectNames);
+        Soc_Main.setAdaptor_Generic(subject_adaptor);
+    }
+
+    private static void initializeAdaptorAllSubjects() {
+        subject_adaptor = new Subject_Adaptor_SOC(AllSubjectNames);
+        Soc_Main.setAdaptor_Generic(subject_adaptor);
+
+    }
+
+   /* private static void initializeAdaptorOtherSubjects() {
+        subject_adaptor = new Subject_Adaptor_SOC(OtherSubjectNames);
+        Soc_Main.setAdaptor_Generic(subject_adaptor);
+
+    }
+*/
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.MySubjects_Button:
+                initializeAdaptorMySubjects();
+                break;
+            case R.id.AS_Button:
+                button_Selected="AS";
+                initializeAdaptorAllSubjects();
+                break;
+            case R.id.A2_Button:
+                button_Selected="A2";
+                initializeAdaptorAllSubjects();
+                break;
+        }
+
+    }
+}
