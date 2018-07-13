@@ -27,7 +27,7 @@ public class Subjects_homescreen implements View.OnClickListener {
     private Button AS;
     private Button A2;
     public static SegmentedGroup subjectButtons;//so that Classes class can turn on//off buttons
-    public static String button_Selected;
+    public static String button_Selected="A2";
     common_util cu = new common_util();
 
     public Subjects_homescreen(Activity context, View v) {

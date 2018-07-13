@@ -25,11 +25,11 @@ public class Buckets implements View.OnClickListener {
     private static ArrayList<String> myClassBuckets;
     private static ArrayList<String> allBuckets;
     private static Buckets_Adaptor bucketsAdaptor;
-    public static SegmentedGroup bucketsButtons;// so that Names class can turn on/off these buttons.
+    public static SegmentedGroup bucketsButtons;// so that BucketData class can turn on/off these buttons.
     private Button myBucket;
     private Button mostRecent;
     private Button topRated;
-    public static String subjectName;// need to access it in names class
+    public static String subjectName;// need to access it in BucketDclass
     Activity context;
 
     common_util cu = new common_util();
@@ -72,8 +72,9 @@ public class Buckets implements View.OnClickListener {
     //MARK: It gets current Students's classes only
     private void GetAllBuckets(final View v) {
         allBuckets = new ArrayList<>();
+        allBuckets.add(0,"empty");
         Soc_Main.socRoot.document(Subjects_homescreen.button_Selected).collection("Subjects").document(subjectName)
-                .collection("Buckets").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                .collection("Users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (int i = 0; i < queryDocumentSnapshots.getDocuments().size(); i++) {

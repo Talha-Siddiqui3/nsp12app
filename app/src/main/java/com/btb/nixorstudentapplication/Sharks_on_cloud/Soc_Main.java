@@ -8,8 +8,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.btb.nixorstudentapplication.GeneralLayout.activity_header;
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.R;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes.BucketData;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes.Buckets;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes.Subjects_homescreen;
 import com.google.firebase.firestore.CollectionReference;
@@ -25,6 +27,7 @@ public class Soc_Main extends AppCompatActivity {
     private static ProgressBar loading;
     public static Activity context;
     public static String isCurrentlyRunning = "Subjects_homescreen";//the class which is currently running in screen
+    private activity_header activity_header;
 
     public static String username;
 //Bro wessay this isn't wrong but when using object oriented (Is the spelling right? :p) use objects rather than imports. so
@@ -34,6 +37,8 @@ public class Soc_Main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         v = getLayoutInflater().inflate(R.layout.activity_soc__main, null);
         setContentView(v);
+        activity_header=findViewById(R.id.toolbar_top_soc);
+        activity_header.setActivityname("Sharks On Cloud");
         loading = findViewById(R.id.loading_soc);
         context = this;
         rv = (RecyclerView) findViewById(R.id.rectcler_view_soc);
@@ -73,6 +78,10 @@ public class Soc_Main extends AppCompatActivity {
            break;
             case "Buckets":
                 Buckets.OnBackPressed(v);
+                break;
+            case "BucketData":
+                BucketData.OnBackPressed();
+                break;
 
         }
 

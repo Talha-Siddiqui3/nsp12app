@@ -11,7 +11,7 @@
 
 
     <ImageView
-        android:id="@+id/student_imgae_soc"
+        android:id="@+id/content_image_soc"
         android:layout_width="45dp"
         android:layout_height="50dp"
         android:layout_alignParentStart="true"
@@ -22,14 +22,14 @@
 
 
     <TextView
-        android:id="@+id/student_name_soc"
+        android:id="@+id/content_name_soc"
         style="@style/headings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/student_imgae_soc"
         android:layout_marginLeft="80dp"
         android:layout_marginTop="10dp"
-        android:text="talha-siddiqui"
+        android:text="name"
         android:textAlignment="textStart"
         android:textColor="@android:color/white" />
 </RelativeLayout>
