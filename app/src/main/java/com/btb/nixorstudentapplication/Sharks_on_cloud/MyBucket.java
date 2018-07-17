@@ -71,11 +71,12 @@ public class MyBucket extends AppCompatActivity {
     DocumentReference folderNamesdoc;
     boolean isDataRemoved = false;
     boolean isDataAdded = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_bucket);
-        loading=findViewById(R.id.progressBar_myBucket);
+        loading = findViewById(R.id.progressBar_myBucket);
         newFolder = findViewById(R.id.newFolder);
         uploadFile = findViewById(R.id.uploadFile);
         menu = findViewById(R.id.floating_menu);
@@ -97,8 +98,6 @@ public class MyBucket extends AppCompatActivity {
         folderNamesdoc = bucketCr.document("Folder Names");
         getBucketData();
         setListeners();
-
-
 
 
     }
@@ -180,8 +179,8 @@ public class MyBucket extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GALLERY_INTENT&& resultCode==RESULT_OK) {
-           closeMenu();
+        if (requestCode == GALLERY_INTENT && resultCode == RESULT_OK) {
+            closeMenu();
             final Uri uri = data.getData();
             final StorageReference ref = mstorage.child("SOC").child(username).child(uri.getLastPathSegment());
             final UploadTask uploadTask = ref.putFile(uri);
@@ -233,19 +232,18 @@ public class MyBucket extends AppCompatActivity {
         usernameCr.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-              if(task.isSuccessful()) {
-                  DocumentSnapshot document = task.getResult();
-                  if (document.exists()) {
-                      //cu.ToasterLong(MyBucket.this, "Upload Completed Succesfully");
-                      loading.setVisibility(View.INVISIBLE);
-                      menu.setVisibility(View.VISIBLE);
-                  } else {
-                      AddDummyField();
-                  }
-              }
-            else {
-                  cu.ToasterLong(MyBucket.this, "Failed to connect to Server");
-              }
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        //cu.ToasterLong(MyBucket.this, "Upload Completed Succesfully");
+                        loading.setVisibility(View.INVISIBLE);
+                        menu.setVisibility(View.VISIBLE);
+                    } else {
+                        AddDummyField();
+                    }
+                } else {
+                    cu.ToasterLong(MyBucket.this, "Failed to connect to Server");
+                }
             }
         });
     }
@@ -279,43 +277,28 @@ public class MyBucket extends AppCompatActivity {
         bucketCr.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if (e != null|| queryDocumentSnapshots.isEmpty()) {
-                   checkIfDummyFieldExists();
-                }
-                else {
+                if (e != null || queryDocumentSnapshots.isEmpty()) {
+                    checkIfDummyFieldExists();
+                } else {
 
-                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
-                    if (isInitialData) {
-                        genericGetData(dc);
-                        loading.setVisibility(View.INVISIBLE);
-                        menu.setVisibility(View.VISIBLE);
-                        }
-                        else {
-                        switch (dc.getType()) {
-                            case ADDED:
-                                genericGetData(dc);
-                                isDataAdded = true;
-                                break;
-                            case REMOVED:
-                                genericGetData(dc);
-                                isDataRemoved = true;
-                                break;
-                            case MODIFIED:
-                                if (!isDataAdded && !isDataRemoved) {
-                                    genericGetData(dc);
-                                }
-                                break;
+                    for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                        if (isInitialData) {
+                            genericGetData(dc);
+                            loading.setVisibility(View.INVISIBLE);
+                            menu.setVisibility(View.VISIBLE);
+                        } else {
+                            genericGetData(dc);
+                            }
                         }
                     }
+
+                    initializeAdaptorBucketData(bucketDataObjects, photoUrls, isInitialData);
+                    isInitialData = false;
                 }
-
-                initializeAdaptorBucketData(bucketDataObjects, photoUrls, isInitialData);
-                isInitialData = false;
-            }
+            });
         }
-        });
 
-        }
+
 
     private void genericGetData(DocumentChange dc) {
         Log.i("TEST12345", "Executed");
@@ -331,21 +314,22 @@ public class MyBucket extends AppCompatActivity {
                     if (isInitialData) {
                         bucketDataObjects.add(bucketDataObject);
 
+
                     } else {
                         boolean found = false;
                         int k = 0;
-                        int folderCount=0;
+                        int folderCount = 0;
                         while (k < bucketDataObjects.size() && found == false) {
                             if (bucketDataObjects.get(k).getName().equals(bucketDataObject.getName()) && bucketDataObjects.get(k).isFolder()) {
                                 found = true;
                             }
-                            if (bucketDataObjects.get(k).isFolder()){
-                                folderCount+=1;
+                            if (bucketDataObjects.get(k).isFolder()) {
+                                folderCount += 1;
                             }
                             k += 1;
                             Log.i("TEST", String.valueOf(found));
                         }
-                        if (found == false || folderCount==0) {
+                        if (found == false || folderCount == 0) {
                             bucketDataObjects.add(bucketDataObject);
                         }
                     }
@@ -358,22 +342,23 @@ public class MyBucket extends AppCompatActivity {
             bucketDataObject.setFolder(false);
             if (isInitialData) {
                 bucketDataObjects.add(bucketDataObject);
-
+                photoUrls.add(bucketDataObject.getPhotoUrl());
             } else {
                 boolean found = false;
                 int k = 0;
-                int fileCount=0;
+                int fileCount = 0;
                 while (k < bucketDataObjects.size() && found == false) {
                     if (bucketDataObjects.get(k).getName().equals(bucketDataObject.getName()) && !bucketDataObjects.get(k).isFolder()) {
                         found = true;
                     }
-                    if (!bucketDataObjects.get(k).isFolder()){
-                        fileCount=fileCount+1;
+                    if (!bucketDataObjects.get(k).isFolder()) {
+                        fileCount = fileCount + 1;
                     }
                     k += 1;
                 }
-                if (found == false || fileCount==0) {
+                if (found == false || fileCount == 0) {
                     bucketDataObjects.add(bucketDataObject);
+                    photoUrls.add(bucketDataObject.getPhotoUrl());
                 }
             }
         }
@@ -387,12 +372,13 @@ public class MyBucket extends AppCompatActivity {
             bucketData_adaptor.notifyDataSetChanged();
         }
     }
-public void closeMenu(){
-    mHandler.postDelayed(new Runnable() {
-        public void run() {
-            menu.toggle(true);
-        }
-    }, 350);
-}
+
+    public void closeMenu() {
+        mHandler.postDelayed(new Runnable() {
+            public void run() {
+                menu.toggle(true);
+            }
+        }, 350);
+    }
 
 }
