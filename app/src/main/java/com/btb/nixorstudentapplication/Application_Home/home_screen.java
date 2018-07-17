@@ -3,6 +3,7 @@ package com.btb.nixorstudentapplication.Application_Home;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.icu.lang.UProperty;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
@@ -229,6 +230,7 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
         gridView.setAdapter(nsp_adaptor);
         GetExternalStoragePermission();
         MakePath();
+        UpdateRequest();
 
 
     }
@@ -373,7 +375,38 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
     }
 
 
+    public void UpdateRequest() {
+        // Create the arguments to the callable function.
+       FirebaseFunctions mFunctions = FirebaseFunctions.getInstance();
+        Map<String, Object> data = new HashMap<>();
+        Map<String,Object> testmap=new HashMap<>();
+        testmap.put("HELLO","123");
+        data.put("username1", "talha-siddiqui");
+        data.put("username2", "hassan-abbasi");
+        data.put("map",testmap);
+        data.put("id","asdfasdfasf");
+        Log.i(TAG, "method executed");
 
+        mFunctions
+                .getHttpsCallable("carpool_function")
+                .call(data)
+                .addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
+                    @Override
+                    public void onSuccess(HttpsCallableResult httpsCallableResult) {
+                        Log.i(TAG, "Success");
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i(TAG, "FAIlED");
+
+                    }
+                });
+
+
+    }
 
 
 
