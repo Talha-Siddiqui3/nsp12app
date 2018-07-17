@@ -336,13 +336,14 @@ public class MyBucket extends AppCompatActivity {
                         int k = 0;
                         int folderCount=0;
                         while (k < bucketDataObjects.size() && found == false) {
-                            if (bucketDataObjects.get(k).getName().equals(bucketDataObject.getName()) || !bucketDataObjects.get(k).isFolder()) {
+                            if (bucketDataObjects.get(k).getName().equals(bucketDataObject.getName()) && bucketDataObjects.get(k).isFolder()) {
                                 found = true;
                             }
                             if (bucketDataObjects.get(k).isFolder()){
                                 folderCount+=1;
                             }
                             k += 1;
+                            Log.i("TEST", String.valueOf(found));
                         }
                         if (found == false || folderCount==0) {
                             bucketDataObjects.add(bucketDataObject);
@@ -363,7 +364,7 @@ public class MyBucket extends AppCompatActivity {
                 int k = 0;
                 int fileCount=0;
                 while (k < bucketDataObjects.size() && found == false) {
-                    if (bucketDataObjects.get(k).getName().equals(bucketDataObject.getName()) || bucketDataObjects.get(k).isFolder()) {
+                    if (bucketDataObjects.get(k).getName().equals(bucketDataObject.getName()) && !bucketDataObjects.get(k).isFolder()) {
                         found = true;
                     }
                     if (!bucketDataObjects.get(k).isFolder()){
