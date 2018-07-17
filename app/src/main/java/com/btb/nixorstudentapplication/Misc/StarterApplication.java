@@ -12,6 +12,14 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import javax.annotation.Nullable;
 
 
 public class StarterApplication extends Application {
@@ -27,8 +35,12 @@ public class StarterApplication extends Application {
   @Override
   public void onCreate() {
     super.onCreate();
-    FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+            .setPersistenceEnabled(true)
+            .setTimestampsInSnapshotsEnabled(true)
+            .build();
+    db.setFirestoreSettings(settings);
 
   }
 

@@ -16,7 +16,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data android:name="firebase_performance_collection_deactivated" android:value="true" />
+        <meta-data
+            android:name="firebase_performance_collection_deactivated"
+            android:value="true" />
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="false" />
+
         <receiver android:name=".Misc.sms_broadcast.SmsReceiver">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
@@ -76,11 +82,13 @@
         <activity
             android:name=".BookMyTa.Main_Activity_Ta_Tab"
             android:label="@string/title_activity_ta_tab"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Nsp_Portal.NspPortalPdf" />
-
-        <activity android:name=".Sharks_on_cloud.Soc_Main"
-            android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".Sharks_on_cloud.ImageViewver.ImageViewer" />
+        <activity
+            android:name=".Sharks_on_cloud.Soc_Main"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".Sharks_on_cloud.MyBucket">
         </activity>
     </application>
 

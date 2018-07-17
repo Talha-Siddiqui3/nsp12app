@@ -35,9 +35,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.HttpsCallableResult;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -48,6 +52,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
+
+import javax.annotation.Nullable;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -125,7 +131,9 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
         loadStudentDetails();
         common_util.checkActivation(home_screen.this, username);
         intializeNSP();
+        OfflineData();//Fixing Firestore Offline Slow access bug
     }
+
 
     public void onClick(View view) {
         switch (view.getId()) {
@@ -351,6 +359,17 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
         } else {
             super.onBackPressed();
         }
+    }
+
+    private void OfflineData() {
+
+        CollectionReference cr = FirebaseFirestore.getInstance().collection("BookMyTa");
+        cr.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+
+            }
+        });
     }
 
 

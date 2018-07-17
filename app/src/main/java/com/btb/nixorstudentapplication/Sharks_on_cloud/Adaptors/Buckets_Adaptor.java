@@ -1,6 +1,7 @@
 package com.btb.nixorstudentapplication.Sharks_on_cloud.Adaptors;
 
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,15 +21,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class Buckets_Adaptor extends RecyclerView.Adapter<Buckets_Adaptor.Rv_ViewHolder> implements View.OnClickListener {
     ArrayList<String> bucketNames;
-    common_util cu=new common_util();
-
-
-
+    common_util cu = new common_util();
 
 
     public Buckets_Adaptor(ArrayList<String> bucketNames) {
@@ -46,33 +46,42 @@ public class Buckets_Adaptor extends RecyclerView.Adapter<Buckets_Adaptor.Rv_Vie
 
     @Override
     public void onBindViewHolder(@NonNull final Rv_ViewHolder holder, int position) {
-       holder.studentName.setOnClickListener(this);
-        if(position==0){
-            holder.studentName.setText("MyBucket");
-            Glide.with(Soc_Main.context).load(R.drawable.redbucket).into(holder.studentPhoto);
-        }
-        else {
+        if (bucketNames.get(position) != "empty") {
+            holder.studentName.setOnClickListener(this);
             final String tempName = bucketNames.get(position);
             holder.studentName.setText(tempName);
             Soc_Main.usersRoot.document(tempName).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    String photourl=documentSnapshot.get("photourl").toString();
-                    Log.i("ASDASDADASDASD",photourl);
-                    Glide.with(Soc_Main.context).load(photourl).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)).into(holder.studentPhoto);
+                    final String photourl = documentSnapshot.get("photourl").toString();
+                    Picasso.get()
+                            .load(photourl)
+                            .networkPolicy(NetworkPolicy.OFFLINE)
+                            .into(holder.studentPhoto, new com.squareup.picasso.Callback() {
+                                @Override
+                                public void onSuccess() {
 
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+                                    Picasso.get()
+                                            .load(photourl)
+                                            .error(R.drawable.cie_grades)//TODO:Change this
+                                            .into(holder.studentPhoto);
+                                }
+
+
+                            });
                 }
-            })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            cu.ToasterLong(Soc_Main.context, "Failed to load" + tempName + "photo");
-                        }
-                    });
+            });
+
+
+        } else {
+            holder.studentName.setText("EMPTY");
+            holder.studentPhoto.setVisibility(View.INVISIBLE);
         }
     }
-
-
 
     @Override
     public int getItemCount() {
@@ -83,9 +92,9 @@ public class Buckets_Adaptor extends RecyclerView.Adapter<Buckets_Adaptor.Rv_Vie
     @Override
     public void onClick(View view) {
         TextView tempUserName = (TextView) view;
-        Soc_Main.isCurrentlyRunning="BucketData";//To provide functionality for OnBackPressed;
+        Soc_Main.isCurrentlyRunning = "BucketData";//To provide functionality for OnBackPressed;
         Soc_Main.ClearData();// cleaing previous data of adadptor
-        BucketData bucketData=new BucketData(Soc_Main.context,tempUserName.getText().toString());
+        BucketData bucketData = new BucketData(Soc_Main.context, tempUserName.getText().toString());
     }
 
 
@@ -97,7 +106,7 @@ public class Buckets_Adaptor extends RecyclerView.Adapter<Buckets_Adaptor.Rv_Vie
         public Rv_ViewHolder(View itemView) {
             super(itemView);
             studentName = itemView.findViewById(R.id.student_name_soc);
-studentPhoto=itemView.findViewById(R.id.student_imgae_soc);
+            studentPhoto = itemView.findViewById(R.id.student_imgae_soc);
 
 
         }

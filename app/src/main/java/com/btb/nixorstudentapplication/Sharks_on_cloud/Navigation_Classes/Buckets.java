@@ -1,23 +1,30 @@
 package com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.R;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Adaptors.Buckets_Adaptor;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.MyBucket;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Soc_Main;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 
 import java.util.ArrayList;
+
+import javax.annotation.Nullable;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
 
@@ -26,11 +33,13 @@ public class Buckets implements View.OnClickListener {
     private static ArrayList<String> allBuckets;
     private static Buckets_Adaptor bucketsAdaptor;
     public static SegmentedGroup bucketsButtons;// so that BucketData class can turn on/off these buttons.
-    private Button myBucket;
+    private Button myClasses;
     private Button mostRecent;
     private Button topRated;
+    public static RelativeLayout my_Bucket;//// so that BucketData class can turn on/off this.
     public static String subjectName;// need to access it in BucketDclass
     Activity context;
+    private Boolean isInitialData;
 
     common_util cu = new common_util();
 
@@ -39,13 +48,15 @@ public class Buckets implements View.OnClickListener {
         RemovePreviousButtons(v);
         this.subjectName = subjectName;
         GetAllBuckets(v);
+        isInitialData = true;
 
     }
 
 
     private static void AddPreviousButtons(View v) {
         Subjects_homescreen.subjectButtons.setVisibility(View.VISIBLE);
-        bucketsButtons.setVisibility(View.GONE);
+        bucketsButtons.setVisibility(View.GONE);//TODO:NULL KA KHAYAL RAKHO
+        my_Bucket.setVisibility(View.GONE);
     }
 
 
@@ -55,12 +66,15 @@ public class Buckets implements View.OnClickListener {
     }
 
     private void initializeButtons(View v) {
-        myBucket = v.findViewById(R.id.my_bucket_button);
+        myClasses = v.findViewById(R.id.my_classes_soc);
         mostRecent = v.findViewById(R.id.most_recent_soc);
         topRated = v.findViewById(R.id.top_rated_soc);
         bucketsButtons = v.findViewById(R.id.segmented_soc_classes);
+        my_Bucket = v.findViewById(R.id.my_bucket_layout);
         bucketsButtons.setVisibility(View.VISIBLE);
-        myBucket.setOnClickListener(this);
+        my_Bucket.setVisibility(View.VISIBLE);
+        my_Bucket.setOnClickListener(this);
+        myClasses.setOnClickListener(this);
         mostRecent.setOnClickListener(this);
         topRated.setOnClickListener(this);
     }
@@ -72,22 +86,45 @@ public class Buckets implements View.OnClickListener {
     //MARK: It gets current Students's classes only
     private void GetAllBuckets(final View v) {
         allBuckets = new ArrayList<>();
-        allBuckets.add(0,"empty");
         Soc_Main.socRoot.document(Subjects_homescreen.button_Selected).collection("Subjects").document(subjectName)
-                .collection("Users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                .collection("Users").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (int i = 0; i < queryDocumentSnapshots.getDocuments().size(); i++) {
-                    DocumentSnapshot doc = queryDocumentSnapshots.getDocuments().get(i);
-                    allBuckets.add(doc.getId());
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (queryDocumentSnapshots.isEmpty()) {
+                    allBuckets.add(0, "empty");
                 }
-                initializeAdaptorAllBuckets();
-                initializeButtons(v);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-           cu.ToasterLong(context,"Error retrieving data form Server");
+                if (e == null) {
+                    for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                        if (isInitialData) {
+                            allBuckets.add(dc.getDocument().getId());
+                        } else {
+                            if (allBuckets.contains("empty")) {
+                                allBuckets.clear();
+                            }
+                            Log.i("TEST123", dc.getType().toString());
+                            switch (dc.getType()) {
+                                case ADDED:
+                                    if(!allBuckets.contains(dc.getDocument().getId())) {
+                                        allBuckets.add(dc.getDocument().getId());
+                                    }
+                                    break;
+                                case REMOVED:
+                                    if(!allBuckets.contains(dc.getDocument().getId())) {
+                                        allBuckets.remove(dc.getDocument().getId());
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                    initializeAdaptorAllBuckets(isInitialData);
+                    initializeButtons(v);
+                    isInitialData = false;
+
+
+                } else {
+                    cu.ToasterLong(context, "Error retrieving data form Server");
+                }
+
             }
         });
 
@@ -98,21 +135,27 @@ public class Buckets implements View.OnClickListener {
     //MARK: It gets AS all classes.
 
 
-    //Names calls this methoid to implement onBackPressed feature
-    public static void initializeAdaptorAllBuckets() {
-        bucketsAdaptor = new Buckets_Adaptor(allBuckets);
-        Soc_Main.setAdaptor_Generic(bucketsAdaptor);
+    //BucketData calls this methoid to implement onBackPressed feature
+    public static void initializeAdaptorAllBuckets(Boolean isInitialData) {
+        if (isInitialData) {
+            bucketsAdaptor = new Buckets_Adaptor(allBuckets);
+            Soc_Main.setAdaptor_Generic(bucketsAdaptor);
+        } else {
+            bucketsAdaptor.notifyDataSetChanged();
+        }
     }
-
 
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.my_bucket_button:
-                initializeAdaptorAllBuckets();
-                break;
-
+            // case R.id.my_classes_soc:
+            //   initializeAdaptorAllBuckets();//TODO: Change this
+            // break;
+            case R.id.my_bucket_layout:
+                Intent i = new Intent(Soc_Main.context, MyBucket.class);
+                i.putExtra("subject", subjectName);
+                Soc_Main.context.startActivity(i);
         }
     }
 

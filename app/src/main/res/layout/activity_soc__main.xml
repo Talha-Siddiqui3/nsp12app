@@ -6,6 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".Sharks_on_cloud.Soc_Main">
 
+    <RelativeLayout
+        android:id="@+id/my_bucket_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/LinearLayoutSoc_Subjects"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/textView9"
+            style="@style/headings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/imageView9"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="3dp"
+            android:text="My Bucket" />
+
+        <ImageView
+            android:id="@+id/imageView9"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="5dp"
+            app:srcCompat="@drawable/redbucket" />
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/LinearLayoutSoc_Subjects"
         android:layout_width="match_parent"
@@ -22,7 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:checkedButton="@+id/my_bucket_button"
+            android:checkedButton="@+id/my_classes_soc"
             android:orientation="horizontal"
             android:visibility="gone"
             app:sc_border_width="2dp"
@@ -32,7 +59,7 @@
             tools:layout_editor_absoluteY="169dp">
 
             <RadioButton
-                android:id="@+id/my_bucket_button"
+                android:id="@+id/my_classes_soc"
                 style="@style/RadioButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -119,7 +146,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/LinearLayoutSoc_Subjects">
+        android:layout_below="@+id/my_bucket_layout">
 
         <ProgressBar
             android:id="@+id/loading_soc"

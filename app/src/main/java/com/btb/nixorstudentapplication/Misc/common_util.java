@@ -191,6 +191,7 @@ public class common_util {
         editor.putString("student_id", studentDetails.getStudent_id()); // Storing studentID
         editor.putString("nsp_photo", studentDetails.getStudent_profileUrl()); // Storing NspPhoto
         editor.putString("GUID",studentDetails.getStudent_guid());// String Students's GUID
+        editor.putString("year",studentDetails.getStudent_year());
         editor.apply();
     }
     public void saveUserDataLocally(Context context ,String key ,String data){
