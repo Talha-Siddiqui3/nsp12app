@@ -100,9 +100,11 @@ public class BucketData_Adaptor extends RecyclerView.Adapter<BucketData_Adaptor.
             relativeLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ImageViewer imageViewer = new ImageViewer(photoUrls, getAdapterPosition());
-                    imageViewer.startActivity(Soc_Main.context);
-                }
+                   if(photoUrls.get(getAdapterPosition())!=null){
+                        ImageViewer imageViewer = new ImageViewer(photoUrls, getAdapterPosition());
+                        imageViewer.startActivity(Soc_Main.context);
+                    }
+                   }
             });
         }
 

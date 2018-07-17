@@ -62,6 +62,7 @@ public class BucketData {
                                 bucketDataObject.setName(tempArray.get(j));
                                 bucketDataObject.setFolder(true);
                                 bucketDataObjects.add(bucketDataObject);
+                                photoUrls.add(null);
 
                             }
                         }

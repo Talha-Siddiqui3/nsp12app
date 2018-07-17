@@ -288,16 +288,15 @@ public class MyBucket extends AppCompatActivity {
                             menu.setVisibility(View.VISIBLE);
                         } else {
                             genericGetData(dc);
-                            }
                         }
                     }
-
-                    initializeAdaptorBucketData(bucketDataObjects, photoUrls, isInitialData);
-                    isInitialData = false;
                 }
-            });
-        }
 
+                initializeAdaptorBucketData(bucketDataObjects, photoUrls, isInitialData);
+                isInitialData = false;
+            }
+        });
+    }
 
 
     private void genericGetData(DocumentChange dc) {
@@ -313,8 +312,7 @@ public class MyBucket extends AppCompatActivity {
                     bucketDataObject.setFolder(true);
                     if (isInitialData) {
                         bucketDataObjects.add(bucketDataObject);
-
-
+                        photoUrls.add(null);
                     } else {
                         boolean found = false;
                         int k = 0;
@@ -331,6 +329,8 @@ public class MyBucket extends AppCompatActivity {
                         }
                         if (found == false || folderCount == 0) {
                             bucketDataObjects.add(bucketDataObject);
+                            photoUrls.add(null);
+
                         }
                     }
                 }
