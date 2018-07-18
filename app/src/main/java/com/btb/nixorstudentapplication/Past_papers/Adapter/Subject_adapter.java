@@ -93,7 +93,7 @@ public class Subject_adapter extends RecyclerView.Adapter<Subject_adapter.Rv_Vie
         public Rv_ViewHolder(View itemView) {
             super(itemView);
             item_name = itemView.findViewById(R.id.subjectname_textView);
-            layout = itemView.findViewById(R.id.layout);
+            layout = itemView.findViewById(R.id.layout_pp);
 
 
         }

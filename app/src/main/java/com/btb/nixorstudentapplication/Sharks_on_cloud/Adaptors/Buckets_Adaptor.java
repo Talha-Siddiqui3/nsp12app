@@ -92,7 +92,8 @@ public class Buckets_Adaptor extends RecyclerView.Adapter<Buckets_Adaptor.Rv_Vie
 
     @Override
     public void onClick(View view) {
-        TextView tempUserName = (TextView) view;
+        RelativeLayout tempRL=(RelativeLayout) view ;
+        TextView tempUserName = (TextView)tempRL.getChildAt(1);
         Soc_Main.isCurrentlyRunning = "BucketData";//To provide functionality for OnBackPressed;
         Soc_Main.ClearData();// cleaing previous data of adadptor
         BucketData bucketData = new BucketData(Soc_Main.context, tempUserName.getText().toString());

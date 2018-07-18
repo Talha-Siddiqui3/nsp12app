@@ -230,8 +230,6 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
         gridView.setAdapter(nsp_adaptor);
         GetExternalStoragePermission();
         MakePath();
-        UpdateRequest();
-
 
     }
 

@@ -15,8 +15,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class BucketData {
     private BucketDataObject bucketDataObject;
@@ -69,7 +67,7 @@ public class BucketData {
                     } else {
                         bucketDataObject.setName(doc.get("Name").toString());
                         bucketDataObject.setDate((Date) (doc.get("Date")));
-                        bucketDataObject.setPhotoUrl(doc.get("PhotoUrl").toString());
+                        bucketDataObject.setPhotoUrlThumbnail(doc.get("PhotoUrl").toString());
                         bucketDataObject.setFolder(false);
                         bucketDataObjects.add(bucketDataObject);
                         photoUrls.add(doc.get("PhotoUrl").toString());

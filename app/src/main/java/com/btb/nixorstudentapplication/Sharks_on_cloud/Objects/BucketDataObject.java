@@ -6,14 +6,14 @@ public class BucketDataObject {
 private boolean folder;
 private Date date;
 private String name;
-private String photoUrl;
+private String PhotoUrlThumbnail;
 
-    public String getPhotoUrl() {
-        return photoUrl;
+    public String getPhotoUrlThumbnail() {
+        return PhotoUrlThumbnail;
     }
 
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
+    public void setPhotoUrlThumbnail(String photoUrlThumbnail) {
+        this.PhotoUrlThumbnail = photoUrlThumbnail;
     }
 
     public boolean isFolder() {

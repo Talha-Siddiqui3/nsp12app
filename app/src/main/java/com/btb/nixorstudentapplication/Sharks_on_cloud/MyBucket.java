@@ -62,7 +62,7 @@ public class MyBucket extends AppCompatActivity {
     public static final int GALLERY_INTENT = 2;
     private StorageReference mstorage;
     private ArrayList<BucketDataObject> bucketDataObjects;
-    private ArrayList<String> photoUrls;
+    private ArrayList<String> photoUrlsImageViewver;
     private BucketDataObject bucketDataObject;
     private BucketData_Adaptor bucketData_adaptor;
     private Boolean isInitialData = false;
@@ -182,7 +182,7 @@ public class MyBucket extends AppCompatActivity {
         if (requestCode == GALLERY_INTENT && resultCode == RESULT_OK) {
             closeMenu();
             final Uri uri = data.getData();
-            final StorageReference ref = mstorage.child("SOC").child(username).child(uri.getLastPathSegment());
+            final StorageReference ref = mstorage.child("SOC").child(year).child(subject).child(username).child(uri.getLastPathSegment());
             final UploadTask uploadTask = ref.putFile(uri);
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -206,26 +206,26 @@ public class MyBucket extends AppCompatActivity {
             });
         }
     }
-
+//TODO:FIX DATE ISSUE
     private void uploadUrl(String url, String name) {
         Map<String, Object> map = new HashMap<>();
         map.put("Name", name);
         map.put("Type", "image");
-        map.put("PhotoUrl", url);
+        map.put("PhotoUrlThumbnail", url);
+        map.put("PhotoUrlImageViewver",url);
         map.put("Data", FieldValue.serverTimestamp());
-        bucketCr.add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        bucketCr.document(name).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
-            public void onSuccess(DocumentReference documentReference) {
-
+            public void onSuccess(Void aVoid) {
 
             }
-
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                cu.ToasterLong(MyBucket.this, "Upload Failed");
+                cu.ToasterLong(MyBucket.this,"UNFORTUNATELY UPLOAD FAILED");
             }
         });
+
     }
 
     private void checkIfDummyFieldExists() {
@@ -272,7 +272,7 @@ public class MyBucket extends AppCompatActivity {
     //Any way to not copy paste this? xD
     private void getBucketData() {
         bucketDataObjects = new ArrayList<>();
-        photoUrls = new ArrayList<>();
+        photoUrlsImageViewver = new ArrayList<>();
 
         bucketCr.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -292,7 +292,7 @@ public class MyBucket extends AppCompatActivity {
                     }
                 }
 
-                initializeAdaptorBucketData(bucketDataObjects, photoUrls, isInitialData);
+                initializeAdaptorBucketData(bucketDataObjects, photoUrlsImageViewver, isInitialData);
                 isInitialData = false;
             }
         });
@@ -312,7 +312,7 @@ public class MyBucket extends AppCompatActivity {
                     bucketDataObject.setFolder(true);
                     if (isInitialData) {
                         bucketDataObjects.add(bucketDataObject);
-                        photoUrls.add(null);
+                        photoUrlsImageViewver.add(null);
                     } else {
                         boolean found = false;
                         int k = 0;
@@ -329,7 +329,7 @@ public class MyBucket extends AppCompatActivity {
                         }
                         if (found == false || folderCount == 0) {
                             bucketDataObjects.add(bucketDataObject);
-                            photoUrls.add(null);
+                            photoUrlsImageViewver.add(null);
 
                         }
                     }
@@ -338,11 +338,11 @@ public class MyBucket extends AppCompatActivity {
         } else {
             bucketDataObject.setName(dc.getDocument().get("Name").toString());
             bucketDataObject.setDate((Date) (dc.getDocument().get("Date")));
-            bucketDataObject.setPhotoUrl(dc.getDocument().get("PhotoUrl").toString());
+            bucketDataObject.setPhotoUrlThumbnail(dc.getDocument().get("PhotoUrlThumbnail").toString());
             bucketDataObject.setFolder(false);
             if (isInitialData) {
                 bucketDataObjects.add(bucketDataObject);
-                photoUrls.add(bucketDataObject.getPhotoUrl());
+                photoUrlsImageViewver.add(bucketDataObject.getPhotoUrlThumbnail());
             } else {
                 boolean found = false;
                 int k = 0;
@@ -358,7 +358,7 @@ public class MyBucket extends AppCompatActivity {
                 }
                 if (found == false || fileCount == 0) {
                     bucketDataObjects.add(bucketDataObject);
-                    photoUrls.add(bucketDataObject.getPhotoUrl());
+                    photoUrlsImageViewver.add(dc.getDocument().get("PhotoUrlImageViewver").toString());
                 }
             }
         }

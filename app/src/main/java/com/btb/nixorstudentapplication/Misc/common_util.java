@@ -191,7 +191,8 @@ public class common_util {
         editor.putString("student_id", studentDetails.getStudent_id()); // Storing studentID
         editor.putString("nsp_photo", studentDetails.getStudent_profileUrl()); // Storing NspPhoto
         editor.putString("GUID",studentDetails.getStudent_guid());// String Students's GUID
-        editor.putString("year",studentDetails.getStudent_year());
+        editor.putString("year",studentDetails.getStudent_year());//Storing Student's Graduating Year
+
         editor.apply();
     }
     public void saveUserDataLocally(Context context ,String key ,String data){
@@ -214,7 +215,7 @@ public class common_util {
     public StudentDetails hashMapStudentDetails(HashMap map){
         StudentDetails student = new StudentDetails();
         student.setStudent_email(map.get("student_email").toString());
-//        student.setStudent_house(map.get("student_house").toString());
+//        student.setStudent_house(map.get("student_house").toString());//TODO: FIX THIS
         student.setStudent_name(map.get("student_name").toString());
         student.setStudent_year(map.get("student_year").toString());
         student.setStudent_id(map.get("student_id").toString());

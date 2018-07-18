@@ -3,6 +3,7 @@ package com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -34,6 +35,7 @@ public class Subjects_homescreen implements View.OnClickListener {
     public Subjects_homescreen(Activity context, View v, String year) {
         GetUserSubjects(v, context);
         myYear=year;
+        button_Selected=year;
     }
 
 

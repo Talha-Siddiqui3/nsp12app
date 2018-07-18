@@ -267,13 +267,17 @@ send_code.setEnabled(false);
                 studentDetails= common_util.hashMapStudentDetails(map);
                 common_util.saveUserDataLocally(login_screen.this,studentDetails);
                 common_util.saveUserDataLocally(login_screen.this,"Mode",mode);
-                uploadFcmToken(mode,username);
+                if(common_util.getUserDataLocally(login_screen.this,"initial")==null) {
+                    uploadFcmToken(mode, username);
+                }
+             else {
+                    common_util.saveUserDataLocally(login_screen.this,"initial","NO");
+                    common_util.progressDialogHide();
+                    startActivity(new Intent(login_screen.this, home_screen.class));
+                    finish();
 
-                //common_util.progressDialogHide();
-                //startActivity(new Intent(login_screen.this, home_screen.class));
-                //finish();
-//THESE ARE SHIFTED TO UPLOAD TOKEN METHOD(last method of this class)
-            }
+                }
+                }
         });
 
     }

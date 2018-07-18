@@ -2,6 +2,7 @@ package com.btb.nixorstudentapplication.Sharks_on_cloud.Adaptors;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,8 +50,10 @@ public class Subject_Adaptor_SOC extends RecyclerView.Adapter<Subject_Adaptor_SO
     public void onClick(View view) {
         Soc_Main.isCurrentlyRunning="Buckets";//To provide functionality for OnBackPressed;
         Soc_Main.ClearData();// cleaing previous data of adadptor
-        TextView tempSubjectName = (TextView) view;
-        Buckets buckets = new Buckets(Soc_Main.context, Soc_Main.v, tempSubjectName.getText().toString());//naviagating to new page through a new class and passing clicked subject name
+        RelativeLayout tempRL=(RelativeLayout) view;
+        TextView tempSubjectName = (TextView)tempRL.getChildAt(0);
+       Log.i("123456",tempSubjectName.getText().toString());
+       Buckets buckets = new Buckets(Soc_Main.context, Soc_Main.v, tempSubjectName.getText().toString());//naviagating to new page through a new class and passing clicked subject name
 
     }
 

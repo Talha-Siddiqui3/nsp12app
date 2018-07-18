@@ -1,10 +1,7 @@
 package com.btb.nixorstudentapplication.Sharks_on_cloud.Adaptors;
 
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +20,12 @@ import java.util.ArrayList;
 
 public class BucketData_Adaptor extends RecyclerView.Adapter<BucketData_Adaptor.Rv_ViewHolder> {
     private ArrayList<BucketDataObject> bucketDataObjects;
-    private ArrayList<String> photoUrls;
+    private ArrayList<String> photoUrlsForImageViewver;
 
 
-    public BucketData_Adaptor(ArrayList<BucketDataObject> bucketDataObjects, ArrayList<String> photoUrls) {
+    public BucketData_Adaptor(ArrayList<BucketDataObject> bucketDataObjects, ArrayList<String> photoUrlsForImageViewver) {
         this.bucketDataObjects = bucketDataObjects;
-        this.photoUrls = photoUrls;
+        this.photoUrlsForImageViewver = photoUrlsForImageViewver;
     }
 
 
@@ -46,7 +43,7 @@ public class BucketData_Adaptor extends RecyclerView.Adapter<BucketData_Adaptor.
         if (bucketDataObjects.get(position).isFolder()) {
             Picasso.get()
                     .load(R.drawable.foldericon)
-                    .error(R.drawable.cie_grades)
+                    .error(R.drawable.ic_error_outline)
                     .into(holder.contentImage, new com.squareup.picasso.Callback() {
                         @Override
                         public void onSuccess() {
@@ -61,8 +58,8 @@ public class BucketData_Adaptor extends RecyclerView.Adapter<BucketData_Adaptor.
         } else {
 
             Picasso.get()
-                    .load(bucketDataObjects.get(position).getPhotoUrl())
-                    .error(R.drawable.cie_grades)
+                    .load(bucketDataObjects.get(position).getPhotoUrlThumbnail())
+                    .error(R.drawable.ic_error_outline)
                     .into(holder.contentImage, new com.squareup.picasso.Callback() {
                         @Override
                         public void onSuccess() {
@@ -100,8 +97,8 @@ public class BucketData_Adaptor extends RecyclerView.Adapter<BucketData_Adaptor.
             relativeLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                   if(photoUrls.get(getAdapterPosition())!=null){
-                        ImageViewer imageViewer = new ImageViewer(photoUrls, getAdapterPosition());
+                   if(photoUrlsForImageViewver.get(getAdapterPosition())!=null){
+                        ImageViewer imageViewer = new ImageViewer(photoUrlsForImageViewver, getAdapterPosition());
                         imageViewer.startActivity(Soc_Main.context);
                     }
                    }
