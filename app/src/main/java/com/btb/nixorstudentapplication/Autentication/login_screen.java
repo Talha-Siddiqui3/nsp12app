@@ -44,10 +44,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class login_screen extends Activity implements View.OnClickListener {
@@ -76,7 +81,9 @@ public class login_screen extends Activity implements View.OnClickListener {
     private static String[] PERMISSIONS = {
             android.Manifest.permission.RECEIVE_SMS,
             android.Manifest.permission.READ_SMS,};
-
+    //fcm upload
+    private ArrayList<String> ParentFirebaseTokens;
+    private ArrayList<String> StudentFirebaseTokens;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -260,13 +267,25 @@ send_code.setEnabled(false);
                 studentDetails= common_util.hashMapStudentDetails(map);
                 common_util.saveUserDataLocally(login_screen.this,studentDetails);
                 common_util.saveUserDataLocally(login_screen.this,"Mode",mode);
-                common_util.progressDialogHide();
-                startActivity(new Intent(login_screen.this, home_screen.class));
-                finish();
+                uploadFcmToken(mode,username);
 
+                //common_util.progressDialogHide();
+                //startActivity(new Intent(login_screen.this, home_screen.class));
+                //finish();
+//THESE ARE SHIFTED TO UPLOAD TOKEN METHOD(last method of this class)
             }
         });
 
+    }
+
+    private void uploadFcmToken(final String mode,final String username) {
+        Log.i(TAG,mode);
+        if(mode.equals("student")){
+      uploadFirebaseTokenStudent(username);
+    }
+    else if((mode.equals("parent"))){
+        uploadFirebaseTokenParent(username);
+    }
     }
 
 
@@ -422,5 +441,94 @@ send_code.setEnabled(false);
                 PackageManager.DONT_KILL_APP);
         super.onResume();
     }
+
+
+
+
+    private void uploadFirebaseTokenParent(String username) {
+       final String tokenForMessageing = FirebaseInstanceId.getInstance().getToken();
+        ParentFirebaseTokens = new ArrayList<>();
+        final DocumentReference dr = FirebaseFirestore.getInstance().collection("/users").document(username);
+        final Map<String, Object> uploadData = new HashMap<>();
+
+        dr.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                DocumentSnapshot documentSnapshot = task.getResult();
+                if (documentSnapshot.get("parentFirebaseTokens")==null) {
+                    ParentFirebaseTokens.add(tokenForMessageing);
+                    uploadData.put("parentFirebaseTokens", ParentFirebaseTokens);
+                    dr.set(uploadData, SetOptions.merge());
+                    Log.i(TAG, "uploaded data inside if(parent)");
+                } else {
+                    dr.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            ParentFirebaseTokens = (ArrayList<String>) task.getResult().get("parentFirebaseTokens");
+                            ParentFirebaseTokens.add(tokenForMessageing);
+                            uploadData.put("parentFirebaseTokens", ParentFirebaseTokens);
+                            UploadToken(uploadData,dr);
+                            Log.i(TAG, "uploaded data inside else(parent)");
+                        }
+                    });
+
+                }
+            }
+
+        });
+
+    }
+
+    private void uploadFirebaseTokenStudent(String username) {
+
+       final  String tokenForMessageing = FirebaseInstanceId.getInstance().getToken();
+        StudentFirebaseTokens = new ArrayList<>();
+        final DocumentReference dr = FirebaseFirestore.getInstance().collection("/users").document(username);
+        final Map<String, Object> uploadData = new HashMap<>();
+
+        dr.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                DocumentSnapshot documentSnapshot = task.getResult();
+                if (documentSnapshot.get("studentFirebaseTokens")==null) {
+                    StudentFirebaseTokens.add(tokenForMessageing);
+                    uploadData.put("studentFirebaseTokens", StudentFirebaseTokens);
+                    dr.set(uploadData, SetOptions.merge());
+                    Log.i(TAG, "uploaded data inside if(student)");
+                } else {
+                    dr.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            StudentFirebaseTokens = (ArrayList<String>) task.getResult().get("studentFirebaseTokens");
+                            StudentFirebaseTokens.add(tokenForMessageing);
+                            uploadData.put("studentFirebaseTokens", StudentFirebaseTokens);
+                            UploadToken(uploadData,dr);
+                            Log.i(TAG, "uploaded data inside else(student)");
+                        }
+                    });
+
+                }
+            }
+
+        });
+
+    }
+    public void UploadToken(Map uploadData,DocumentReference dr){
+        dr.set(uploadData, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.i(TAG,"TOKEN UPLOADED");
+                common_util.progressDialogHide();
+                startActivity(new Intent(login_screen.this, home_screen.class));
+                finish();
+            }
+        });
+    }
+
+
+
+
 
 }

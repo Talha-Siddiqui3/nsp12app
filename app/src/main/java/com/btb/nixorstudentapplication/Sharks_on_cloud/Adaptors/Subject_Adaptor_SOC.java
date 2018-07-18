@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.btb.nixorstudentapplication.R;
@@ -34,7 +35,7 @@ public class Subject_Adaptor_SOC extends RecyclerView.Adapter<Subject_Adaptor_SO
     @Override
     public void onBindViewHolder(@NonNull Rv_ViewHolder holder, int position) {
         holder.subjectname.setText(SubjectNames.get(position));
-        holder.subjectname.setOnClickListener(this);
+        holder.subjectRL.setOnClickListener(this);
     }
 
 
@@ -56,12 +57,12 @@ public class Subject_Adaptor_SOC extends RecyclerView.Adapter<Subject_Adaptor_SO
 
     class Rv_ViewHolder extends RecyclerView.ViewHolder {
         TextView subjectname;
-
+RelativeLayout subjectRL;
 
         public Rv_ViewHolder(View itemView) {
             super(itemView);
             subjectname = itemView.findViewById(R.id.subjectname_soc_textview);
-
+subjectRL=itemView.findViewById(R.id.rl_subject_soc);
 
         }
 

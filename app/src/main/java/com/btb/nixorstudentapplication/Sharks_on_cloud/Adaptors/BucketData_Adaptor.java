@@ -112,4 +112,3 @@ public class BucketData_Adaptor extends RecyclerView.Adapter<BucketData_Adaptor.
 
 }
 
-//TODO: Set OnclickListeners on layouts instead of textviews.

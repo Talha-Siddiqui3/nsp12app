@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.btb.nixorstudentapplication.Misc.common_util;
@@ -47,7 +48,7 @@ public class Buckets_Adaptor extends RecyclerView.Adapter<Buckets_Adaptor.Rv_Vie
     @Override
     public void onBindViewHolder(@NonNull final Rv_ViewHolder holder, int position) {
         if (bucketNames.get(position) != "empty") {
-            holder.studentName.setOnClickListener(this);
+            holder.rl_Buckets.setOnClickListener(this);
             final String tempName = bucketNames.get(position);
             holder.studentName.setText(tempName);
             Soc_Main.usersRoot.document(tempName).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -67,7 +68,7 @@ public class Buckets_Adaptor extends RecyclerView.Adapter<Buckets_Adaptor.Rv_Vie
                                 public void onError(Exception e) {
                                     Picasso.get()
                                             .load(photourl)
-                                            .error(R.drawable.cie_grades)//TODO:Change this
+                                            .error(R.drawable.ic_error_outline)
                                             .into(holder.studentPhoto);
                                 }
 
@@ -101,13 +102,14 @@ public class Buckets_Adaptor extends RecyclerView.Adapter<Buckets_Adaptor.Rv_Vie
     class Rv_ViewHolder extends RecyclerView.ViewHolder {
         TextView studentName;
         ImageView studentPhoto;
+        RelativeLayout rl_Buckets;
 
 
         public Rv_ViewHolder(View itemView) {
             super(itemView);
             studentName = itemView.findViewById(R.id.student_name_soc);
             studentPhoto = itemView.findViewById(R.id.student_imgae_soc);
-
+rl_Buckets=itemView.findViewById(R.id.rl_buckets_soc);
 
         }
 

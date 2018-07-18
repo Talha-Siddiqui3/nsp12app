@@ -27,11 +27,13 @@ public class Subjects_homescreen implements View.OnClickListener {
     private Button AS;
     private Button A2;
     public static SegmentedGroup subjectButtons;//so that Classes class can turn on//off buttons
-    public static String button_Selected="A2";
+    public static String button_Selected;
+    private String myYear;
     common_util cu = new common_util();
 
-    public Subjects_homescreen(Activity context, View v) {
+    public Subjects_homescreen(Activity context, View v, String year) {
         GetUserSubjects(v, context);
+        myYear=year;
     }
 
 
@@ -113,7 +115,7 @@ public class Subjects_homescreen implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.MySubjects_Button:
                 initializeAdaptorMySubjects();
-                button_Selected="A2";//TODO:CHANGE THIS.REMOVED HARDCODED
+                button_Selected=myYear;
                 break;
             case R.id.AS_Button:
                 button_Selected = "AS";

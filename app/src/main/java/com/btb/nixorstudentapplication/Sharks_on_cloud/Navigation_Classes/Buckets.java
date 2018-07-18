@@ -55,10 +55,11 @@ public class Buckets implements View.OnClickListener {
 
     private static void AddPreviousButtons(View v) {
         Subjects_homescreen.subjectButtons.setVisibility(View.VISIBLE);
-        bucketsButtons.setVisibility(View.GONE);//TODO:NULL KA KHAYAL RAKHO
-        my_Bucket.setVisibility(View.GONE);
+        if (bucketsButtons != null && my_Bucket != null) {
+            bucketsButtons.setVisibility(View.GONE);
+            my_Bucket.setVisibility(View.GONE);
+        }
     }
-
 
     private void RemovePreviousButtons(View v) {
         Subjects_homescreen.subjectButtons = v.findViewById(R.id.segmented_soc_subjects);

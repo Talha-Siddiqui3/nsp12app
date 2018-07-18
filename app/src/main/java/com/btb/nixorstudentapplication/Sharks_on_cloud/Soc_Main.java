@@ -43,8 +43,9 @@ public class Soc_Main extends AppCompatActivity {
         context = this;
         rv = (RecyclerView) findViewById(R.id.rectcler_view_soc);
         rv.setLayoutManager(new LinearLayoutManager(this));
+        String year=cu.getUserDataLocally(this,"year");
         SetUserName();
-        new Subjects_homescreen(this, v);
+        new Subjects_homescreen(this, v,setYear(year));
     }
 
 
@@ -86,5 +87,13 @@ public class Soc_Main extends AppCompatActivity {
         }
 
 
+    }
+    private String setYear(String year) {
+        if (year.equals("2020")) {
+            year = "AS";
+        } else {
+            year = "A2";
+        }
+ return year;
     }
 }
