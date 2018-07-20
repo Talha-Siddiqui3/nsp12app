@@ -1,7 +1,10 @@
 package com.btb.nixorstudentapplication.Sharks_on_cloud.Adaptors;
 
+import android.app.Activity;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,7 @@ import android.widget.TextView;
 
 import com.btb.nixorstudentapplication.R;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.ImageViewver.ImageViewer;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.MyBucket;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Objects.BucketDataObject;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Soc_Main;
 import com.squareup.picasso.Picasso;
@@ -21,11 +25,13 @@ import java.util.ArrayList;
 public class BucketData_Adaptor extends RecyclerView.Adapter<BucketData_Adaptor.Rv_ViewHolder> {
     private ArrayList<BucketDataObject> bucketDataObjects;
     private ArrayList<String> photoUrlsForImageViewver;
+    private Activity context;
 
 
-    public BucketData_Adaptor(ArrayList<BucketDataObject> bucketDataObjects, ArrayList<String> photoUrlsForImageViewver) {
+    public BucketData_Adaptor(ArrayList<BucketDataObject> bucketDataObjects, ArrayList<String> photoUrlsForImageViewver,Activity context) {
         this.bucketDataObjects = bucketDataObjects;
         this.photoUrlsForImageViewver = photoUrlsForImageViewver;
+        this.context=context;
     }
 
 
@@ -53,6 +59,7 @@ public class BucketData_Adaptor extends RecyclerView.Adapter<BucketData_Adaptor.
                         @Override
                         public void onError(Exception e) {
                             holder.loading.setVisibility(View.INVISIBLE);
+
                         }
                     });
         } else {
@@ -69,6 +76,7 @@ public class BucketData_Adaptor extends RecyclerView.Adapter<BucketData_Adaptor.
                         @Override
                         public void onError(Exception e) {
                             holder.loading.setVisibility(View.INVISIBLE);
+                            Log.i("123",e.toString());
                         }
                     });
 
@@ -99,7 +107,7 @@ public class BucketData_Adaptor extends RecyclerView.Adapter<BucketData_Adaptor.
                 public void onClick(View view) {
                    if(photoUrlsForImageViewver.get(getAdapterPosition())!=null){
                         ImageViewer imageViewer = new ImageViewer(photoUrlsForImageViewver, getAdapterPosition());
-                        imageViewer.startActivity(Soc_Main.context);
+                        imageViewer.startActivity(context);
                     }
                    }
             });

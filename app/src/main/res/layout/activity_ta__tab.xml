@@ -40,18 +40,43 @@
 
         </android.support.design.widget.TabLayout>
 
-        <com.btb.nixorstudentapplication.GeneralLayout.navigator_header
-            android:id="@+id/nav_main"
 
-
+        <RelativeLayout
+            android:id="@+id/search_filter_bookymyta"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            app:layout_constraintStart_toStartOf="parent">
+            android:layout_height="62dp"
+            android:layout_below="@+id/tablayout_id"
+            android:layout_margin="1dp"
+            android:background="@android:drawable/dialog_holo_light_frame"
+            tools:targetApi="honeycomb">
+
+            <ImageView
+                android:id="@+id/filterbutton_bookmyta"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/searchfield"
+                android:padding="10dp"
+                android:src="@drawable/filter_icon" />
 
 
-        </com.btb.nixorstudentapplication.GeneralLayout.navigator_header>
+            <EditText
+                android:id="@+id/searchfield_bookmyta"
+                style="@style/text_entry"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="50dp"
+                android:backgroundTint="@android:color/transparent"
+                android:drawableLeft="@drawable/search_icon"
+                android:drawablePadding="5dp"
+                android:ems="10"
+                android:hint="Subject name"
+                android:inputType="textPersonName"
+                android:padding="5dp" />
+        </RelativeLayout>
+
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager_id"
@@ -60,7 +85,7 @@
 
             android:layout_above="@+id/nav_main"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/tablayout_id"
+            android:layout_below="@+id/search_filter_bookymyta"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"

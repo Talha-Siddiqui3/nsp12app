@@ -1,5 +1,6 @@
 package com.btb.nixorstudentapplication.Sharks_on_cloud;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -71,11 +72,13 @@ public class MyBucket extends AppCompatActivity {
     DocumentReference folderNamesdoc;
     boolean isDataRemoved = false;
     boolean isDataAdded = false;
+    public static Activity context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_bucket);
+        context=this;
         loading = findViewById(R.id.progressBar_myBucket);
         newFolder = findViewById(R.id.newFolder);
         uploadFile = findViewById(R.id.uploadFile);
@@ -342,7 +345,7 @@ public class MyBucket extends AppCompatActivity {
             bucketDataObject.setFolder(false);
             if (isInitialData) {
                 bucketDataObjects.add(bucketDataObject);
-                photoUrlsImageViewver.add(bucketDataObject.getPhotoUrlThumbnail());
+                photoUrlsImageViewver.add(dc.getDocument().get("PhotoUrlImageViewver").toString());
             } else {
                 boolean found = false;
                 int k = 0;
@@ -366,7 +369,7 @@ public class MyBucket extends AppCompatActivity {
 
     private void initializeAdaptorBucketData(ArrayList<BucketDataObject> bucketDataObjects, ArrayList<String> photoUrls, Boolean isInitialData) {
         if (isInitialData) {
-            bucketData_adaptor = new BucketData_Adaptor(bucketDataObjects, photoUrls);
+            bucketData_adaptor = new BucketData_Adaptor(bucketDataObjects, photoUrls,context);
             rv.setAdapter(bucketData_adaptor);
         } else {
             bucketData_adaptor.notifyDataSetChanged();

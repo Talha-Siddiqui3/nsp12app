@@ -20,7 +20,7 @@ public class BucketData {
     private BucketDataObject bucketDataObject;
     private ArrayList<BucketDataObject> bucketDataObjects;
     private common_util cu = new common_util();
-    private ArrayList<String> photoUrls;
+    private ArrayList<String> photoUrlsImageViewver;
 
     public BucketData(Activity context, String userName) {
         RemovePreviousButtons();
@@ -43,7 +43,7 @@ public class BucketData {
 
     private void getBucketData(final Activity context, String userName) {
         bucketDataObjects = new ArrayList<>();
-        photoUrls =new ArrayList<>();
+        photoUrlsImageViewver =new ArrayList<>();
         Soc_Main.socRoot.document(Subjects_homescreen.button_Selected).collection("Subjects").document(Buckets.subjectName)
                 .collection("Users").document(userName).collection("Buckets").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -60,17 +60,17 @@ public class BucketData {
                                 bucketDataObject.setName(tempArray.get(j));
                                 bucketDataObject.setFolder(true);
                                 bucketDataObjects.add(bucketDataObject);
-                                photoUrls.add(null);
+                                photoUrlsImageViewver.add(null);
 
                             }
                         }
                     } else {
                         bucketDataObject.setName(doc.get("Name").toString());
                         bucketDataObject.setDate((Date) (doc.get("Date")));
-                        bucketDataObject.setPhotoUrlThumbnail(doc.get("PhotoUrl").toString());
+                        bucketDataObject.setPhotoUrlThumbnail(doc.get("PhotoUrlThumbnail").toString());
                         bucketDataObject.setFolder(false);
                         bucketDataObjects.add(bucketDataObject);
-                        photoUrls.add(doc.get("PhotoUrl").toString());
+                        photoUrlsImageViewver.add(doc.get("PhotoUrlImageViewver").toString());
                     }
                 }
                 initializeAdaptorBucketData(bucketDataObjects);
@@ -85,7 +85,7 @@ public class BucketData {
     }
 
     private void initializeAdaptorBucketData(ArrayList<BucketDataObject> bucketDataObjects) {
-        BucketData_Adaptor bucketData_adaptor = new BucketData_Adaptor(bucketDataObjects, photoUrls);
+        BucketData_Adaptor bucketData_adaptor = new BucketData_Adaptor(bucketDataObjects, photoUrlsImageViewver,Soc_Main.context);
         Soc_Main.setAdaptor_Generic(bucketData_adaptor);
     }
 

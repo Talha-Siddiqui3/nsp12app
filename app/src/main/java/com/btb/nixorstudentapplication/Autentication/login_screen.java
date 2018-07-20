@@ -268,10 +268,12 @@ send_code.setEnabled(false);
                 common_util.saveUserDataLocally(login_screen.this,studentDetails);
                 common_util.saveUserDataLocally(login_screen.this,"Mode",mode);
                 if(common_util.getUserDataLocally(login_screen.this,"initial")==null) {
+                    common_util.saveUserDataLocally(login_screen.this,"initial","NO");
                     uploadFcmToken(mode, username);
+                    Log.i("ACCOUNTTYPE","IF EXECUTED");
                 }
              else {
-                    common_util.saveUserDataLocally(login_screen.this,"initial","NO");
+                    Log.i("ACCOUNTTYPE","ELSE EXECUTED");
                     common_util.progressDialogHide();
                     startActivity(new Intent(login_screen.this, home_screen.class));
                     finish();

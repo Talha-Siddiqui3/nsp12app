@@ -63,9 +63,9 @@ Log.i("ABC",email_editText.getText().toString()+"123");
           email += getString(R.string.domain_textView);
             Log.i(TAG,email);
           password=  password_editText.getText().toString();
-          String[] creds={email,password};
-            portal_async login = new portal_async(this);
-            login.execute(creds);
+          //String[] creds={email,password};
+            //portal_async login = new portal_async(this);
+            //login.execute(creds);
 
         }
         else{

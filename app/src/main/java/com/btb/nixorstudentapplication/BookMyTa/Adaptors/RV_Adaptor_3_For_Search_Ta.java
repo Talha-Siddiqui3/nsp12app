@@ -57,18 +57,17 @@ public class RV_Adaptor_3_For_Search_Ta extends RecyclerView.Adapter<RV_Adaptor_
         holder.TaNameUnfolded.setText(ta_objects.get(position).getTaName());
         holder.TaSubjectUnfolded.setText(ta_objects.get(position).getSubject());
         holder.TaID.setText(ta_objects.get(position).getTaID());
-     /*   holder.relativeLayoutLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-              //sends the speceific TAObject from the ArrayList of TaObjects.
-                //Ta_Dialogue ta_dialogue = new Ta_Dialogue(context,ta_objects.get(position));
-                //ta_dialogue.ParseData();
-                //ta_dialogue.ExtractTime();
-               // ta_dialogue.UpdateLayout();
-                //ta_dialogue.show();
-            }
-        });
-    */
+        holder.Monday = ta_objects.get(position).getMonday();
+        holder.Tuesday = ta_objects.get(position).getTuesday();
+        holder.Wednesday = ta_objects.get(position).getWednesday();
+        holder.Thursday = ta_objects.get(position).getThursday();
+        holder.Friday = ta_objects.get(position).getFriday();
+        holder.mondayTime.setText(ExtractTime(holder.Monday));
+        holder.tuesdayTime.setText(ExtractTime(holder.Tuesday));
+        holder.wednesdayTime.setText(ExtractTime(holder.Wednesday));
+        holder.thursdayTime.setText(ExtractTime(holder.Thursday));
+        holder.fridayTime.setText(ExtractTime(holder.Friday));
+
         holder.fc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,6 +85,25 @@ public class RV_Adaptor_3_For_Search_Ta extends RecyclerView.Adapter<RV_Adaptor_
 
     }
 
+    private String ExtractTime(HashMap<String, Boolean> map) {
+        String timings = "";
+        int truecount = 0;
+        for (int i = 8; i < map.size()+8; i++) {
+            if (map.get(String.valueOf(i)) == true) {
+                timings = timings + i + "-" + (i + 1) + "/";
+                truecount += 1;
+            }
+        }
+
+
+        if (truecount == 0) {
+            return "Unavailable";
+        } else {
+            timings=timings.substring(0,timings.length()-1);
+            return timings;
+        }
+    }
+
     @Override
     public int getItemCount() {
         return ta_objects.size();
@@ -98,9 +116,20 @@ public class RV_Adaptor_3_For_Search_Ta extends RecyclerView.Adapter<RV_Adaptor_
         private TextView TaID;
         private TextView TaSubjectUnfolded;
         private Button BookTa;
+        private TextView mondayTime;
+        private TextView tuesdayTime;
+        private TextView wednesdayTime;
+        private TextView thursdayTime;
+        private TextView fridayTime;
         //RelativeLayout relativeLayoutLayout;
         FoldingCell fc;
         private Map<String, Object> map;
+        private HashMap<String, Boolean> Monday;
+        private HashMap<String, Boolean> Tuesday;
+        private HashMap<String, Boolean> Wednesday;
+        private HashMap<String, Boolean> Thursday;
+        private HashMap<String, Boolean> Friday;
+
 
         public Rv_ViewHolder(View itemView) {
             super(itemView);
@@ -110,6 +139,11 @@ public class RV_Adaptor_3_For_Search_Ta extends RecyclerView.Adapter<RV_Adaptor_
             TaID = itemView.findViewById(R.id.Ta_Id_FoldingVIew);
             TaSubjectUnfolded = itemView.findViewById(R.id.Teaches_FoldingView_Unfolded);
             BookTa = itemView.findViewById(R.id.Submit_Button_FoldingView);
+            mondayTime = itemView.findViewById(R.id.Monday_Time);
+            tuesdayTime = itemView.findViewById(R.id.Tuesday_Time);
+            wednesdayTime = itemView.findViewById(R.id.Wednesday_Time);
+            thursdayTime = itemView.findViewById(R.id.Thursday_Time);
+            fridayTime = itemView.findViewById(R.id.Friday_Time);
             // relativeLayoutLayout = itemView.findViewById(R.id.cell_title_layout);
             context = itemView.getContext();
             fc = itemView.findViewById(R.id.cell);
@@ -126,6 +160,8 @@ public class RV_Adaptor_3_For_Search_Ta extends RecyclerView.Adapter<RV_Adaptor_
         map.put("latestUpdateTimestamp", FieldValue.serverTimestamp());
         map.put("TaUserName", ta_objects.get(position).getTaUserName());
         map.put("StudentUserName", ta_objects.get(position).getStudentUserName());
+        map.put("TA_Year", ta_objects.get(position).getStudentYear());
+        map.put("StudentYear", ta_objects.get(position).getStudentYear());
         cr.add(map);
     }
 

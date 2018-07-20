@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -61,7 +62,7 @@ public class Buckets_Adaptor extends RecyclerView.Adapter<Buckets_Adaptor.Rv_Vie
                             .into(holder.studentPhoto, new com.squareup.picasso.Callback() {
                                 @Override
                                 public void onSuccess() {
-
+                                    holder.pb.setVisibility(View.INVISIBLE);
                                 }
 
                                 @Override
@@ -70,6 +71,7 @@ public class Buckets_Adaptor extends RecyclerView.Adapter<Buckets_Adaptor.Rv_Vie
                                             .load(photourl)
                                             .error(R.drawable.ic_error_outline)
                                             .into(holder.studentPhoto);
+                                    holder.pb.setVisibility(View.INVISIBLE);
                                 }
 
 
@@ -92,8 +94,8 @@ public class Buckets_Adaptor extends RecyclerView.Adapter<Buckets_Adaptor.Rv_Vie
 
     @Override
     public void onClick(View view) {
-        RelativeLayout tempRL=(RelativeLayout) view ;
-        TextView tempUserName = (TextView)tempRL.getChildAt(1);
+        RelativeLayout tempRL = (RelativeLayout) view;
+        TextView tempUserName = (TextView) tempRL.getChildAt(1);
         Soc_Main.isCurrentlyRunning = "BucketData";//To provide functionality for OnBackPressed;
         Soc_Main.ClearData();// cleaing previous data of adadptor
         BucketData bucketData = new BucketData(Soc_Main.context, tempUserName.getText().toString());
@@ -104,13 +106,15 @@ public class Buckets_Adaptor extends RecyclerView.Adapter<Buckets_Adaptor.Rv_Vie
         TextView studentName;
         ImageView studentPhoto;
         RelativeLayout rl_Buckets;
+        ProgressBar pb;
 
 
         public Rv_ViewHolder(View itemView) {
             super(itemView);
             studentName = itemView.findViewById(R.id.student_name_soc);
             studentPhoto = itemView.findViewById(R.id.student_imgae_soc);
-rl_Buckets=itemView.findViewById(R.id.rl_buckets_soc);
+            rl_Buckets = itemView.findViewById(R.id.rl_buckets_soc);
+            pb = itemView.findViewById(R.id.progressBar_buckets);
 
         }
 

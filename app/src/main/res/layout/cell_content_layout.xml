@@ -32,7 +32,7 @@
                 android:layout_height="1dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="77dp"
+                android:layout_marginTop="70dp"
                 android:src="@color/contentDividerLine"
                 android:visibility="visible" />
 
@@ -63,8 +63,8 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/photoStudent_circleView_FOR_FoldingView"
                 style="main_studentphoto"
-                android:layout_width="60dp"
-                android:layout_height="70dp"
+                android:layout_width="55dp"
+                android:layout_height="65dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="11dp"
@@ -97,7 +97,7 @@
                 android:layout_height="1dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="70dp"
+                android:layout_marginTop="55dp"
                 android:src="@color/contentDividerLine" />
 
             <TextView
@@ -110,7 +110,7 @@
                 android:text="2019172"
                 android:textAlignment="textStart"
                 android:textColor="@android:color/white"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -129,10 +129,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignStart="@+id/Teaches_Title_FoldingVIew"
-                android:layout_marginTop="43dp"
+                android:layout_marginTop="30dp"
                 android:text="Physics"
                 android:textColor="@android:color/white"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -142,7 +142,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="11dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="3dp"
                 android:text="Teaches"
                 android:textAlignment="textStart"
                 android:textColor="@android:color/white" />
@@ -158,10 +158,11 @@
                 android:layout_width="78dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="7dp"
                 android:text="Monday:"
                 android:textAlignment="textStart"
                 android:textColor="@android:color/white"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -171,7 +172,7 @@
                 android:layout_width="78dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="23dp"
                 android:text="Tuesday:"
                 android:textAlignment="textStart"
                 android:textColor="@android:color/white"
@@ -184,7 +185,7 @@
                 android:layout_width="78dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="23dp"
                 android:text="Wednesday:"
                 android:textAlignment="textStart"
                 android:textColor="@android:color/white"
@@ -197,7 +198,7 @@
                 android:layout_width="78dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="23dp"
                 android:text="Thursday:"
                 android:textAlignment="textStart"
                 android:textColor="@android:color/white"
@@ -210,7 +211,7 @@
                 android:layout_width="78dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="23dp"
                 android:text="Friday:"
                 android:textAlignment="textStart"
                 android:textColor="@android:color/white"
@@ -220,10 +221,10 @@
 
             <TextView
                 android:id="@+id/Monday_Time"
-                android:layout_width="75dp"
+                android:layout_width="105dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="36dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginTop="7dp"
                 android:text="@string/Default_Time_Ta"
                 android:textAlignment="textStart"
                 android:textColor="@android:color/white"
@@ -232,10 +233,10 @@
 
             <TextView
                 android:id="@+id/Tuesday_Time"
-                android:layout_width="75dp"
+                android:layout_width="105dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="36dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginTop="23dp"
                 android:text="@string/Default_Time_Ta"
                 android:textColor="@android:color/white"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -243,10 +244,10 @@
 
             <TextView
                 android:id="@+id/Wednesday_Time"
-                android:layout_width="75dp"
+                android:layout_width="105dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="36dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginTop="23dp"
                 android:text="@string/Default_Time_Ta"
                 android:textColor="@android:color/white"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -254,10 +255,10 @@
 
             <TextView
                 android:id="@+id/Thursday_Time"
-                android:layout_width="75dp"
+                android:layout_width="105dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="36dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginTop="23dp"
                 android:text="@string/Default_Time_Ta"
                 android:textColor="@android:color/white"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -265,10 +266,10 @@
 
             <TextView
                 android:id="@+id/Friday_Time"
-                android:layout_width="75dp"
+                android:layout_width="105dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="36dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginTop="23dp"
                 android:text="@string/Default_Time_Ta"
                 android:textColor="@android:color/white"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -277,14 +278,14 @@
             <Button
                 android:id="@+id/Submit_Button_FoldingView"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
+                android:layout_height="38dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="245dp"
+                android:layout_marginTop="210dp"
                 android:background="@android:color/holo_orange_light"
                 android:text="@string/submit_Button_textView"
-                android:textSize="20sp"
+                android:textSize="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

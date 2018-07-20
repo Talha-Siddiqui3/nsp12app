@@ -2,52 +2,53 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/Outer_Layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingBottom="10dp">
 
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/cell_title_layout"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginBottom="7dp"
+        android:layout_height="61dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:background="@color/colorPrimary">
 
 
         <TextView
             android:id="@+id/Teaches_FoldingVIew_Folded"
-            android:layout_width="140dp"
+            style="@style/sub_headings"
 
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignStart="@+id/TA_NAME_FoldingView_Folded"
             android:layout_below="@+id/TA_NAME_FoldingView_Folded"
             android:layout_weight="1"
-            android:paddingTop="10dp"
             android:text="Physics"
             android:textAlignment="textStart"
-            android:textColor="@android:color/white"
-            android:textSize="17sp" />
+            android:textColor="@android:color/white" />
 
         <TextView
             android:id="@+id/TA_NAME_FoldingView_Folded"
-            android:layout_width="240dp"
+            style="@style/sub_headings"
 
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignStart="@+id/student_photo"
-            android:layout_marginStart="85dp"
-            android:layout_marginTop="17dp"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="1dp"
             android:text="Muhammad Talha Siddiqui"
             android:textAlignment="textStart"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
             android:textStyle="bold" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/student_photo"
             style="main_studentphoto"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="17dp"
