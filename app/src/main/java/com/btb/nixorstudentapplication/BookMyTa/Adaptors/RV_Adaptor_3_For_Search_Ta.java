@@ -54,7 +54,9 @@ public class RV_Adaptor_3_For_Search_Ta extends RecyclerView.Adapter<RV_Adaptor_
         Log.i(TAG, ta_objects.get(position).getTaName());
         holder.TaNameFolded.setText(ta_objects.get(position).getTaName());
         holder.TaSubjectFolded.setText(ta_objects.get(position).getSubject());
+        holder.TaYearFolded.setText(ta_objects.get(position).getTAYear());
         holder.TaNameUnfolded.setText(ta_objects.get(position).getTaName());
+        holder.TaYearUnfolded.setText(ta_objects.get(position).getTAYear());
         holder.TaSubjectUnfolded.setText(ta_objects.get(position).getSubject());
         holder.TaID.setText(ta_objects.get(position).getTaID());
         holder.Monday = ta_objects.get(position).getMonday();
@@ -112,7 +114,9 @@ public class RV_Adaptor_3_For_Search_Ta extends RecyclerView.Adapter<RV_Adaptor_
     class Rv_ViewHolder extends RecyclerView.ViewHolder {
         TextView TaNameFolded;
         TextView TaSubjectFolded;
+        TextView TaYearFolded;
         private TextView TaNameUnfolded;
+        private TextView TaYearUnfolded;
         private TextView TaID;
         private TextView TaSubjectUnfolded;
         private Button BookTa;
@@ -135,7 +139,9 @@ public class RV_Adaptor_3_For_Search_Ta extends RecyclerView.Adapter<RV_Adaptor_
             super(itemView);
             TaNameFolded = itemView.findViewById(R.id.TA_NAME_FoldingView_Folded);
             TaSubjectFolded = itemView.findViewById(R.id.Teaches_FoldingVIew_Folded);
+            TaYearFolded=itemView.findViewById(R.id.TA_YEAR_FOLDINGVIEW_FOLDED);
             TaNameUnfolded = itemView.findViewById(R.id.Ta_Name_FoldingView_Unfolded);
+         TaYearUnfolded=itemView.findViewById(R.id.TA_YEAR_FOLDINGVIEW_UNFOLDED);
             TaID = itemView.findViewById(R.id.Ta_Id_FoldingVIew);
             TaSubjectUnfolded = itemView.findViewById(R.id.Teaches_FoldingView_Unfolded);
             BookTa = itemView.findViewById(R.id.Submit_Button_FoldingView);
@@ -160,7 +166,7 @@ public class RV_Adaptor_3_For_Search_Ta extends RecyclerView.Adapter<RV_Adaptor_
         map.put("latestUpdateTimestamp", FieldValue.serverTimestamp());
         map.put("TaUserName", ta_objects.get(position).getTaUserName());
         map.put("StudentUserName", ta_objects.get(position).getStudentUserName());
-        map.put("TA_Year", ta_objects.get(position).getStudentYear());
+        map.put("TAYear", ta_objects.get(position).getStudentYear());
         map.put("StudentYear", ta_objects.get(position).getStudentYear());
         cr.add(map);
     }

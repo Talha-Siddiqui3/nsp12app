@@ -2,6 +2,7 @@ package com.btb.nixorstudentapplication.BookMyTa;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,6 +36,7 @@ public class TA_Filter extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bookmyta_filter);
         apply_button = findViewById(R.id.apply_button_bookmyta);
+        apply_button.setOnClickListener(this);
         yearSpinner = findViewById(R.id.yearspinner_bookmyta);
         ratingSpinner=findViewById(R.id.ratingspinner_bookmyta);
         subjectSpinner=findViewById(R.id.subjectspinner_bookmyta);
@@ -107,10 +109,6 @@ classTeacherSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedList
 
 
 
-
-
-
-
     public Query addOrderBy(Query query, String data){
         return query.orderBy(data);
     }
@@ -118,18 +116,25 @@ classTeacherSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedList
     public Query addEquals(Query query,String data, String value){
         return query.whereEqualTo(data,value);
     }
+
     public Query buildQuery(){
-        Query query=null;
+        Query query=Search_Ta_Fragment.cr;
 if(yearsCurrentSelection.equals("All")&& ratingCurrentSelection.equals("All")&&subjectsCurrentSelection.equals("All")
         &&classTeachersCurrentSelection.equals("All")){
     return null;
 }
 if(yearsCurrentSelection.equals("All")){
-    addOrderBy(query,"TaYear");
+    query=addOrderBy(query,"TaYear");
 }
 else{
-    addEquals(query,"TaYear",yearsCurrentSelection);
+    query=addEquals(query,"TaYear",yearsCurrentSelection);
 }
+if(subjectsCurrentSelection.equals("All")){
+           query=addOrderBy(query,"Subject");
+        }
+else{
+           query=addEquals(query,"Subject",subjectsCurrentSelection);
+        }
 return query;
     }
 
@@ -148,8 +153,12 @@ return query;
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.apply_button_bookmyta:
-                Search_Ta_Fragment.DisplayTa(buildQuery(),false);
-                finish();
+               Query query=buildQuery();
+             if(query!=null) {
+                 Search_Ta_Fragment.DisplayTa(query, false);
+             }
+             finish();
+
         }
     }
 }

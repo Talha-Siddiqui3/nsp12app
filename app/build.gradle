@@ -57,9 +57,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:16.0.2'
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-database:16.0.1'
+    implementation 'com.google.firebase:firebase-firestore:17.0.3'
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
     implementation 'com.google.firebase:firebase-storage:16.0.1'
-    implementation 'com.google.firebase:firebase-firestore:17.0.2'
+    //implementation 'com.google.firebase:firebase-firestore:17.0.2'
     implementation 'com.google.firebase:firebase-functions:16.0.1'
     implementation 'com.google.firebase:firebase-messaging:17.1.0'
     implementation 'com.google.firebase:firebase-perf:16.0.0'
@@ -73,6 +74,8 @@ dependencies {
     implementation 'info.hoang8f:android-segmented:1.0.6'
 implementation 'com.github.clans:fab:1.6.4'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.facebook.fresco:fresco:1.10.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

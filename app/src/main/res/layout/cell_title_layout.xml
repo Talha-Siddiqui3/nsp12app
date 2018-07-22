@@ -16,6 +16,19 @@
 
 
         <TextView
+            android:id="@+id/TA_YEAR_FOLDINGVIEW_FOLDED"
+            style="@style/sub_headings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/student_photo"
+            android:layout_marginStart="218dp"
+            android:layout_marginTop="1dp"
+            android:text="(AS)"
+            android:textColor="@android:color/white" />
+
+        <TextView
             android:id="@+id/Teaches_FoldingVIew_Folded"
             style="@style/sub_headings"
 
@@ -37,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignStart="@+id/student_photo"
-            android:layout_marginStart="80dp"
+            android:layout_marginStart="72dp"
             android:layout_marginTop="1dp"
             android:text="Muhammad Talha Siddiqui"
             android:textAlignment="textStart"

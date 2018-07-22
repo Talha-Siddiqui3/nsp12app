@@ -1,11 +1,19 @@
 package com.btb.nixorstudentapplication.BookMyTa;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.btb.nixorstudentapplication.BookMyTa.Adaptors.ViewPageAdaptor;
 import com.btb.nixorstudentapplication.BookMyTa.Fragments_for_tabs.Requests_To_Book_Ta_Fragment;
@@ -14,18 +22,15 @@ import com.btb.nixorstudentapplication.BookMyTa.Fragments_for_tabs.Student_Reque
 import com.btb.nixorstudentapplication.GeneralLayout.activity_header;
 import com.btb.nixorstudentapplication.Misc.permission_util;
 import com.btb.nixorstudentapplication.R;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.iid.FirebaseInstanceId;
+
 
 public class Main_Activity_Ta_Tab extends AppCompatActivity {
     private TabLayout tablayout;
     private ViewPager viewPager;
     private activity_header activity_header;
-    public static int i=1;
-
-
-
+    public static int i = 1;
+    ImageView filterButton;
+    EditText taSearch;
 
 
     @Override
@@ -34,7 +39,7 @@ public class Main_Activity_Ta_Tab extends AppCompatActivity {
         setContentView(R.layout.activity_ta__tab);
         tablayout = findViewById(R.id.tablayout_id);
         viewPager = findViewById(R.id.viewpager_id);
-        activity_header=findViewById(R.id.toolbar_top_Ta_Tab);
+        activity_header = findViewById(R.id.toolbar_top_Ta_Tab);
         ViewPageAdaptor adaptor = new ViewPageAdaptor(this.getSupportFragmentManager());
         adaptor.AddFragment(new Search_Ta_Fragment(), "Search Ta");
         adaptor.AddFragment(new Student_Requests_For_Ta_Fragment(), "Requests for you");
@@ -44,6 +49,15 @@ public class Main_Activity_Ta_Tab extends AppCompatActivity {
         tablayout.setupWithViewPager(viewPager);
         activity_header.setActivityname("Bookmyta");
         GetVibratinPermission();
+        taSearch=findViewById(R.id.searchfield_bookmyta);
+        HideKeyboard(taSearch);
+        filterButton = findViewById(R.id.filterbutton_bookmyta);
+        filterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Main_Activity_Ta_Tab.this, TA_Filter.class));
+            }
+        });
 
 
     }
@@ -51,7 +65,12 @@ public class Main_Activity_Ta_Tab extends AppCompatActivity {
     private void GetVibratinPermission() {
         permission_util permission_util = new permission_util();
         String[] permissions = {Manifest.permission.VIBRATE};
-        permission_util.getPermissions( this, permissions);
+        permission_util.getPermissions(this, permissions);
     }
 
+
+    public void HideKeyboard(EditText editText) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+    }
 }

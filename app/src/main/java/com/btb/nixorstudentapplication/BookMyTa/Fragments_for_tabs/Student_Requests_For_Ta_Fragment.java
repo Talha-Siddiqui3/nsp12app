@@ -139,7 +139,7 @@ public class Student_Requests_For_Ta_Fragment extends Fragment {
 
     //Retired method
 //It Updates the Request Status on Firebase when a TA clicks on accept/reject button.
-   /* public static void UpdateRequest(final String requestStatus, String DocId) {
+   /* public static void cloudFuncExtractData(final String requestStatus, String DocId) {
         DocumentReference dr = cr.document(DocId);
         dr.update("Status", requestStatus);
         //dr.delete();

@@ -44,6 +44,10 @@ public class Soc_Main extends AppCompatActivity {
         context = this;
         rv = (RecyclerView) findViewById(R.id.rectcler_view_soc);
         rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.setHasFixedSize(true);
+        rv.setItemViewCacheSize(20);
+        rv.setDrawingCacheEnabled(true);
+        rv.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         String year=cu.getUserDataLocally(this,"year");
         SetUserName();
         new Subjects_homescreen(this, v,setYear(year));
@@ -79,9 +83,11 @@ public class Soc_Main extends AppCompatActivity {
                 super.onBackPressed();
            break;
             case "Buckets":
+                HideLoading();
                 Buckets.OnBackPressed(v);
                 break;
             case "BucketData":
+                HideLoading();
                 BucketData.OnBackPressed();
                 break;
 

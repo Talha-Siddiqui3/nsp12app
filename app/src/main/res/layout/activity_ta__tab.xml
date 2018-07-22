@@ -72,7 +72,7 @@
                 android:drawableLeft="@drawable/search_icon"
                 android:drawablePadding="5dp"
                 android:ems="10"
-                android:hint="Subject name"
+                android:hint="Ta Name"
                 android:inputType="textPersonName"
                 android:padding="5dp" />
         </RelativeLayout>

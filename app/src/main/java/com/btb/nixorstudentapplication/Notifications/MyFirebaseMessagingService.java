@@ -40,7 +40,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             if (remoteMessage.getNotification() != null) {
                 Log.i(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, null);
-                mBuilder.setVibrate(new long[]{1000, 1000});
+                mBuilder.setVibrate(new long[]{500,500,500,500});
                 mBuilder.setSmallIcon(R.drawable.shark_image);
                 mBuilder.setColor(getResources().getColor(R.color.colorPrimaryDark));
                 mBuilder.setContentTitle(remoteMessage.getNotification().getTitle());

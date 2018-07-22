@@ -12,9 +12,12 @@ import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.R;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Adaptors.Buckets_Adaptor;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.MyBucket;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.Objects.BucketsObject;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Soc_Main;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -23,6 +26,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -30,8 +34,9 @@ import info.hoang8f.android.segmented.SegmentedGroup;
 
 public class Buckets implements View.OnClickListener {
     private static ArrayList<String> myClassBuckets;
-    private static ArrayList<String> allBuckets;
+    private static ArrayList<BucketsObject> allBuckets;
     private static Buckets_Adaptor bucketsAdaptor;
+    private static BucketsObject bucketsObject;
     public static SegmentedGroup bucketsButtons;// so that BucketData class can turn on/off these buttons.
     private Button myClasses;
     private Button mostRecent;
@@ -44,6 +49,7 @@ public class Buckets implements View.OnClickListener {
     common_util cu = new common_util();
 
     public Buckets(Activity context, View v, String subjectName) {
+        Soc_Main.ShowLoading();
         this.context = context;
         RemovePreviousButtons(v);
         this.subjectName = subjectName;
@@ -87,49 +93,38 @@ public class Buckets implements View.OnClickListener {
     //MARK: It gets current Students's classes only
     private void GetAllBuckets(final View v) {
         allBuckets = new ArrayList<>();
+
         Soc_Main.socRoot.document(Subjects_homescreen.button_Selected).collection("Subjects").document(subjectName)
                 .collection("Users").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if (queryDocumentSnapshots.isEmpty()) {
-                    allBuckets.add(0, "empty");
-                }
-                if (e == null) {
-                    for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
-                        if (isInitialData) {
-                            allBuckets.add(dc.getDocument().getId());
-                        } else {
-                            if (allBuckets.contains("empty")) {
-                                allBuckets.clear();
-                            }
-                            Log.i("TEST123", dc.getType().toString());
-                            switch (dc.getType()) {
-                                case ADDED:
-                                    if(!allBuckets.contains(dc.getDocument().getId())) {
-                                        allBuckets.add(dc.getDocument().getId());
-                                    }
-                                    break;
-                                case REMOVED:
-                                    if(!allBuckets.contains(dc.getDocument().getId())) {
-                                        allBuckets.remove(dc.getDocument().getId());
-                                    }
-                                    break;
-                            }
-                        }
-                    }
-                    initializeAdaptorAllBuckets(isInitialData);
-                    initializeButtons(v);
-                    isInitialData = false;
+            public void onEvent(@Nullable final QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
+                if (queryDocumentSnapshots.isEmpty()) {
+                    bucketsObject = new BucketsObject();
+                    bucketsObject.setPhotoUrl(null);
+                    bucketsObject.setName("Empty List");
+                    allBuckets.add(0, bucketsObject);
+
+                    if (Soc_Main.isCurrentlyRunning.equals("Buckets")) {
+                        initializeAdaptorAllBuckets(isInitialData);
+                        initializeButtons(v);
+                        isInitialData = false;
+                    }
 
                 } else {
-                    cu.ToasterLong(context, "Error retrieving data form Server");
+                    if (e == null) {
+                        int i=0;
+                        genericGetData(allBuckets, queryDocumentSnapshots.getDocumentChanges(), isInitialData,v,i);
+
+                    } else {
+                        cu.ToasterLong(context, "Error retrieving data form Server");
+                    }
                 }
 
             }
         });
-
     }
+
 
     //Orrr you could use remote config for this, Because kaafi rare hoga ke update hoon all subjects and if you ever want to tou you can use remote config. Check docs for
     //remote config. Alright best
@@ -138,6 +133,7 @@ public class Buckets implements View.OnClickListener {
 
     //BucketData calls this methoid to implement onBackPressed feature
     public static void initializeAdaptorAllBuckets(Boolean isInitialData) {
+        Soc_Main.HideLoading();
         if (isInitialData) {
             bucketsAdaptor = new Buckets_Adaptor(allBuckets);
             Soc_Main.setAdaptor_Generic(bucketsAdaptor);
@@ -167,7 +163,82 @@ public class Buckets implements View.OnClickListener {
         Subjects_homescreen.initializeAdaptorMySubjects();
     }
 
+    public static ArrayList<String> containsData(ArrayList<BucketsObject> bucketsObjects, String id) {
+        ArrayList<String> arr=new ArrayList<>();
+        Log.i("AFSAF",id);
+       for (int i=0;i < bucketsObjects.size();i++) {
+            if (bucketsObjects.get(i).getName().equals(id)) {
+                arr.add(0, "true");
+                arr.add(1, String.valueOf(i));
+                return arr;
+            }
+        }
+        arr.add(0,"false");
+        arr.add(1, String.valueOf(-1));
+        return arr;
+    }
 
+    public void genericGetData(final ArrayList<BucketsObject> allBuckets, final List<DocumentChange> documentChanges, final boolean initialdata,final View v,int i) {
+            bucketsObject = new BucketsObject();
+            final int I=i;
+            Soc_Main.usersRoot.document(documentChanges.get(i).getDocument().getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    String photoUrl;
+                    if (task.getResult().get("photourl") != null) {
+                        photoUrl = task.getResult().get("photourl").toString();
+                    } else {
+                        photoUrl = null;
+                    }
+                    if (initialdata) {
+                        bucketsObject.setName(documentChanges.get(I).getDocument().getId());
+                        bucketsObject.setPhotoUrl(photoUrl);
+                        allBuckets.add(bucketsObject);
+                    } else {
+                        String id = documentChanges.get(I).getDocument().getId();
+                        ArrayList<String> temparray=new ArrayList();
+                        temparray=containsData(allBuckets, id);
+
+                      //  if (containsData(allBuckets,"Empty List")) {
+                        //    allBuckets.clear();  TODO: WHAT IF EVERYBODY REMOVE THEIR BUCKET
+                       //}
+                        switch (documentChanges.get(I).getType()) {
+                            case ADDED:
+                                if (temparray.get(0).equals("false")) {
+                                    bucketsObject.setName(id);
+                                    bucketsObject.setPhotoUrl(photoUrl);
+                                    allBuckets.add(bucketsObject);
+                                }
+                                break;
+                            case REMOVED:
+                               if (temparray.get(0).equals("true")) {
+                                  int removeIndex=Integer.valueOf(temparray.get(1));
+                                    allBuckets.remove(removeIndex);
+                                    Log.i("ASD","REMOVING");
+                               }
+                               break;
+                      }
+                    }
+
+
+                    if (Soc_Main.isCurrentlyRunning.equals("Buckets") && I == (documentChanges.size() - 1)) {
+                        Log.i("ABC", String.valueOf(allBuckets.size()));
+                        initializeAdaptorAllBuckets(isInitialData);
+                            initializeButtons(v);
+                            isInitialData = false;
+
+                    }
+                    else if(I<documentChanges.size()){
+                        int index=I;
+                        index+=1;
+                        genericGetData(allBuckets,documentChanges,initialdata,v,index);
+                    }
+
+                }
+            } );
+
+
+    }
 }
 
 

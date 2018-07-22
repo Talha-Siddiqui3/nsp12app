@@ -76,11 +76,11 @@ public class RV_Adaptor_1 extends RecyclerView.Adapter<RV_Adaptor_1.Rv_ViewHolde
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.Accept_Request:
-                Student_Requests_For_Ta_Fragment.UpdateRequest("Accepted");
+                Student_Requests_For_Ta_Fragment.cloudFuncExtractData("Accepted");
                 Log.i(TAG,"CHALING");
                 break;
             case R.id.Reject_Request:
-                Student_Requests_For_Ta_Fragment.UpdateRequest("Rejected");
+                Student_Requests_For_Ta_Fragment.cloudFuncExtractData("Rejected");
         }
     }
     */

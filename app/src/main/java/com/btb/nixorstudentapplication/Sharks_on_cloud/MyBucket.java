@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.R;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Adaptors.BucketData_Adaptor;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes.BucketData;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Objects.BucketDataObject;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -369,7 +370,7 @@ public class MyBucket extends AppCompatActivity {
 
     private void initializeAdaptorBucketData(ArrayList<BucketDataObject> bucketDataObjects, ArrayList<String> photoUrls, Boolean isInitialData) {
         if (isInitialData) {
-            bucketData_adaptor = new BucketData_Adaptor(bucketDataObjects, photoUrls,context);
+            bucketData_adaptor = new BucketData_Adaptor(bucketDataObjects, photoUrls, context);
             rv.setAdapter(bucketData_adaptor);
         } else {
             bucketData_adaptor.notifyDataSetChanged();
@@ -383,5 +384,9 @@ public class MyBucket extends AppCompatActivity {
             }
         }, 350);
     }
+
+
+
+
 
 }

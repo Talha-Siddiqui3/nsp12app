@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.R;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes.BucketData;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.Objects.BucketsObject;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Soc_Main;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -29,11 +30,11 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class Buckets_Adaptor extends RecyclerView.Adapter<Buckets_Adaptor.Rv_ViewHolder> implements View.OnClickListener {
-    ArrayList<String> bucketNames;
+    ArrayList<BucketsObject> bucketNames;
     common_util cu = new common_util();
 
 
-    public Buckets_Adaptor(ArrayList<String> bucketNames) {
+    public Buckets_Adaptor(ArrayList<BucketsObject> bucketNames) {
         this.bucketNames = bucketNames;
     }
 
@@ -47,42 +48,44 @@ public class Buckets_Adaptor extends RecyclerView.Adapter<Buckets_Adaptor.Rv_Vie
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final Rv_ViewHolder holder, int position) {
-        if (bucketNames.get(position) != "empty") {
+    public void onBindViewHolder(@NonNull final Rv_ViewHolder holder, final int position) {
+
+        if (bucketNames.get(position).getName() != "Empty List") {
             holder.rl_Buckets.setOnClickListener(this);
-            final String tempName = bucketNames.get(position);
+            final String tempName = bucketNames.get(position).getName();
             holder.studentName.setText(tempName);
-            Soc_Main.usersRoot.document(tempName).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    final String photourl = documentSnapshot.get("photourl").toString();
-                    Picasso.get()
-                            .load(photourl)
-                            .networkPolicy(NetworkPolicy.OFFLINE)
-                            .into(holder.studentPhoto, new com.squareup.picasso.Callback() {
-                                @Override
-                                public void onSuccess() {
-                                    holder.pb.setVisibility(View.INVISIBLE);
-                                }
+           if(bucketNames.get(position).getPhotoUrl()!=null)
+                Picasso.get()
+                        .load(bucketNames.get(position).getPhotoUrl())
+                        .networkPolicy(NetworkPolicy.OFFLINE)
+                        .into(holder.studentPhoto, new com.squareup.picasso.Callback() {
+                            @Override
+                            public void onSuccess() {
+                                holder.pb.setVisibility(View.INVISIBLE);
+                            }
 
-                                @Override
-                                public void onError(Exception e) {
-                                    Picasso.get()
-                                            .load(photourl)
-                                            .error(R.drawable.ic_error_outline)
-                                            .into(holder.studentPhoto);
-                                    holder.pb.setVisibility(View.INVISIBLE);
-                                }
+                            @Override
+                            public void onError(Exception e) {
+                                Picasso.get()
+                                        .load(bucketNames.get(position).getPhotoUrl())
+                                        .error(R.drawable.ic_error_outline)
+                                        .into(holder.studentPhoto);
+                                holder.pb.setVisibility(View.INVISIBLE);
+                            }
 
 
-                            });
-                }
-            });
-
+                        });
+           else{
+               Picasso.get()
+                       .load(R.drawable.ic_error_outline)
+                       .into(holder.studentPhoto);
+               holder.pb.setVisibility(View.INVISIBLE);
+           }
 
         } else {
-            holder.studentName.setText("EMPTY");
+            holder.studentName.setText("Empty List");
             holder.studentPhoto.setVisibility(View.INVISIBLE);
+            holder.pb.setVisibility(View.INVISIBLE);
         }
     }
 

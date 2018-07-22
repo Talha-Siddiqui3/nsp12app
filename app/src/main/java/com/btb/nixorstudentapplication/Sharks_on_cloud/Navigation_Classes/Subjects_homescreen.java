@@ -82,6 +82,7 @@ public class Subjects_homescreen implements View.OnClickListener {
                         DocumentSnapshot doc = task.getResult().getDocuments().get(i);
                         AllSubjectNames.add(doc.getId());
                     }
+                    Log.i("HELLO", String.valueOf(AllSubjectNames.size()));
                     initializeAdaptorMySubjects();
                     initializeButtons(v);
                     Soc_Main.HideLoading();

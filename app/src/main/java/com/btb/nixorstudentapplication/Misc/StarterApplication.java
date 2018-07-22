@@ -11,6 +11,8 @@ package com.btb.nixorstudentapplication.Misc;
 import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
+
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -41,6 +43,8 @@ public class StarterApplication extends Application {
             .setTimestampsInSnapshotsEnabled(true)
             .build();
     db.setFirestoreSettings(settings);
+    Fresco.initialize(this);
+    
 
   }
 

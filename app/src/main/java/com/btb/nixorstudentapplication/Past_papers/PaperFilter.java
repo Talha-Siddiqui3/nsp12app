@@ -175,8 +175,6 @@ public class PaperFilter extends Activity implements View.OnClickListener {
         }
     }
     public void setMyQuery(){
-
-
         mainPPActivity.queryVariable.setBoo(buildQuery(mainPPActivity.queryVariable.isBoo()));
         finish();
 

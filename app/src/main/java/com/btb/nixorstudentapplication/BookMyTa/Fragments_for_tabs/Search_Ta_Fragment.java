@@ -11,19 +11,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.btb.nixorstudentapplication.BookMyTa.Adaptors.RV_Adaptor_3_For_Search_Ta;
-import com.btb.nixorstudentapplication.BookMyTa.Main_Activity_Ta_Tab;
 import com.btb.nixorstudentapplication.BookMyTa.TA_Object;
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -35,21 +32,22 @@ import java.util.Map;
 
 public class Search_Ta_Fragment extends Fragment {
     View view;
-    static CollectionReference cr = FirebaseFirestore.getInstance().collection("BookMyTa/BookMyTaDocument/TA Details");
+    public static CollectionReference cr = FirebaseFirestore.getInstance().collection("BookMyTa/BookMyTaDocument/TA Details");
     static RV_Adaptor_3_For_Search_Ta rvAdaptor;
     static Map<String, Object> map = new HashMap();
     static String TAG = "Search_Ta_Fragment";
     private static common_util cu = new common_util();
     static Activity context;
     private static String myYear;
+    private static List<TA_Object> ta_objects = new ArrayList<>();
+    private static ProgressBar pb;
 
     public Search_Ta_Fragment() {
 
     }
 
 
-    public static List<TA_Object> DisplayTa(Query query,boolean initial) {
-        final List<TA_Object> ta_objects = new ArrayList<>();
+    public static List<TA_Object> DisplayTa(Query query, boolean initial) {
         if (initial) {
             cr.orderBy("Name").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
@@ -59,37 +57,46 @@ public class Search_Ta_Fragment extends Fragment {
                             TA_Object ta_object = new TA_Object();
                             map = task.getResult().getDocuments().get(i).getData();
                             ta_objects.add(addDataToObject(ta_object, map.get("Name"),
-                                    (HashMap<String,Boolean>)map.get("Monday"),(HashMap<String,Boolean>)map.get("Tuesday"),
-                                    (HashMap<String,Boolean>)map.get("Wednesday"),(HashMap<String,Boolean>)map.get("Thursday"),
-                                    (HashMap<String,Boolean>)map.get("Friday"),
+                                    (HashMap<String, Boolean>) map.get("Monday"), (HashMap<String, Boolean>) map.get("Tuesday"),
+                                    (HashMap<String, Boolean>) map.get("Wednesday"), (HashMap<String, Boolean>) map.get("Thursday"),
+                                    (HashMap<String, Boolean>) map.get("Friday"),
                                     map.get("TaID"), map.get("Subject"), map.get("TaUserName"), map.get("TaYear")));
-                            AddDataToAdaptor();
 
                         }
+                        addOrRemoveDataAdaptor();
                     } else {
-                        cu.ToasterLong(context, "Error Retreiving data form Server");
+                        cu.ToasterShort(context, "Error Retreiving data form Server");
                     }
 
                 }
             });
 
         } else {
+            showLoading();
+            ta_objects.clear();
+            addOrRemoveDataAdaptor();
             query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
+                        Log.i("123", String.valueOf(task.getResult().getDocuments().size()));
+
                         for (int i = 0; i < task.getResult().getDocuments().size(); i++) {
                             TA_Object ta_object = new TA_Object();
                             map = task.getResult().getDocuments().get(i).getData();
                             ta_objects.add(addDataToObject(ta_object, map.get("Name"),
-                                    (HashMap<String,Boolean>)map.get("Monday"),(HashMap<String,Boolean>)map.get("Tuesday"),(HashMap<String,Boolean>)map.get("Wednesday"),
-                                    (HashMap<String,Boolean>)map.get("Thursday"),(HashMap<String,Boolean>)map.get("Friday"),
+                                    (HashMap<String, Boolean>) map.get("Monday"), (HashMap<String, Boolean>) map.get("Tuesday"), (HashMap<String, Boolean>) map.get("Wednesday"),
+                                    (HashMap<String, Boolean>) map.get("Thursday"), (HashMap<String, Boolean>) map.get("Friday"),
                                     map.get("TaID"), map.get("Subject"), map.get("TaUserName"), map.get("TaYear")));
-                            AddDataToAdaptor();
-
+                        }
+                        hideLoading();
+                        addOrRemoveDataAdaptor();
+                        if(ta_objects.isEmpty()){
+                            cu.ToasterShort(context, "No Data Avaialble for the applied FIlter.");
                         }
                     } else {
-                        cu.ToasterLong(context, "Error Retreiving data form Server");
+                        cu.ToasterShort(context, "Error Retreiving data form Server");
+                        hideLoading();
                     }
 
                 }
@@ -105,11 +112,11 @@ public class Search_Ta_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.search_ta, container, false);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.search_ta_rv);
+        pb = view.findViewById(R.id.progressBar_Search_Ta);
         context = getActivity();
         setYear();
-        DisplayTa(null,true);
-       rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rvAdaptor = new RV_Adaptor_3_For_Search_Ta(DisplayTa(null,true));
+        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvAdaptor = new RV_Adaptor_3_For_Search_Ta(DisplayTa(null, true));
         rv.setAdapter(rvAdaptor);
         return view;
     }
@@ -123,16 +130,15 @@ public class Search_Ta_Fragment extends Fragment {
         }
     }
 
-    public static void AddDataToAdaptor() {
-
+    public static void addOrRemoveDataAdaptor() {
         rvAdaptor.notifyDataSetChanged();
     }
 
     //sets TA Object to data received from Firebase
-    public static TA_Object addDataToObject(TA_Object ta_object, Object Ta_Name, HashMap<String,Boolean> Monday,HashMap<String,Boolean> Tuesday,
-                                            HashMap<String,Boolean> Wednesday,HashMap<String,Boolean> Thursday,HashMap<String,Boolean> Friday,
+    public static TA_Object addDataToObject(TA_Object ta_object, Object Ta_Name, HashMap<String, Boolean> Monday, HashMap<String, Boolean> Tuesday,
+                                            HashMap<String, Boolean> Wednesday, HashMap<String, Boolean> Thursday, HashMap<String, Boolean> Friday,
                                             Object TaId, Object Subject, Object TaUserName, Object TaYear) {
-HashMap<String,Object> testmap=new HashMap<>();
+        HashMap<String, Object> testmap = new HashMap<>();
 
         ta_object.setSubject(Subject.toString());
         ta_object.setTaID(TaId.toString());
@@ -148,21 +154,12 @@ HashMap<String,Object> testmap=new HashMap<>();
         ta_object.setFriday(Friday);
         return ta_object;
     }
+
+    public static void showLoading() {
+        pb.setVisibility(View.VISIBLE);
+    }
+
+    public static void hideLoading() {
+        pb.setVisibility(View.INVISIBLE);
+    }
 }
-/*
-switch (dc.getType()) {
-                            case ADDED:
-                                map = dc.getDocument().getData();
-                                addDataToObject(ta_object, map.get("Name"), map.get("Days"), map.get("TaID"), map.get("Timings"), map.get("Subject"),map.get("TaUserName"), map.get("Student_Year"));
-                                AddDataToAdaptor();
-                                break;
-
-                            case REMOVED:
-                                break;
-                            case MODIFIED:
-                                break;
-
-
-                        }
-
- */

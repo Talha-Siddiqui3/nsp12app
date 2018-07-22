@@ -90,6 +90,9 @@
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".Sharks_on_cloud.MyBucket">
         </activity>
+        <activity android:name=".BookMyTa.TA_Filter"
+            android:theme="@style/AlertDialogCustom">
+        </activity>
     </application>
 
 </manifest>
