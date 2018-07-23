@@ -18,13 +18,7 @@ import com.btb.nixorstudentapplication.R;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes.BucketData;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Objects.BucketsObject;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Soc_Main;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.squareup.picasso.NetworkPolicy;
+
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

@@ -21,10 +21,7 @@ import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.R;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Adaptors.ImageViewer_Viewpager;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
+
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.ArrayList;
@@ -105,18 +102,7 @@ public class ImageViewer extends Activity {
             PhotoView photoView = rootView.findViewById(R.id.photView);
             TextView upvote_textview = rootView.findViewById(R.id.upvote_textview);
             Glide.with(context)
-                    .load(imageList.get(position)).listener(new RequestListener<Drawable>() {
-                @Override
-                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                    return false;
-                }
-
-                @Override
-                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                    pb.setVisibility(View.INVISIBLE);
-                    return false;
-                }
-            })
+                    .load(imageList.get(position))
                     .into(photoView);
 
             upvote_textview.setOnTouchListener(new OnSwipeTouchListener(context) {

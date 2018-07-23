@@ -614,7 +614,7 @@ public class MyBucket extends AppCompatActivity {
             }
         } else {
             bucketDataObject.setName(dc.getDocument().get("Name").toString());
-            bucketDataObject.setDate((Date) (dc.getDocument().get("Date")));
+          //  bucketDataObject.setDate((Date) (dc.getDocument().get("Date")));
             if (dc.getDocument().get("PhotoUrlThumbnail") != null) {
                 bucketDataObject.setPhotoUrlThumbnail(dc.getDocument().get("PhotoUrlThumbnail").toString());
                 Log.i("thumnail url:", dc.getDocument().get("PhotoUrlThumbnail").toString());

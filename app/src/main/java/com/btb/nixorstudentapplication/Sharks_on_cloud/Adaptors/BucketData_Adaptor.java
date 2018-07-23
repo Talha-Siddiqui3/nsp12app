@@ -20,11 +20,7 @@ import com.btb.nixorstudentapplication.Sharks_on_cloud.ImageViewver.ImageViewer;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.MyBucket;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Objects.BucketDataObject;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Soc_Main;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
+
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
