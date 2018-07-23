@@ -199,7 +199,6 @@ public class MyBucket extends AppCompatActivity {
 
     //MARK: Get download url for uploaded image
     private void getUploadedImageDownloadURL(StorageReference ref, final String uploadedImageName) {
-
         ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
@@ -218,11 +217,26 @@ public class MyBucket extends AppCompatActivity {
 
     //MARK: Method to upload each individual image to firebase storage
     private void uploadImageToFirebaseStorage(final String filename, Bitmap bm) {
+        notificationCounter += 1;
+        notificationsMap.put(notificationCounter, true);
+        final NotificationClass nc = new NotificationClass(context, notificationCounter);
         final String uniqueFileName = FirebaseDatabase.getInstance().getReference().child("SOCPushIDS").push().getKey();
         FirebaseDatabase.getInstance().getReference().child("SOCPushIDS").push().setValue("USED");
 
         final StorageReference ref = mstorage.child("SOC").child(year).child(subject).child(username).child(uniqueFileName);
         ref.putBytes(compressScaledBitmap(bm))
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        boolean done = false;
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                        if (progress >= 100) {
+                            done = true;
+                        }
+                        nc.uploadNotification(uniqueFileName, (int) progress, done,notificationsMap.get(notificationCounter));
+                        notificationsMap.put(notificationCounter, false);
+                    }
+                })
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -450,22 +464,22 @@ public class MyBucket extends AppCompatActivity {
 
 
     private void checkIfDummyFieldExists() {
-    //    usernameCr.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-          //  @Override
-            //public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-      //          if (task.isSuccessful()) {
+        //    usernameCr.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        //  @Override
+        //public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+        //          if (task.isSuccessful()) {
         //            DocumentSnapshot document = task.getResult();
-          //          if (document.exists()) {
-            //            //cu.ToasterLong(MyBucket.this, "Upload Completed Succesfully");
-              //          loading.setVisibility(View.INVISIBLE);
-                //        menu.setVisibility(View.VISIBLE);
-                  //  } else {
-                        AddDummyField();
-                    //}
-               // } else {
-                 //   cu.ToasterLong(MyBucket.this, "Failed to connect to Server");
-                //}
-            //}
+        //          if (document.exists()) {
+        //            //cu.ToasterLong(MyBucket.this, "Upload Completed Succesfully");
+        //          loading.setVisibility(View.INVISIBLE);
+        //        menu.setVisibility(View.VISIBLE);
+        //  } else {
+        AddDummyField();
+        //}
+        // } else {
+        //   cu.ToasterLong(MyBucket.this, "Failed to connect to Server");
+        //}
+        //}
         //});
     }
 
@@ -501,10 +515,7 @@ public class MyBucket extends AppCompatActivity {
                 Log.i("IMPORTANT", queryDocumentSnapshots.getMetadata().toString());
                 if (e != null || queryDocumentSnapshots.isEmpty()) {
                     checkIfDummyFieldExists();
-                }
-
-
-                else {
+                } else {
 
                     for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
                         if (isInitialData) {
@@ -561,10 +572,10 @@ public class MyBucket extends AppCompatActivity {
             }
         } else {
             bucketDataObject.setName(dc.getDocument().get("Name").toString());
-            if(dc.getDocument().getTimestamp("Date")!=null) {
+            if (dc.getDocument().getTimestamp("Date") != null) {
                 Timestamp timestamp = dc.getDocument().getTimestamp("Date");
                 bucketDataObject.setDate(timestamp.toDate());
-                Log.i(TAG,timestamp.toDate().toString());
+                Log.i(TAG, timestamp.toDate().toString());
             }
             if (dc.getDocument().get("PhotoUrlThumbnail") != null) {
                 bucketDataObject.setPhotoUrlThumbnail(dc.getDocument().get("PhotoUrlThumbnail").toString());
@@ -629,41 +640,6 @@ public class MyBucket extends AppCompatActivity {
             }
         }, 350);
     }
-
-    public void uploadNotification(String name, int progress, boolean done, int notificationId, boolean initialNotification) {
-        int PROGRESS_MAX = 100;
-        int PROGRESS_CURRENT = progress;
-        if (initialNotification) {
-            notificationManager = NotificationManagerCompat.from(this);
-            mBuilder = new NotificationCompat.Builder(this, "111");
-            mBuilder.setContentTitle(name)
-                    .setContentText("Uploading(0%)")
-                    .setSmallIcon(R.drawable.shark_black)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH);
-
-// Issue the initial notification with zero progress
-
-            mBuilder.setProgress(PROGRESS_MAX, PROGRESS_CURRENT, false);
-            notificationManager.notify(notificationId, mBuilder.build());
-// Do the job here that tracks the progress.
-// Usually, this should be in a worker thread
-
-
-        } else {
-            // To show progress, update PROGRESS_CURRENT and update the notification with:
-            mBuilder.setProgress(PROGRESS_MAX, PROGRESS_CURRENT, false);
-            mBuilder.setContentText("Uploading(" + progress + "%)");
-            notificationManager.notify(notificationId, mBuilder.build());
-        }
-
-        if (done) {
-// When done, update the notification one more time to remove the progress bar
-            mBuilder.setContentText("Upload complete")
-                    .setProgress(0, 0, false);
-            notificationManager.notify(notificationId, mBuilder.build());
-        }
-    }
-
 
 }
 //TODO:FIX ALREADY EXIST UPLOADS
