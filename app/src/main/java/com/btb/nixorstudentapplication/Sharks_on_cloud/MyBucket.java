@@ -1,9 +1,6 @@
 package com.btb.nixorstudentapplication.Sharks_on_cloud;
 
 import android.app.Activity;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,14 +20,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-import com.btb.nixorstudentapplication.BookMyTa.Main_Activity_Ta_Tab;
-import com.btb.nixorstudentapplication.Manifest;
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.Misc.imageHelper;
 import com.btb.nixorstudentapplication.Misc.permission_util;
 import com.btb.nixorstudentapplication.R;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Adaptors.BucketData_Adaptor;
-import com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes.BucketData;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Objects.BucketDataObject;
 import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
 import com.darsh.multipleimageselect.helpers.Constants;
@@ -53,21 +47,16 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nullable;
-
-import id.zelory.compressor.Compressor;
 
 import static com.btb.nixorstudentapplication.Misc.UriToPath.getPathFromUri;
 import static com.btb.nixorstudentapplication.Misc.imageHelper.compressScaledBitmap;
@@ -100,18 +89,20 @@ public class MyBucket extends AppCompatActivity {
     public static Activity context;
     NotificationManagerCompat notificationManager;
     NotificationCompat.Builder mBuilder;
-    static HashMap<Integer, Boolean> notificationsMap = new HashMap<>();
+    static HashMap<Integer, Boolean> notificationsMap;
     static int notificationCounter = -1;
     permission_util pm = new permission_util();
-
 
     //ImageSelector
     private int imageLimit = 6;
     private String TAG = "MYBUCKET";
-    private int imageWidth = 800;
+    private int imageWidthCompressed = 800;
+    private int imageWidthThumbnail = 200;
     private ArrayList<String> imagesUri = new ArrayList<String>();
     private ArrayList<String> imagesFilesNames = new ArrayList<String>();
     private int countImagesUploaded = 0;
+    private HashMap<String, Integer> imagesMap;
+    private HashMap<String, String> imagesTypeUrls;
 
 
     @Override
@@ -183,10 +174,11 @@ public class MyBucket extends AppCompatActivity {
 
             Log.i(TAG, imageSelectedFile.getAbsolutePath());
             Bitmap compressedImage = imageHelper.compressImage(this, imageSelectedFile);
-            compressedImage = imageHelper.scaleBitmap(compressedImage, imageWidth, imageWidth);
+            compressedImage = imageHelper.scaleBitmap(compressedImage, imageWidthCompressed, imageWidthCompressed);
+            Bitmap thumbnailImage = imageHelper.scaleBitmap(compressedImage, imageWidthThumbnail, imageWidthThumbnail);
 
             String filename = imagesFilesNames.get(imagesUri.indexOf(uri));
-            uploadImageToFirebaseStorage(filename, compressedImage);
+            uploadImageToFirebaseStorage(filename, thumbnailImage, compressedImage);
 
 
         } catch (IOException e) {
@@ -198,12 +190,13 @@ public class MyBucket extends AppCompatActivity {
 
 
     //MARK: Get download url for uploaded image
-    private void getUploadedImageDownloadURL(StorageReference ref, final String uploadedImageName) {
+    private void getUploadedImageDownloadURL(StorageReference ref, final String uploadedImageNameType, final String uniqueFileName) {
         ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
-                    uploadUrl(task.getResult().toString(), uploadedImageName);
+                    imagesTypeUrls.put(uploadedImageNameType, task.getResult().toString());
+                    prepareUrls(imagesTypeUrls, uniqueFileName);
                     countImagesUploaded++;
                 } else {
 
@@ -216,32 +209,27 @@ public class MyBucket extends AppCompatActivity {
 
 
     //MARK: Method to upload each individual image to firebase storage
-    private void uploadImageToFirebaseStorage(final String filename, Bitmap bm) {
-        notificationCounter += 1;
-        notificationsMap.put(notificationCounter, true);
+    private void uploadImageToFirebaseStorage(final String filename, Bitmap bmThumb, Bitmap bmCompressed) {
         final NotificationClass nc = new NotificationClass(context, notificationCounter);
         final String uniqueFileName = FirebaseDatabase.getInstance().getReference().child("SOCPushIDS").push().getKey();
         FirebaseDatabase.getInstance().getReference().child("SOCPushIDS").push().setValue("USED");
+        imagesMap.put(uniqueFileName, 0);
+        uploadCompressedImage(uniqueFileName, bmCompressed, filename);
+        uploadThumbnailImage(uniqueFileName, bmThumb, filename);
 
-        final StorageReference ref = mstorage.child("SOC").child(year).child(subject).child(username).child(uniqueFileName);
+    }
+
+    private void uploadCompressedImage(final String uniqueFileName, Bitmap bm, final String filename) {
+        final String uniqueFileNameCompressed = uniqueFileName + "_compressed";
+        final String filenameCompressed = filename + "_Compressed";
+        final StorageReference ref = mstorage.child("SOC").child(year).child(subject).child(username).child(uniqueFileNameCompressed);
         ref.putBytes(compressScaledBitmap(bm))
-                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                        boolean done = false;
-                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                        if (progress >= 100) {
-                            done = true;
-                        }
-                        nc.uploadNotification(uniqueFileName, (int) progress, done,notificationsMap.get(notificationCounter));
-                        notificationsMap.put(notificationCounter, false);
-                    }
-                })
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                        getUploadedImageDownloadURL(ref, uniqueFileName);
+                        int i = imagesMap.get(uniqueFileName);
+                        imagesMap.put(uniqueFileName, i + 1);
+                        getUploadedImageDownloadURL(ref, uniqueFileNameCompressed, uniqueFileName);
 
 
                     }
@@ -250,7 +238,33 @@ public class MyBucket extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
 
-                        errorUploadingImage(exception, filename);
+                        errorUploadingImage(exception, filenameCompressed);
+
+
+                    }
+                });
+    }
+
+    private void uploadThumbnailImage(final String uniqueFileName, Bitmap bm, final String filename) {
+        final String uniqueFileNameThumb = uniqueFileName + "_thumb";
+        final String filenameThumb = filename + "_Thumb";
+        final StorageReference ref = mstorage.child("SOC").child(year).child(subject).child(username).child(uniqueFileNameThumb);
+        ref.putBytes(compressScaledBitmap(bm))
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        int i = imagesMap.get(uniqueFileName);
+                        imagesMap.put(uniqueFileName, i + 1);
+                        getUploadedImageDownloadURL(ref, uniqueFileNameThumb, uniqueFileName);
+
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+
+                        errorUploadingImage(exception, filenameThumb);
 
 
                     }
@@ -283,17 +297,27 @@ public class MyBucket extends AppCompatActivity {
     }
 
     //TODO:FIX DATE ISSUE
-    private void uploadUrl(String url, String name) {
+    private void prepareUrls(HashMap<String, String> imagesTypeUrls, String uniqueFileName) {
+        String thumbName = uniqueFileName + "_thumb";
+        String compressedName = uniqueFileName + "_compressed";
+        if (imagesMap.get(uniqueFileName) == 2 && imagesTypeUrls.containsKey(thumbName) && imagesTypeUrls.containsKey(thumbName)) {
+            uploadUrls(imagesTypeUrls.get(compressedName), imagesTypeUrls.get(thumbName), uniqueFileName);
+        }
+
+    }
+
+    private void uploadUrls(String compUrl, String thumbUrl, String name) {
         Map<String, Object> map = new HashMap<>();
         map.put("Name", name);
         map.put("Type", "image");
-        map.put("PhotoUrlImageViewver", url);
+        map.put("PhotoUrlImageViewver", compUrl);
+        map.put("PhotoUrlThumbnail", thumbUrl);
         map.put("Date", FieldValue.serverTimestamp());
         bucketCr.document(name).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 countImagesUploaded++;
-                if (countImagesUploaded == imagesUri.size()) {
+                if (countImagesUploaded == (imagesUri.size() * 2)) {
                     allImagesUploaded();
                 }
 
@@ -306,7 +330,6 @@ public class MyBucket extends AppCompatActivity {
                 cu.ToasterLong(MyBucket.this, "UNFORTUNATELY UPLOAD FAILED");
             }
         });
-
     }
 
 
@@ -319,6 +342,8 @@ public class MyBucket extends AppCompatActivity {
 
             imagesUri = new ArrayList<String>();
             imagesFilesNames = new ArrayList<String>();
+            imagesMap = new HashMap<>();
+            imagesTypeUrls = new HashMap<>();
 
 
             //We are basically getting the URI of each image the user has selected
@@ -446,7 +471,7 @@ public class MyBucket extends AppCompatActivity {
 //                                @Override
 //                                public void onComplete(@NonNull Task<Uri> task) {
 //                                    if (task.isSuccessful()) {
-//                                        uploadUrl(task.getResult().toString(), uri.getLastPathSegment());
+//                                        prepareUrls(task.getResult().toString(), uri.getLastPathSegment());
 //                                    } else {
 //                                        cu.ToasterLong(MyBucket.this, "Upload Failed");
 //                                    }
@@ -643,3 +668,4 @@ public class MyBucket extends AppCompatActivity {
 
 }
 //TODO:FIX ALREADY EXIST UPLOADS
+//TODO:FIX IMAGEVIEW DISPLAY(eg remove deafult Economics Notes...etc)
