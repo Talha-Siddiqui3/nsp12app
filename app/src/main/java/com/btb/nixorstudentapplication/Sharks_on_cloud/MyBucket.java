@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,17 +24,24 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.btb.nixorstudentapplication.BookMyTa.Main_Activity_Ta_Tab;
+import com.btb.nixorstudentapplication.Manifest;
 import com.btb.nixorstudentapplication.Misc.common_util;
+import com.btb.nixorstudentapplication.Misc.imageHelper;
+import com.btb.nixorstudentapplication.Misc.permission_util;
 import com.btb.nixorstudentapplication.R;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Adaptors.BucketData_Adaptor;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes.BucketData;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Objects.BucketDataObject;
+import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
+import com.darsh.multipleimageselect.helpers.Constants;
+import com.darsh.multipleimageselect.models.Image;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
@@ -48,12 +56,20 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nullable;
+
+import id.zelory.compressor.Compressor;
+
+import static com.btb.nixorstudentapplication.Misc.UriToPath.getPathFromUri;
+import static com.btb.nixorstudentapplication.Misc.imageHelper.compressScaledBitmap;
 
 public class MyBucket extends AppCompatActivity {
     private CollectionReference bucketCr;
@@ -85,6 +101,19 @@ public class MyBucket extends AppCompatActivity {
     NotificationCompat.Builder mBuilder;
     static HashMap<Integer,Boolean> notificationsMap=new HashMap<>();
     static int notificationCounter=-1;
+    permission_util pm = new permission_util();
+
+
+    //ImageSelector
+    private int imageLimit = 6;
+    private String TAG = "MYBUCKET";
+    private int imageWidth = 800;
+    private ArrayList<String> imagesUri = new ArrayList<String>();
+    private ArrayList<String> imagesFilesNames = new ArrayList<String>();
+    private int countImagesUploaded = 0;
+
+
+
 
 
     @Override
@@ -105,6 +134,11 @@ public class MyBucket extends AppCompatActivity {
         rv.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         isInitialData = true;
         cu = new common_util();
+
+        String[] permissions = {android.Manifest.permission.READ_EXTERNAL_STORAGE,android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        pm.getPermissions(this,permissions);
+
+
         year = cu.getUserDataLocally(this, "year");
         setYear();
         username = cu.getUserDataLocally(this, "username");
@@ -123,6 +157,217 @@ public class MyBucket extends AppCompatActivity {
 
     }
 
+
+
+    private void openImageSelector(int numberOfImagesToSelect){
+        Intent intent = new Intent(this, AlbumSelectActivity.class);
+        intent.putExtra(Constants.INTENT_EXTRA_LIMIT, numberOfImagesToSelect);
+        startActivityForResult(intent, GALLERY_INTENT);
+    }
+
+
+    //MARK: Error handling for failed compression
+    private void errorCompressingImage(String uri, Exception e){
+    //TODO: Handle image compression failed
+        String nameofFailedImage = imagesFilesNames.get(imagesUri.indexOf(uri));
+
+    }
+
+    //MARK: Process the array of images and compress them
+    private void processImage(String uri){
+        try {
+
+            File imageSelectedFile = new File(uri);
+            if(!imageSelectedFile.exists()) {
+                imageSelectedFile = new File(getPathFromUri(this,Uri.parse(uri)));
+
+            }else{
+                Log.i(TAG,"Selected file already exists");
+            }
+
+            Log.i(TAG,imageSelectedFile.getAbsolutePath());
+            Bitmap compressedImage = imageHelper.compressImage(this, imageSelectedFile);
+            compressedImage = imageHelper.scaleBitmap(compressedImage,imageWidth,imageWidth);
+
+            String filename = imagesFilesNames.get(imagesUri.indexOf(uri));
+            uploadImageToFirebaseStorage(filename,compressedImage);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+
+
+
+
+
+    //MARK: Get download url for uploaded image
+    private void getUploadedImageDownloadURL(StorageReference ref, final String uploadedImageName){
+
+        ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    uploadUrl(task.getResult().toString(),uploadedImageName);
+                    countImagesUploaded++;
+                } else {
+
+                    //TODO:Display alert
+                    cu.ToasterLong(MyBucket.this, "Upload Failed");
+                }
+            }
+        });
+    }
+
+
+    //MARK: Method to upload each individual image to firebase storage
+    private void uploadImageToFirebaseStorage(final String filename, Bitmap bm){
+        final String uniqueFileName = FirebaseDatabase.getInstance().getReference().child("SOCPushIDS").push().getKey();
+        FirebaseDatabase.getInstance().getReference().child("SOCPushIDS").push().setValue("USED");
+
+        final StorageReference ref = mstorage.child("SOC").child(year).child(subject).child(username).child(uniqueFileName);
+        ref.putBytes(compressScaledBitmap(bm))
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        getUploadedImageDownloadURL(ref,uniqueFileName);
+
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                                          @Override
+                                          public void onFailure(@NonNull Exception exception) {
+
+                                              errorUploadingImage(exception,filename);
+
+
+                                          }
+                                      });
+                                            }
+
+
+
+            //MARK: Error handling for failed upload
+            private void errorUploadingImage(Exception e,String filename){
+                //TODO: Display alert
+                }
+
+
+
+
+
+
+
+
+    //MARK: Upload initiate method.
+    public void uploadSelectedImages(){
+
+        if(imagesUri!=null){
+            for (String imageUri: imagesUri){
+               processImage(imageUri);
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+    private void allImagesUploaded(){
+    //TODO: Alert all images uploaded
+
+        
+
+
+    }
+
+    //TODO:FIX DATE ISSUE
+    private void uploadUrl(String url, String name) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("Name", name);
+        map.put("Type", "image");
+        map.put("PhotoUrl", url);
+        map.put("Date", FieldValue.serverTimestamp());
+        bucketCr.document(name).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+            countImagesUploaded++;
+            if (countImagesUploaded == imagesUri.size()){
+                allImagesUploaded();
+                }
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+               //TODO: Add alert for failed upload
+                cu.ToasterLong(MyBucket.this, "UNFORTUNATELY UPLOAD FAILED");
+            }
+        });
+
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == GALLERY_INTENT && resultCode == RESULT_OK && data != null) {
+
+            ArrayList<Image> images = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
+
+
+            imagesUri = new ArrayList<String>();
+            imagesFilesNames = new ArrayList<String>();
+
+
+            //We are basically getting the URI of each image the user has selected
+            for (Image img: images) {
+                imagesUri.add(img.path);
+                imagesFilesNames.add(img.name);
+
+            }
+
+            //Image has been selected
+            if(imagesUri.size()!=0){
+            //TODO:Display uploading images and add a cancel button
+
+                //TODO: Add an upload button
+                uploadSelectedImages();
+
+
+            }
+
+
+
+
+
+
+        }
+
+    }
+
+
+
+
+
+
     private void setListeners() {
         newFolder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,12 +379,14 @@ public class MyBucket extends AppCompatActivity {
         uploadFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent, GALLERY_INTENT);
+                openImageSelector(imageLimit);
+
             }
         });
     }
+
+
+
 
     private void getFolderName() {
 
@@ -197,71 +444,62 @@ public class MyBucket extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GALLERY_INTENT && resultCode == RESULT_OK) {
-            notificationCounter+=1;
-            notificationsMap.put(notificationCounter,true);
-            closeMenu();
-            final Uri uri = data.getData();
-            final StorageReference ref = mstorage.child("SOC").child(year).child(subject).child(username).child(uri.getLastPathSegment());
-            final UploadTask uploadTask = ref.putFile(uri);
-            uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                    boolean done = false;
-                    double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                    if (progress >= 100) {
-                        done = true;
-                    }
-                    uploadNotification(uri.getLastPathSegment(), (int) progress, done,notificationCounter,notificationsMap.get(notificationCounter));
-                   notificationsMap.put(notificationCounter,false);
-                }
-            })
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
-                            ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Uri> task) {
-                                    if (task.isSuccessful()) {
-                                        uploadUrl(task.getResult().toString(), uri.getLastPathSegment());
-                                    } else {
-                                        cu.ToasterLong(MyBucket.this, "Upload Failed");
-                                    }
-                                }
-                            });
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    cu.ToasterLong(MyBucket.this, "Upload Failed");
-                }
-            });
-        }
-    }
 
-    //TODO:FIX DATE ISSUE
-    private void uploadUrl(String url, String name) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("Name", name);
-        map.put("Type", "image");
-        map.put("PhotoUrl", url);
-        map.put("Data", FieldValue.serverTimestamp());
-        bucketCr.document(name).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
 
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                cu.ToasterLong(MyBucket.this, "UNFORTUNATELY UPLOAD FAILED");
-            }
-        });
 
-    }
+
+
+
+
+
+
+//
+//
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == GALLERY_INTENT && resultCode == RESULT_OK) {
+//            notificationCounter+=1;
+//            notificationsMap.put(notificationCounter,true);
+//            closeMenu();
+//            final Uri uri = data.getData();
+//            final StorageReference ref = mstorage.child("SOC").child(year).child(subject).child(username).child(uri.getLastPathSegment());
+//            final UploadTask uploadTask = ref.putFile(uri);
+//            uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+//                @Override
+//                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//                    boolean done = false;
+//                    double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+//                    if (progress >= 100) {
+//                        done = true;
+//                    }
+//                    uploadNotification(uri.getLastPathSegment(), (int) progress, done,notificationCounter,notificationsMap.get(notificationCounter));
+//                   notificationsMap.put(notificationCounter,false);
+//                }
+//            })
+//                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
+//                            ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<Uri> task) {
+//                                    if (task.isSuccessful()) {
+//                                        uploadUrl(task.getResult().toString(), uri.getLastPathSegment());
+//                                    } else {
+//                                        cu.ToasterLong(MyBucket.this, "Upload Failed");
+//                                    }
+//                                }
+//                            });
+//                        }
+//                    }).addOnFailureListener(new OnFailureListener() {
+//                @Override
+//                public void onFailure(@NonNull Exception e) {
+//                    cu.ToasterLong(MyBucket.this, "Upload Failed");
+//                }
+//            });
+//        }
+//    }
+
 
     private void checkIfDummyFieldExists() {
         usernameCr.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

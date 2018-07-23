@@ -31,7 +31,6 @@ public class Soc_Main extends AppCompatActivity {
     private activity_header activity_header;
 
     public static String username;
-//Bro wessay this isn't wrong but when using object oriented (Is the spelling right? :p) use objects rather than imports. so
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -203,7 +203,7 @@
                     android:text="All"
                     android:textAlignment="center"
 
-                    />
+                    android:textSize="12sp" />
 
                 <RadioButton
                     android:id="@+id/button22"
@@ -212,7 +212,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Sciences"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textSize="12sp" />
 
                 <RadioButton
                     android:id="@+id/button23"
@@ -221,7 +222,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Commerce"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textSize="12sp" />
 
 
                 <RadioButton
@@ -231,7 +233,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Other"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textSize="12sp" />
 
 
             </info.hoang8f.android.segmented.SegmentedGroup>

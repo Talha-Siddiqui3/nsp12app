@@ -14,6 +14,13 @@ public class queryVariable {
     public void setBoo(Query query) {
         this.query = query;
         if (listener != null) listener.onChange();
+
+
+
+
+
+
+
     }
 
     public ChangeListener getListener() {

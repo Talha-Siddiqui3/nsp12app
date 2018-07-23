@@ -86,10 +86,7 @@ public class Buckets implements View.OnClickListener {
         topRated.setOnClickListener(this);
     }
 
-    //You would have had a null pointer exception at some point
-    //ohk thanks
-//What if we save the user's subjects in shared prefs. and add a refresh button to get subjects from server.
-    //haan good point
+
     //MARK: It gets current Students's classes only
     private void GetAllBuckets(final View v) {
         allBuckets = new ArrayList<>();
