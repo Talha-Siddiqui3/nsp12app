@@ -28,7 +28,7 @@ public class Main_Activity_Ta_Tab extends AppCompatActivity {
     private TabLayout tablayout;
     private ViewPager viewPager;
     private activity_header activity_header;
-    public static int i = 1;
+    public static int i = 100;
     ImageView filterButton;
     EditText taSearch;
 

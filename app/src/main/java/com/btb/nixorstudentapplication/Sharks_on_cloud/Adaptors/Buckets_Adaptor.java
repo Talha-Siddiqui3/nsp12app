@@ -49,37 +49,35 @@ public class Buckets_Adaptor extends RecyclerView.Adapter<Buckets_Adaptor.Rv_Vie
 
     @Override
     public void onBindViewHolder(@NonNull final Rv_ViewHolder holder, final int position) {
-
+        Log.i("123",bucketNames.get(0).getName());
         if (bucketNames.get(position).getName() != "Empty List") {
             holder.rl_Buckets.setOnClickListener(this);
             final String tempName = bucketNames.get(position).getName();
             holder.studentName.setText(tempName);
-           if(bucketNames.get(position).getPhotoUrl()!=null)
-                Picasso.get()
-                        .load(bucketNames.get(position).getPhotoUrl())
-                        .networkPolicy(NetworkPolicy.OFFLINE)
-                        .into(holder.studentPhoto, new com.squareup.picasso.Callback() {
-                            @Override
-                            public void onSuccess() {
-                                holder.pb.setVisibility(View.INVISIBLE);
-                            }
+           if(bucketNames.get(position).getPhotoUrl()!=null) {
+               Picasso.get()
+                       .load(bucketNames.get(position).getPhotoUrl())
+                       .into(holder.studentPhoto, new com.squareup.picasso.Callback() {
+                           @Override
+                           public void onSuccess() {
+                               holder.pb.setVisibility(View.INVISIBLE);
+                           }
 
-                            @Override
-                            public void onError(Exception e) {
-                                Picasso.get()
-                                        .load(bucketNames.get(position).getPhotoUrl())
-                                        .error(R.drawable.ic_error_outline)
-                                        .into(holder.studentPhoto);
-                                holder.pb.setVisibility(View.INVISIBLE);
-                            }
+                           @Override
+                           public void onError(Exception e) {
+                               Picasso.get()
+                                       .load(R.drawable.ic_error_outline)
+                                       .into(holder.studentPhoto);
+                               holder.pb.setVisibility(View.INVISIBLE);
+                           }
 
 
-                        });
+                       });
+           }
            else{
                Picasso.get()
                        .load(R.drawable.ic_error_outline)
                        .into(holder.studentPhoto);
-               holder.pb.setVisibility(View.INVISIBLE);
            }
 
         } else {

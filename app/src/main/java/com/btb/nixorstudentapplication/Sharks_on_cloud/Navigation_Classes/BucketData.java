@@ -107,7 +107,7 @@ public class BucketData {
     }
 */
 
-    private void getBucketData(Context context,String userName) {
+    private void getBucketData(final Context context, String userName) {
         bucketDataObjects = new ArrayList<>();
         photoUrlsImageViewver = new ArrayList<>();
 
@@ -116,7 +116,8 @@ public class BucketData {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null || queryDocumentSnapshots.isEmpty()) {
-                    //TODO:ADD SOMETHING
+                    Soc_Main.HideLoading();
+                    cu.ToasterShort(context,"EMPTY BUCKET");
                 } else {
 
                     for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
@@ -139,8 +140,9 @@ public class BucketData {
 
 
 
+
+
     private void genericGetData(DocumentChange dc) {
-        Log.i("TEST12345", "Executed");
         bucketDataObject = new BucketDataObject();
         if (dc.getDocument().getId().equals("Folders") || dc.getDocument().getId().equals("Folder Names")) {
             if (dc.getDocument().getId().equals("Folder Names")) {
@@ -178,11 +180,21 @@ public class BucketData {
         } else {
             bucketDataObject.setName(dc.getDocument().get("Name").toString());
             bucketDataObject.setDate((Date) (dc.getDocument().get("Date")));
-            bucketDataObject.setPhotoUrlThumbnail(dc.getDocument().get("PhotoUrlThumbnail").toString());
+            if(dc.getDocument().get("PhotoUrlThumbnail")!=null){
+                bucketDataObject.setPhotoUrlThumbnail(dc.getDocument().get("PhotoUrlThumbnail").toString());
+            }
+            else{ bucketDataObject.setPhotoUrlThumbnail(null);
+
+            }
             bucketDataObject.setFolder(false);
             if (isInitialData) {
                 bucketDataObjects.add(bucketDataObject);
-                photoUrlsImageViewver.add(dc.getDocument().get("PhotoUrlImageViewver").toString());
+                if(dc.getDocument().get("PhotoUrlImageViewver")!=null) {
+                    photoUrlsImageViewver.add(dc.getDocument().get("PhotoUrlImageViewver").toString());
+                }
+                else{
+                    photoUrlsImageViewver.add(null);
+                }
             } else {
                 boolean found = false;
                 int k = 0;
@@ -190,6 +202,13 @@ public class BucketData {
                 while (k < bucketDataObjects.size() && found == false) {
                     if (bucketDataObjects.get(k).getName().equals(bucketDataObject.getName()) && !bucketDataObjects.get(k).isFolder()) {
                         found = true;
+                        bucketDataObjects.get(k).setPhotoUrlThumbnail(bucketDataObject.getPhotoUrlThumbnail());
+                        if(dc.getDocument().get("PhotoUrlImageViewver")!=null) {
+                            photoUrlsImageViewver.set(k,dc.getDocument().get("PhotoUrlImageViewver").toString());
+                        }
+                        else{
+                            photoUrlsImageViewver.add(null);
+                        }
                     }
                     if (!bucketDataObjects.get(k).isFolder()) {
                         fileCount = fileCount + 1;
@@ -198,11 +217,18 @@ public class BucketData {
                 }
                 if (found == false || fileCount == 0) {
                     bucketDataObjects.add(bucketDataObject);
-                    photoUrlsImageViewver.add(dc.getDocument().get("PhotoUrlImageViewver").toString());
+                    if(dc.getDocument().get("PhotoUrlImageViewver")!=null) {
+                        photoUrlsImageViewver.add(dc.getDocument().get("PhotoUrlImageViewver").toString());
+                    }
+                    else{
+                        photoUrlsImageViewver.add(null);
+                    }
                 }
             }
         }
+
     }
+
 
     private void initializeAdaptorBucketData(ArrayList<BucketDataObject> bucketDataObjects, ArrayList<String> photoUrls, Boolean isInitialData) {
         if (isInitialData) {
@@ -212,10 +238,6 @@ public class BucketData {
             bucketData_adaptor.notifyDataSetChanged();
         }
     }
-
-
-
-
 
 
 

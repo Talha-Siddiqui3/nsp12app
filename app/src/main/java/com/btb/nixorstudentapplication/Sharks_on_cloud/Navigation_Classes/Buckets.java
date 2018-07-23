@@ -161,6 +161,7 @@ public class Buckets implements View.OnClickListener {
         Soc_Main.isCurrentlyRunning = "Subjects_homescreen";//Providing back functionality for OnBackPressed in Soc_Main class(mainactvity).
         AddPreviousButtons(v);
         Subjects_homescreen.initializeAdaptorMySubjects();
+        return;
     }
 
     public static ArrayList<String> containsData(ArrayList<BucketsObject> bucketsObjects, String id) {
@@ -179,8 +180,9 @@ public class Buckets implements View.OnClickListener {
     }
 
     public void genericGetData(final ArrayList<BucketsObject> allBuckets, final List<DocumentChange> documentChanges, final boolean initialdata,final View v,int i) {
+        if (Soc_Main.isCurrentlyRunning.equals("Buckets")) {
             bucketsObject = new BucketsObject();
-            final int I=i;
+            final int I = i;
             Soc_Main.usersRoot.document(documentChanges.get(i).getDocument().getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -196,12 +198,12 @@ public class Buckets implements View.OnClickListener {
                         allBuckets.add(bucketsObject);
                     } else {
                         String id = documentChanges.get(I).getDocument().getId();
-                        ArrayList<String> temparray=new ArrayList();
-                        temparray=containsData(allBuckets, id);
+                        ArrayList<String> temparray = new ArrayList();
+                        temparray = containsData(allBuckets, id);
 
-                      //  if (containsData(allBuckets,"Empty List")) {
+                        //  if (containsData(allBuckets,"Empty List")) {
                         //    allBuckets.clear();  TODO: WHAT IF EVERYBODY REMOVE THEIR BUCKET
-                       //}
+                        //}
                         switch (documentChanges.get(I).getType()) {
                             case ADDED:
                                 if (temparray.get(0).equals("false")) {
@@ -211,35 +213,35 @@ public class Buckets implements View.OnClickListener {
                                 }
                                 break;
                             case REMOVED:
-                               if (temparray.get(0).equals("true")) {
-                                  int removeIndex=Integer.valueOf(temparray.get(1));
+                                if (temparray.get(0).equals("true")) {
+                                    int removeIndex = Integer.valueOf(temparray.get(1));
                                     allBuckets.remove(removeIndex);
-                                    Log.i("ASD","REMOVING");
-                               }
-                               break;
-                      }
+                                    Log.i("ASD", "REMOVING");
+                                }
+                                break;
+                        }
                     }
 
 
                     if (Soc_Main.isCurrentlyRunning.equals("Buckets") && I == (documentChanges.size() - 1)) {
                         Log.i("ABC", String.valueOf(allBuckets.size()));
                         initializeAdaptorAllBuckets(isInitialData);
-                            initializeButtons(v);
-                            isInitialData = false;
+                        initializeButtons(v);
+                        isInitialData = false;
 
-                    }
-                    else if(I<documentChanges.size()){
-                        int index=I;
-                        index+=1;
-                        genericGetData(allBuckets,documentChanges,initialdata,v,index);
+                    } else if (I < documentChanges.size()) {
+                        int index = I;
+                        index += 1;
+                        genericGetData(allBuckets, documentChanges, initialdata, v, index);
                     }
 
                 }
-            } );
+            });
 
 
+        }
     }
-}
+    }
 
 
 

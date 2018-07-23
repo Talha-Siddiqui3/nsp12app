@@ -1,12 +1,17 @@
 package com.btb.nixorstudentapplication.Sharks_on_cloud;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +22,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.btb.nixorstudentapplication.BookMyTa.Main_Activity_Ta_Tab;
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.R;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Adaptors.BucketData_Adaptor;
@@ -38,6 +44,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -74,12 +81,17 @@ public class MyBucket extends AppCompatActivity {
     boolean isDataRemoved = false;
     boolean isDataAdded = false;
     public static Activity context;
+    NotificationManagerCompat notificationManager;
+    NotificationCompat.Builder mBuilder;
+    static HashMap<Integer,Boolean> notificationsMap=new HashMap<>();
+    static int notificationCounter=-1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_bucket);
-        context=this;
+        context = this;
         loading = findViewById(R.id.progressBar_myBucket);
         newFolder = findViewById(R.id.newFolder);
         uploadFile = findViewById(R.id.uploadFile);
@@ -87,6 +99,10 @@ public class MyBucket extends AppCompatActivity {
         mstorage = FirebaseStorage.getInstance().getReference();
         rv = (RecyclerView) findViewById(R.id.mybucket_recyclerview);
         rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.setHasFixedSize(true);
+        rv.setItemViewCacheSize(20);
+        rv.setDrawingCacheEnabled(true);
+        rv.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         isInitialData = true;
         cu = new common_util();
         year = cu.getUserDataLocally(this, "year");
@@ -102,6 +118,7 @@ public class MyBucket extends AppCompatActivity {
         folderNamesdoc = bucketCr.document("Folder Names");
         getBucketData();
         setListeners();
+
 
 
     }
@@ -184,25 +201,39 @@ public class MyBucket extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GALLERY_INTENT && resultCode == RESULT_OK) {
+            notificationCounter+=1;
+            notificationsMap.put(notificationCounter,true);
             closeMenu();
             final Uri uri = data.getData();
             final StorageReference ref = mstorage.child("SOC").child(year).child(subject).child(username).child(uri.getLastPathSegment());
             final UploadTask uploadTask = ref.putFile(uri);
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                 @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            if (task.isSuccessful()) {
-                                uploadUrl(task.getResult().toString(), uri.getLastPathSegment());
-                            } else {
-                                cu.ToasterLong(MyBucket.this, "Upload Failed");
-                            }
-                        }
-                    });
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    boolean done = false;
+                    double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                    if (progress >= 100) {
+                        done = true;
+                    }
+                    uploadNotification(uri.getLastPathSegment(), (int) progress, done,notificationCounter,notificationsMap.get(notificationCounter));
+                   notificationsMap.put(notificationCounter,false);
                 }
-            }).addOnFailureListener(new OnFailureListener() {
+            })
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
+                            ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    if (task.isSuccessful()) {
+                                        uploadUrl(task.getResult().toString(), uri.getLastPathSegment());
+                                    } else {
+                                        cu.ToasterLong(MyBucket.this, "Upload Failed");
+                                    }
+                                }
+                            });
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     cu.ToasterLong(MyBucket.this, "Upload Failed");
@@ -210,13 +241,13 @@ public class MyBucket extends AppCompatActivity {
             });
         }
     }
-//TODO:FIX DATE ISSUE
+
+    //TODO:FIX DATE ISSUE
     private void uploadUrl(String url, String name) {
         Map<String, Object> map = new HashMap<>();
         map.put("Name", name);
         map.put("Type", "image");
-        map.put("PhotoUrlThumbnail", url);
-        map.put("PhotoUrlImageViewver",url);
+        map.put("PhotoUrl", url);
         map.put("Data", FieldValue.serverTimestamp());
         bucketCr.document(name).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -226,7 +257,7 @@ public class MyBucket extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                cu.ToasterLong(MyBucket.this,"UNFORTUNATELY UPLOAD FAILED");
+                cu.ToasterLong(MyBucket.this, "UNFORTUNATELY UPLOAD FAILED");
             }
         });
 
@@ -281,6 +312,7 @@ public class MyBucket extends AppCompatActivity {
         bucketCr.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                Log.i("IMPORTANT", queryDocumentSnapshots.getMetadata().toString());
                 if (e != null || queryDocumentSnapshots.isEmpty()) {
                     checkIfDummyFieldExists();
                 } else {
@@ -296,7 +328,7 @@ public class MyBucket extends AppCompatActivity {
                     }
                 }
 
-                initializeAdaptorBucketData(bucketDataObjects, photoUrlsImageViewver, isInitialData);
+                initializeAdaptorBucketData(bucketDataObjects, photoUrlsImageViewver, true);
                 isInitialData = false;
             }
         });
@@ -304,7 +336,6 @@ public class MyBucket extends AppCompatActivity {
 
 
     private void genericGetData(DocumentChange dc) {
-        Log.i("TEST12345", "Executed");
         bucketDataObject = new BucketDataObject();
         if (dc.getDocument().getId().equals("Folders") || dc.getDocument().getId().equals("Folder Names")) {
             if (dc.getDocument().getId().equals("Folder Names")) {
@@ -342,11 +373,21 @@ public class MyBucket extends AppCompatActivity {
         } else {
             bucketDataObject.setName(dc.getDocument().get("Name").toString());
             bucketDataObject.setDate((Date) (dc.getDocument().get("Date")));
-            bucketDataObject.setPhotoUrlThumbnail(dc.getDocument().get("PhotoUrlThumbnail").toString());
+            if (dc.getDocument().get("PhotoUrlThumbnail") != null) {
+                bucketDataObject.setPhotoUrlThumbnail(dc.getDocument().get("PhotoUrlThumbnail").toString());
+                Log.i("thumnail url:", dc.getDocument().get("PhotoUrlThumbnail").toString());
+            } else {
+                bucketDataObject.setPhotoUrlThumbnail(null);
+
+            }
             bucketDataObject.setFolder(false);
             if (isInitialData) {
                 bucketDataObjects.add(bucketDataObject);
-                photoUrlsImageViewver.add(dc.getDocument().get("PhotoUrlImageViewver").toString());
+                if (dc.getDocument().get("PhotoUrlImageViewver") != null) {
+                    photoUrlsImageViewver.add(dc.getDocument().get("PhotoUrlImageViewver").toString());
+                } else {
+                    photoUrlsImageViewver.add(null);
+                }
             } else {
                 boolean found = false;
                 int k = 0;
@@ -354,6 +395,12 @@ public class MyBucket extends AppCompatActivity {
                 while (k < bucketDataObjects.size() && found == false) {
                     if (bucketDataObjects.get(k).getName().equals(bucketDataObject.getName()) && !bucketDataObjects.get(k).isFolder()) {
                         found = true;
+                        bucketDataObjects.get(k).setPhotoUrlThumbnail(bucketDataObject.getPhotoUrlThumbnail());
+                        if (dc.getDocument().get("PhotoUrlImageViewver") != null) {
+                            photoUrlsImageViewver.set(k, dc.getDocument().get("PhotoUrlImageViewver").toString());
+                        } else {
+                            photoUrlsImageViewver.add(null);
+                        }
                     }
                     if (!bucketDataObjects.get(k).isFolder()) {
                         fileCount = fileCount + 1;
@@ -362,10 +409,16 @@ public class MyBucket extends AppCompatActivity {
                 }
                 if (found == false || fileCount == 0) {
                     bucketDataObjects.add(bucketDataObject);
-                    photoUrlsImageViewver.add(dc.getDocument().get("PhotoUrlImageViewver").toString());
+                    if (dc.getDocument().get("PhotoUrlImageViewver") != null) {
+                        photoUrlsImageViewver.add(dc.getDocument().get("PhotoUrlImageViewver").toString());
+                        Log.i("ImageUrl", dc.getDocument().get("PhotoUrlImageViewver").toString());
+                    } else {
+                        photoUrlsImageViewver.add(null);
+                    }
                 }
             }
         }
+
     }
 
     private void initializeAdaptorBucketData(ArrayList<BucketDataObject> bucketDataObjects, ArrayList<String> photoUrls, Boolean isInitialData) {
@@ -385,8 +438,40 @@ public class MyBucket extends AppCompatActivity {
         }, 350);
     }
 
+    public void uploadNotification(String name, int progress, boolean done, int notificationId,boolean initialNotification) {
+        int PROGRESS_MAX = 100;
+        int PROGRESS_CURRENT = progress;
+        if (initialNotification) {
+            notificationManager = NotificationManagerCompat.from(this);
+            mBuilder = new NotificationCompat.Builder(this, "111");
+            mBuilder.setContentTitle(name)
+                    .setContentText("Uploading(0%)")
+                    .setSmallIcon(R.drawable.shark_black)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+// Issue the initial notification with zero progress
+
+            mBuilder.setProgress(PROGRESS_MAX, PROGRESS_CURRENT, false);
+            notificationManager.notify(notificationId, mBuilder.build());
+// Do the job here that tracks the progress.
+// Usually, this should be in a worker thread
 
 
+        } else {
+            // To show progress, update PROGRESS_CURRENT and update the notification with:
+            mBuilder.setProgress(PROGRESS_MAX, PROGRESS_CURRENT, false);
+            mBuilder.setContentText("Uploading(" + progress + "%)");
+            notificationManager.notify(notificationId, mBuilder.build());
+        }
+
+        if (done) {
+// When done, update the notification one more time to remove the progress bar
+            mBuilder.setContentText("Upload complete")
+                    .setProgress(0, 0, false);
+            notificationManager.notify(notificationId, mBuilder.build());
+        }
+    }
 
 
 }
+//TODO:FIX ALREADY EXIST UPLOADS
