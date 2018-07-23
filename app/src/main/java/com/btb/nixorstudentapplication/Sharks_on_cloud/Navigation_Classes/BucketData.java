@@ -10,8 +10,11 @@ import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Adaptors.BucketData_Adaptor;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Objects.BucketDataObject;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Soc_Main;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -107,7 +110,7 @@ public class BucketData {
     }
 */
 
-    private void getBucketData(final Context context, String userName) {
+    private void getBucketData(final Context context, final String userName) {
         bucketDataObjects = new ArrayList<>();
         photoUrlsImageViewver = new ArrayList<>();
 
@@ -115,9 +118,11 @@ public class BucketData {
                 .collection("Users").document(userName).collection("Buckets").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if (e != null || queryDocumentSnapshots.isEmpty()) {
+                if (e != null || queryDocumentSnapshots.isEmpty()) { //if by latency empty bucke tnot deleted from firebase.
                     Soc_Main.HideLoading();
-                    cu.ToasterShort(context,"EMPTY BUCKET");
+                    //cu.ToasterShort(context,"EMPTY BUCKET");
+                } else if (queryDocumentSnapshots.getDocuments().isEmpty()) {
+                    deleteBucket(userName, context);
                 } else {
 
                     for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
@@ -136,10 +141,20 @@ public class BucketData {
         });
     }
 
+    private void deleteBucket(final String userName, final Context context) {
+        Soc_Main.HideLoading();//just to be on safe side
+        Soc_Main.socRoot.document(Subjects_homescreen.button_Selected).collection("Subjects").document(Buckets.subjectName)
+                .collection("Users").document(userName).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    cu.ToasterShort(context, "BUcket Deleted Successfully");
+                    OnBackPressed();
 
-
-
-
+                }
+            }
+        });
+    }
 
 
     private void genericGetData(DocumentChange dc) {
@@ -179,20 +194,22 @@ public class BucketData {
             }
         } else {
             bucketDataObject.setName(dc.getDocument().get("Name").toString());
-            bucketDataObject.setDate((Date) (dc.getDocument().get("Date")));
-            if(dc.getDocument().get("PhotoUrlThumbnail")!=null){
-                bucketDataObject.setPhotoUrlThumbnail(dc.getDocument().get("PhotoUrlThumbnail").toString());
+            if(dc.getDocument().getTimestamp("Date")!=null) {
+                Timestamp timestamp = dc.getDocument().getTimestamp("Date");
+                bucketDataObject.setDate(timestamp.toDate());
             }
-            else{ bucketDataObject.setPhotoUrlThumbnail(null);
+            if (dc.getDocument().get("PhotoUrlThumbnail") != null) {
+                bucketDataObject.setPhotoUrlThumbnail(dc.getDocument().get("PhotoUrlThumbnail").toString());
+            } else {
+                bucketDataObject.setPhotoUrlThumbnail(null);
 
             }
             bucketDataObject.setFolder(false);
             if (isInitialData) {
                 bucketDataObjects.add(bucketDataObject);
-                if(dc.getDocument().get("PhotoUrlImageViewver")!=null) {
+                if (dc.getDocument().get("PhotoUrlImageViewver") != null) {
                     photoUrlsImageViewver.add(dc.getDocument().get("PhotoUrlImageViewver").toString());
-                }
-                else{
+                } else {
                     photoUrlsImageViewver.add(null);
                 }
             } else {
@@ -203,10 +220,9 @@ public class BucketData {
                     if (bucketDataObjects.get(k).getName().equals(bucketDataObject.getName()) && !bucketDataObjects.get(k).isFolder()) {
                         found = true;
                         bucketDataObjects.get(k).setPhotoUrlThumbnail(bucketDataObject.getPhotoUrlThumbnail());
-                        if(dc.getDocument().get("PhotoUrlImageViewver")!=null) {
-                            photoUrlsImageViewver.set(k,dc.getDocument().get("PhotoUrlImageViewver").toString());
-                        }
-                        else{
+                        if (dc.getDocument().get("PhotoUrlImageViewver") != null) {
+                            photoUrlsImageViewver.set(k, dc.getDocument().get("PhotoUrlImageViewver").toString());
+                        } else {
                             photoUrlsImageViewver.add(null);
                         }
                     }
@@ -217,10 +233,9 @@ public class BucketData {
                 }
                 if (found == false || fileCount == 0) {
                     bucketDataObjects.add(bucketDataObject);
-                    if(dc.getDocument().get("PhotoUrlImageViewver")!=null) {
+                    if (dc.getDocument().get("PhotoUrlImageViewver") != null) {
                         photoUrlsImageViewver.add(dc.getDocument().get("PhotoUrlImageViewver").toString());
-                    }
-                    else{
+                    } else {
                         photoUrlsImageViewver.add(null);
                     }
                 }
@@ -232,15 +247,12 @@ public class BucketData {
 
     private void initializeAdaptorBucketData(ArrayList<BucketDataObject> bucketDataObjects, ArrayList<String> photoUrls, Boolean isInitialData) {
         if (isInitialData) {
-            bucketData_adaptor = new BucketData_Adaptor(bucketDataObjects, photoUrls,Soc_Main.context);
+            bucketData_adaptor = new BucketData_Adaptor(bucketDataObjects, photoUrls, Soc_Main.context);
             Soc_Main.setAdaptor_Generic(bucketData_adaptor);
         } else {
             bucketData_adaptor.notifyDataSetChanged();
         }
     }
-
-
-
 
 
     //MARK: Main acitivty calls this

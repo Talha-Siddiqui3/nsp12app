@@ -41,6 +41,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
@@ -99,8 +100,8 @@ public class MyBucket extends AppCompatActivity {
     public static Activity context;
     NotificationManagerCompat notificationManager;
     NotificationCompat.Builder mBuilder;
-    static HashMap<Integer,Boolean> notificationsMap=new HashMap<>();
-    static int notificationCounter=-1;
+    static HashMap<Integer, Boolean> notificationsMap = new HashMap<>();
+    static int notificationCounter = -1;
     permission_util pm = new permission_util();
 
 
@@ -111,9 +112,6 @@ public class MyBucket extends AppCompatActivity {
     private ArrayList<String> imagesUri = new ArrayList<String>();
     private ArrayList<String> imagesFilesNames = new ArrayList<String>();
     private int countImagesUploaded = 0;
-
-
-
 
 
     @Override
@@ -135,8 +133,8 @@ public class MyBucket extends AppCompatActivity {
         isInitialData = true;
         cu = new common_util();
 
-        String[] permissions = {android.Manifest.permission.READ_EXTERNAL_STORAGE,android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        pm.getPermissions(this,permissions);
+        String[] permissions = {android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        pm.getPermissions(this, permissions);
 
 
         year = cu.getUserDataLocally(this, "year");
@@ -154,47 +152,41 @@ public class MyBucket extends AppCompatActivity {
         setListeners();
 
 
-
     }
 
 
-
-    private void openImageSelector(int numberOfImagesToSelect){
+    private void openImageSelector(int numberOfImagesToSelect) {
         Intent intent = new Intent(this, AlbumSelectActivity.class);
         intent.putExtra(Constants.INTENT_EXTRA_LIMIT, numberOfImagesToSelect);
         startActivityForResult(intent, GALLERY_INTENT);
-
-        //cannot resolve constant
-        //cannot resolve albumselectedactivity
-        //mein aaya 5 min namaz parh ke
     }
 
 
     //MARK: Error handling for failed compression
-    private void errorCompressingImage(String uri, Exception e){
-    //TODO: Handle image compression failed
+    private void errorCompressingImage(String uri, Exception e) {
+        //TODO: Handle image compression failed
         String nameofFailedImage = imagesFilesNames.get(imagesUri.indexOf(uri));
 
     }
 
     //MARK: Process the array of images and compress them
-    private void processImage(String uri){
+    private void processImage(String uri) {
         try {
 
             File imageSelectedFile = new File(uri);
-            if(!imageSelectedFile.exists()) {
-                imageSelectedFile = new File(getPathFromUri(this,Uri.parse(uri)));
+            if (!imageSelectedFile.exists()) {
+                imageSelectedFile = new File(getPathFromUri(this, Uri.parse(uri)));
 
-            }else{
-                Log.i(TAG,"Selected file already exists");
+            } else {
+                Log.i(TAG, "Selected file already exists");
             }
 
-            Log.i(TAG,imageSelectedFile.getAbsolutePath());
+            Log.i(TAG, imageSelectedFile.getAbsolutePath());
             Bitmap compressedImage = imageHelper.compressImage(this, imageSelectedFile);
-            compressedImage = imageHelper.scaleBitmap(compressedImage,imageWidth,imageWidth);
+            compressedImage = imageHelper.scaleBitmap(compressedImage, imageWidth, imageWidth);
 
             String filename = imagesFilesNames.get(imagesUri.indexOf(uri));
-            uploadImageToFirebaseStorage(filename,compressedImage);
+            uploadImageToFirebaseStorage(filename, compressedImage);
 
 
         } catch (IOException e) {
@@ -205,19 +197,14 @@ public class MyBucket extends AppCompatActivity {
     }
 
 
-
-
-
-
-
     //MARK: Get download url for uploaded image
-    private void getUploadedImageDownloadURL(StorageReference ref, final String uploadedImageName){
+    private void getUploadedImageDownloadURL(StorageReference ref, final String uploadedImageName) {
 
         ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
-                    uploadUrl(task.getResult().toString(),uploadedImageName);
+                    uploadUrl(task.getResult().toString(), uploadedImageName);
                     countImagesUploaded++;
                 } else {
 
@@ -230,7 +217,7 @@ public class MyBucket extends AppCompatActivity {
 
 
     //MARK: Method to upload each individual image to firebase storage
-    private void uploadImageToFirebaseStorage(final String filename, Bitmap bm){
+    private void uploadImageToFirebaseStorage(final String filename, Bitmap bm) {
         final String uniqueFileName = FirebaseDatabase.getInstance().getReference().child("SOCPushIDS").push().getKey();
         FirebaseDatabase.getInstance().getReference().child("SOCPushIDS").push().setValue("USED");
 
@@ -240,64 +227,43 @@ public class MyBucket extends AppCompatActivity {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        getUploadedImageDownloadURL(ref,uniqueFileName);
+                        getUploadedImageDownloadURL(ref, uniqueFileName);
 
 
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
-                                          @Override
-                                          public void onFailure(@NonNull Exception exception) {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
 
-                                              errorUploadingImage(exception,filename);
-
-
-                                          }
-                                      });
-                                            }
+                        errorUploadingImage(exception, filename);
 
 
-
-            //MARK: Error handling for failed upload
-            private void errorUploadingImage(Exception e,String filename){
-                //TODO: Display alert
-                }
+                    }
+                });
+    }
 
 
-
-
-
-
+    //MARK: Error handling for failed upload
+    private void errorUploadingImage(Exception e, String filename) {
+        //TODO: Display alert
+    }
 
 
     //MARK: Upload initiate method.
-    public void uploadSelectedImages(){
+    public void uploadSelectedImages() {
 
-        if(imagesUri!=null){
-            for (String imageUri: imagesUri){
-               processImage(imageUri);
+        if (imagesUri != null) {
+            for (String imageUri : imagesUri) {
+                processImage(imageUri);
             }
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
-    private void allImagesUploaded(){
-    //TODO: Alert all images uploaded
-
-
+    private void allImagesUploaded() {
+        //TODO: Alert all images uploaded
 
 
     }
@@ -307,14 +273,14 @@ public class MyBucket extends AppCompatActivity {
         Map<String, Object> map = new HashMap<>();
         map.put("Name", name);
         map.put("Type", "image");
-        map.put("PhotoUrl", url);
+        map.put("PhotoUrlImageViewver", url);
         map.put("Date", FieldValue.serverTimestamp());
         bucketCr.document(name).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-            countImagesUploaded++;
-            if (countImagesUploaded == imagesUri.size()){
-                allImagesUploaded();
+                countImagesUploaded++;
+                if (countImagesUploaded == imagesUri.size()) {
+                    allImagesUploaded();
                 }
 
             }
@@ -322,7 +288,7 @@ public class MyBucket extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
 
-               //TODO: Add alert for failed upload
+                //TODO: Add alert for failed upload
                 cu.ToasterLong(MyBucket.this, "UNFORTUNATELY UPLOAD FAILED");
             }
         });
@@ -333,7 +299,7 @@ public class MyBucket extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == GALLERY_INTENT && resultCode == RESULT_OK && data != null) {
-
+            closeMenu();
             ArrayList<Image> images = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
 
 
@@ -342,34 +308,23 @@ public class MyBucket extends AppCompatActivity {
 
 
             //We are basically getting the URI of each image the user has selected
-            for (Image img: images) {
+            for (Image img : images) {
                 imagesUri.add(img.path);
                 imagesFilesNames.add(img.name);
 
             }
 
             //Image has been selected
-            if(imagesUri.size()!=0){
-            //TODO:Display uploading images and add a cancel button
+            if (imagesUri.size() != 0) {
+                //TODO:Display uploading images and add a cancel button
 
                 //TODO: Add an upload button
                 uploadSelectedImages();
 
 
             }
-
-
-
-
-
-
         }
-
     }
-
-
-
-
 
 
     private void setListeners() {
@@ -388,8 +343,6 @@ public class MyBucket extends AppCompatActivity {
             }
         });
     }
-
-
 
 
     private void getFolderName() {
@@ -448,15 +401,6 @@ public class MyBucket extends AppCompatActivity {
     }
 
 
-
-
-
-
-
-
-
-
-
 //
 //
 //    @Override
@@ -506,23 +450,23 @@ public class MyBucket extends AppCompatActivity {
 
 
     private void checkIfDummyFieldExists() {
-        usernameCr.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        //cu.ToasterLong(MyBucket.this, "Upload Completed Succesfully");
-                        loading.setVisibility(View.INVISIBLE);
-                        menu.setVisibility(View.VISIBLE);
-                    } else {
+    //    usernameCr.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+          //  @Override
+            //public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+      //          if (task.isSuccessful()) {
+        //            DocumentSnapshot document = task.getResult();
+          //          if (document.exists()) {
+            //            //cu.ToasterLong(MyBucket.this, "Upload Completed Succesfully");
+              //          loading.setVisibility(View.INVISIBLE);
+                //        menu.setVisibility(View.VISIBLE);
+                  //  } else {
                         AddDummyField();
-                    }
-                } else {
-                    cu.ToasterLong(MyBucket.this, "Failed to connect to Server");
-                }
-            }
-        });
+                    //}
+               // } else {
+                 //   cu.ToasterLong(MyBucket.this, "Failed to connect to Server");
+                //}
+            //}
+        //});
     }
 
     private void AddDummyField() {
@@ -557,7 +501,10 @@ public class MyBucket extends AppCompatActivity {
                 Log.i("IMPORTANT", queryDocumentSnapshots.getMetadata().toString());
                 if (e != null || queryDocumentSnapshots.isEmpty()) {
                     checkIfDummyFieldExists();
-                } else {
+                }
+
+
+                else {
 
                     for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
                         if (isInitialData) {
@@ -614,10 +561,13 @@ public class MyBucket extends AppCompatActivity {
             }
         } else {
             bucketDataObject.setName(dc.getDocument().get("Name").toString());
-          //  bucketDataObject.setDate((Date) (dc.getDocument().get("Date")));
+            if(dc.getDocument().getTimestamp("Date")!=null) {
+                Timestamp timestamp = dc.getDocument().getTimestamp("Date");
+                bucketDataObject.setDate(timestamp.toDate());
+                Log.i(TAG,timestamp.toDate().toString());
+            }
             if (dc.getDocument().get("PhotoUrlThumbnail") != null) {
                 bucketDataObject.setPhotoUrlThumbnail(dc.getDocument().get("PhotoUrlThumbnail").toString());
-                Log.i("thumnail url:", dc.getDocument().get("PhotoUrlThumbnail").toString());
             } else {
                 bucketDataObject.setPhotoUrlThumbnail(null);
 
@@ -680,7 +630,7 @@ public class MyBucket extends AppCompatActivity {
         }, 350);
     }
 
-    public void uploadNotification(String name, int progress, boolean done, int notificationId,boolean initialNotification) {
+    public void uploadNotification(String name, int progress, boolean done, int notificationId, boolean initialNotification) {
         int PROGRESS_MAX = 100;
         int PROGRESS_CURRENT = progress;
         if (initialNotification) {

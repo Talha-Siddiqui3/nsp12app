@@ -96,7 +96,7 @@ public class Buckets implements View.OnClickListener {
             @Override
             public void onEvent(@Nullable final QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
-                if (queryDocumentSnapshots.isEmpty()) {
+                if (queryDocumentSnapshots.isEmpty() && queryDocumentSnapshots!=null) {
                     bucketsObject = new BucketsObject();
                     bucketsObject.setPhotoUrl(null);
                     bucketsObject.setName("Empty List");
