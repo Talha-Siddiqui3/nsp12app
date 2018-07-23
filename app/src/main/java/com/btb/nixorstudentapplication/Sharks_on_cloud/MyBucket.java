@@ -163,6 +163,10 @@ public class MyBucket extends AppCompatActivity {
         Intent intent = new Intent(this, AlbumSelectActivity.class);
         intent.putExtra(Constants.INTENT_EXTRA_LIMIT, numberOfImagesToSelect);
         startActivityForResult(intent, GALLERY_INTENT);
+
+        //cannot resolve constant
+        //cannot resolve albumselectedactivity
+        //mein aaya 5 min namaz parh ke
     }
 
 
@@ -293,7 +297,7 @@ public class MyBucket extends AppCompatActivity {
     private void allImagesUploaded(){
     //TODO: Alert all images uploaded
 
-        
+
 
 
     }
