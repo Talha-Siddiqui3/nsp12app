@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.btb.nixorstudentapplication.BookMyTa.Main_Activity_Ta_Tab;
+import com.btb.nixorstudentapplication.Carpool.Main_Activity_Carpool_Tab;
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.Misc.permission_util;
 import com.btb.nixorstudentapplication.Nsp_Portal.Adaptors.Nsp_Adaptor;
@@ -122,6 +123,9 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
                                 break;
                             case R.id.ta:
                                 startActivity(new Intent(home_screen.this, Main_Activity_Ta_Tab.class));
+                                break;
+                            case R.id.carpool_icon:
+                                startActivity(new Intent(home_screen.this, Main_Activity_Carpool_Tab.class));
                                 break;
                         }
                         return true;
@@ -275,7 +279,7 @@ public class home_screen extends AppCompatActivity implements View.OnClickListen
             }
         });
     */
-        Log.i("ABCD", FirebaseInstanceId.getInstance().getToken());
+
         icons.add("Profile");
         icons.add("Gate Attendance");
         icons.add("Class Attendance");

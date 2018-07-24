@@ -21,10 +21,15 @@ android:icon="@drawable/bookmyta_drawer"
                 android:title="BookMyTA"
             android:fontFamily="@font/assistant_extralight"/>
             <item
-                android:icon="@drawable/soc_drawer"
                 android:id="@+id/soc"
                 android:fontFamily="@font/assistant_extralight"
+                android:icon="@drawable/soc_drawer"
                 android:title="Sharks on Cloud" />
+            <item
+                android:id="@+id/carpool_icon"
+                android:fontFamily="@font/assistant_extralight"
+                android:icon="@drawable/carpool_icon"
+                android:title="Carpool" />
         </menu>
     </item>
 

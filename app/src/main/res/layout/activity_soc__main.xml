@@ -53,7 +53,7 @@
             android:orientation="horizontal"
             android:visibility="gone"
             app:sc_border_width="2dp"
-            app:sc_corner_radius="10dp"
+            app:sc_corner_radius="5dp"
             app:sc_tint_color="@color/colorPrimary"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="169dp">
@@ -102,7 +102,7 @@
             android:orientation="horizontal"
             android:visibility="invisible"
             segmentedgroup:sc_border_width="2dp"
-            segmentedgroup:sc_corner_radius="10dp"
+            segmentedgroup:sc_corner_radius="5dp"
             segmentedgroup:sc_tint_color="@color/colorPrimary"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="169dp">

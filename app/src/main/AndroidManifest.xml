@@ -89,10 +89,10 @@
         <activity
             android:name=".Sharks_on_cloud.Soc_Main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Sharks_on_cloud.MyBucket"></activity>
+        <activity android:name=".Sharks_on_cloud.MyBucket" />
         <activity
             android:name=".BookMyTa.TA_Filter"
-            android:theme="@style/AlertDialogCustom"></activity>
+            android:theme="@style/AlertDialogCustom" />
         <activity
             android:name="com.darsh.multipleimageselect.activities.AlbumSelectActivity"
             android:theme="@style/MultipleImageSelectTheme">
@@ -100,7 +100,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".Carpool.Main_Activity_Carpool_Tab"></activity>
+        <activity
+            android:name=".Carpool.Main_Activity_Carpool_Tab"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".Carpool.CreateRide_Initial"></activity>
     </application>
 
 </manifest>

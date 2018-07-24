@@ -118,12 +118,10 @@ public class BucketData {
                 .collection("Users").document(userName).collection("Buckets").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if (e != null || queryDocumentSnapshots.isEmpty()) { //if by latency empty bucke tnot deleted from firebase.
+                if (e != null || queryDocumentSnapshots.isEmpty()) { //if by latency empty bucket not deleted from firebase.
                     Soc_Main.HideLoading();
                     //cu.ToasterShort(context,"EMPTY BUCKET");
-                } else if (queryDocumentSnapshots.getDocuments().isEmpty()) {
-                    deleteBucket(userName, context);
-                } else {
+                }  else {
 
                     for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
                         if (isInitialData) {
@@ -141,20 +139,7 @@ public class BucketData {
         });
     }
 
-    private void deleteBucket(final String userName, final Context context) {
-        Soc_Main.HideLoading();//just to be on safe side
-        Soc_Main.socRoot.document(Subjects_homescreen.button_Selected).collection("Subjects").document(Buckets.subjectName)
-                .collection("Users").document(userName).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    cu.ToasterShort(context, "BUcket Deleted Successfully");
-                    OnBackPressed();
 
-                }
-            }
-        });
-    }
 
 
     private void genericGetData(DocumentChange dc) {

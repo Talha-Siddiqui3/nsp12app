@@ -1,6 +1,7 @@
 package com.btb.nixorstudentapplication.Sharks_on_cloud;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,9 +24,13 @@ import android.widget.ProgressBar;
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.Misc.imageHelper;
 import com.btb.nixorstudentapplication.Misc.permission_util;
+import com.btb.nixorstudentapplication.Nsp_Portal.NspPortalPdf;
 import com.btb.nixorstudentapplication.R;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Adaptors.BucketData_Adaptor;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes.Buckets;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes.Subjects_homescreen;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Objects.BucketDataObject;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.Objects.BucketsObject;
 import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
 import com.darsh.multipleimageselect.helpers.Constants;
 import com.darsh.multipleimageselect.models.Image;
@@ -53,6 +58,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -540,7 +546,9 @@ public class MyBucket extends AppCompatActivity {
                 Log.i("IMPORTANT", queryDocumentSnapshots.getMetadata().toString());
                 if (e != null || queryDocumentSnapshots.isEmpty()) {
                     checkIfDummyFieldExists();
-                } else {
+                } /*else if (queryDocumentSnapshots.getDocuments().isEmpty()) {
+                    deleteBucket(username, context);
+                }*/ else {
 
                     for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
                         if (isInitialData) {
@@ -548,15 +556,81 @@ public class MyBucket extends AppCompatActivity {
                             loading.setVisibility(View.INVISIBLE);
                             menu.setVisibility(View.VISIBLE);
                         } else {
-                            genericGetData(dc);
+                            Log.i(TAG,dc.getDocument().getMetadata().toString());
+                            switch (dc.getType()) {
+                                case ADDED:
+                                    Log.i(TAG, "Added Called");
+                                    genericGetData(dc);
+                                    break;
+                                case MODIFIED:
+                                    Log.i(TAG, "Modified Called");
+                                    genericGetData(dc);
+                                    break;
+                                case REMOVED:
+                                    Log.i(TAG, "REMOVE Called");
+                                    genericRemoveData(dc);
+                                    break;
+                            }
                         }
                     }
                 }
 
-                initializeAdaptorBucketData(bucketDataObjects, photoUrlsImageViewver, true);
+
+                initializeAdaptorBucketData(bucketDataObjects, photoUrlsImageViewver, isInitialData);
+
                 isInitialData = false;
             }
         });
+    }
+
+
+    private void deleteBucket() {
+        Soc_Main.socRoot.document(Subjects_homescreen.button_Selected).collection("Subjects").document(Buckets.subjectName)
+                .collection("Users").document(username).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    cu.ToasterShort(context, "Bucket Deleted Successfully");
+                    MyBucket.super.onBackPressed();
+                }
+            }
+        });
+    }
+
+
+    private void genericRemoveData(DocumentChange dc) {
+
+        for (int i = 0; i < bucketDataObjects.size(); i++) {
+            if (bucketDataObjects.get(i).getName() == dc.getDocument().get("Name")) {
+                bucketDataObjects.remove(i);
+            }
+        }
+if(bucketDataObjects.size()==1){
+        showLastItemWarning();
+}
+
+    }
+
+    private void showLastItemWarning() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Warning");
+// Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteBucket();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+
     }
 
 
@@ -585,7 +659,6 @@ public class MyBucket extends AppCompatActivity {
                                 folderCount += 1;
                             }
                             k += 1;
-                            Log.i("TEST", String.valueOf(found));
                         }
                         if (found == false || folderCount == 0) {
                             bucketDataObjects.add(bucketDataObject);
@@ -600,7 +673,7 @@ public class MyBucket extends AppCompatActivity {
             if (dc.getDocument().getTimestamp("Date") != null) {
                 Timestamp timestamp = dc.getDocument().getTimestamp("Date");
                 bucketDataObject.setDate(timestamp.toDate());
-                Log.i(TAG, timestamp.toDate().toString());
+
             }
             if (dc.getDocument().get("PhotoUrlThumbnail") != null) {
                 bucketDataObject.setPhotoUrlThumbnail(dc.getDocument().get("PhotoUrlThumbnail").toString());
@@ -639,7 +712,6 @@ public class MyBucket extends AppCompatActivity {
                     bucketDataObjects.add(bucketDataObject);
                     if (dc.getDocument().get("PhotoUrlImageViewver") != null) {
                         photoUrlsImageViewver.add(dc.getDocument().get("PhotoUrlImageViewver").toString());
-                        Log.i("ImageUrl", dc.getDocument().get("PhotoUrlImageViewver").toString());
                     } else {
                         photoUrlsImageViewver.add(null);
                     }
@@ -667,5 +739,6 @@ public class MyBucket extends AppCompatActivity {
     }
 
 }
-//TODO:FIX ALREADY EXIST UPLOADS
-//TODO:FIX IMAGEVIEW DISPLAY(eg remove deafult Economics Notes...etc)
+//TODO:FIX ALREADY EXIST UPLOADS.
+//TODO:FIX IMAGEVIEW DISPLAY(eg remove deafult Economics Notes...etc.
+//TODO:Add Remove Button.

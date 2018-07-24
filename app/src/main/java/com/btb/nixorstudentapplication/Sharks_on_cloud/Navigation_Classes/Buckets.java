@@ -23,6 +23,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Source;
 
 
 import java.util.ArrayList;
@@ -96,7 +97,7 @@ public class Buckets implements View.OnClickListener {
             @Override
             public void onEvent(@Nullable final QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
-                if (queryDocumentSnapshots.isEmpty() && queryDocumentSnapshots!=null) {
+                if (queryDocumentSnapshots.isEmpty() && queryDocumentSnapshots != null) {
                     bucketsObject = new BucketsObject();
                     bucketsObject.setPhotoUrl(null);
                     bucketsObject.setName("Empty List");
@@ -110,8 +111,8 @@ public class Buckets implements View.OnClickListener {
 
                 } else {
                     if (e == null) {
-                        int i=0;
-                        genericGetData(allBuckets, queryDocumentSnapshots.getDocumentChanges(), isInitialData,v,i);
+                        int i = 0;
+                        genericGetData(allBuckets, queryDocumentSnapshots.getDocumentChanges(), isInitialData, v, i);
 
                     } else {
                         cu.ToasterLong(context, "Error retrieving data form Server");
@@ -161,26 +162,62 @@ public class Buckets implements View.OnClickListener {
         return;
     }
 
+    //it compares all data in allbuckets array with the curent document that has been changed and then accordingly if it exists/not exists in allbuckets
+    //it adds that result to temparray
+    //positon 0 holds true or false(exists or not exists)
+    //position 1 holds the position of item in allbuckets only if the docuemnt exists in allbuckets
+    //otherwise position 1 hold -1(indicating not exists so no available position in allbuckets array)
     public static ArrayList<String> containsData(ArrayList<BucketsObject> bucketsObjects, String id) {
-        ArrayList<String> arr=new ArrayList<>();
-        Log.i("AFSAF",id);
-       for (int i=0;i < bucketsObjects.size();i++) {
+        ArrayList<String> arr = new ArrayList<>();
+        Log.i("AFSAF", id);
+        for (int i = 0; i < bucketsObjects.size(); i++) {
             if (bucketsObjects.get(i).getName().equals(id)) {
                 arr.add(0, "true");
                 arr.add(1, String.valueOf(i));
                 return arr;
             }
         }
-        arr.add(0,"false");
-        arr.add(1, String.valueOf(-1));
+        arr.add(0, "false");
+        arr.add(1, String.valueOf(-1));//-1 means false(just an additional way to know if it is false)
         return arr;
     }
 
-    public void genericGetData(final ArrayList<BucketsObject> allBuckets, final List<DocumentChange> documentChanges, final boolean initialdata,final View v,int i) {
+
+    public void handleNonInitialData(final List<DocumentChange> documentChanges, final int I) {
+        //checking data change and dealing with it accordingly.
+        String id = documentChanges.get(I).getDocument().getId();
+        ArrayList<String> temparray = new ArrayList();
+        temparray = containsData(allBuckets, id);//checking if data already exists in allBuckets array or not and storing the result in temparray
+
+        //  if (containsData(allBuckets,"Empty List")) {
+        //    allBuckets.clear();  TODO: WHAT IF EVERYBODY REMOVE THEIR BUCKET
+        //}
+        switch (documentChanges.get(I).getType()) {
+            //checking whther added or removed and then using temparray to add if it does not exist or remove if it exists already
+            case ADDED:
+                if (temparray.get(0).equals("false")) {
+                    bucketsObject.setName(id);
+                    bucketsObject.setPhotoUrl(photoUrl);
+                    allBuckets.add(bucketsObject);
+                }
+                break;
+            case REMOVED:
+                if (temparray.get(0).equals("true")) {
+                    int removeIndex = Integer.valueOf(temparray.get(1));
+                    allBuckets.remove(removeIndex);
+                    Log.i("ASD", "REMOVING");
+                }
+                break;
+        }
+    }
+
+
+    public void genericGetData(final ArrayList<BucketsObject> allBuckets, final List<DocumentChange> documentChanges, final boolean initialdata, final View v, int i) {
         if (Soc_Main.isCurrentlyRunning.equals("Buckets")) {
             bucketsObject = new BucketsObject();
-            final int I = i;
-            Soc_Main.usersRoot.document(documentChanges.get(i).getDocument().getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            final int I = i;//just a temp final variable so i can access it in inner class methods
+            //TODO:CHANGE SOURCE CACHE.
+            Soc_Main.usersRoot.document(documentChanges.get(i).getDocument().getId()).get(Source.CACHE).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     String photoUrl;
@@ -189,43 +226,24 @@ public class Buckets implements View.OnClickListener {
                     } else {
                         photoUrl = null;
                     }
+                    //if data is initial add all of it without any check as there will be no duplicates
                     if (initialdata) {
                         bucketsObject.setName(documentChanges.get(I).getDocument().getId());
                         bucketsObject.setPhotoUrl(photoUrl);
                         allBuckets.add(bucketsObject);
                     } else {
-                        String id = documentChanges.get(I).getDocument().getId();
-                        ArrayList<String> temparray = new ArrayList();
-                        temparray = containsData(allBuckets, id);
-
-                        //  if (containsData(allBuckets,"Empty List")) {
-                        //    allBuckets.clear();  TODO: WHAT IF EVERYBODY REMOVE THEIR BUCKET
-                        //}
-                        switch (documentChanges.get(I).getType()) {
-                            case ADDED:
-                                if (temparray.get(0).equals("false")) {
-                                    bucketsObject.setName(id);
-                                    bucketsObject.setPhotoUrl(photoUrl);
-                                    allBuckets.add(bucketsObject);
-                                }
-                                break;
-                            case REMOVED:
-                                if (temparray.get(0).equals("true")) {
-                                    int removeIndex = Integer.valueOf(temparray.get(1));
-                                    allBuckets.remove(removeIndex);
-                                    Log.i("ASD", "REMOVING");
-                                }
-                                break;
-                        }
+                        //handlig data if it is not initial
+                        handleNonInitialData(documentChanges, I);
                     }
 
 
+//simple check that whther this class is running and the loop is completed then load the adadptor with this new data.
+                    //this prevents for eg 5 items changed so adadptor will refresh 5 times(inefficient)
                     if (Soc_Main.isCurrentlyRunning.equals("Buckets") && I == (documentChanges.size() - 1)) {
-                        Log.i("ABC", String.valueOf(allBuckets.size()));
                         initializeAdaptorAllBuckets(isInitialData);
                         initializeButtons(v);
                         isInitialData = false;
-
+//simple check that if loop not complete call function again(recursive function, very useful :p)
                     } else if (I < documentChanges.size()) {
                         int index = I;
                         index += 1;
@@ -234,11 +252,9 @@ public class Buckets implements View.OnClickListener {
 
                 }
             });
-
-
         }
     }
-    }
+}
 
 
 
