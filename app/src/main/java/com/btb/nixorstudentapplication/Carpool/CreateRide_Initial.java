@@ -21,6 +21,7 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import net.igenius.customcheckbox.CustomCheckBox;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
@@ -57,7 +58,7 @@ public class CreateRide_Initial extends AppCompatActivity implements View.OnClic
 
     //DataObject
     private CarpoolInfoObject carpoolInfoObject = new CarpoolInfoObject();
-    private HashMap<String, Boolean> daysMap=new HashMap<>();
+    private HashMap<String, Boolean> daysMap = new HashMap<>();
 
     //checks
     private boolean isDateAlreadySelected = false;
@@ -117,15 +118,7 @@ public class CreateRide_Initial extends AppCompatActivity implements View.OnClic
         repeatedButton.setOnClickListener(this);
 
 
-
-
-
-
     }
-
-
-
-
 
 
     @Override
@@ -192,7 +185,10 @@ public class CreateRide_Initial extends AppCompatActivity implements View.OnClic
     private void setTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day, hour, minute, second);
-        long selectedTime = calendar.getTimeInMillis() / 1000;
+        //long selectedTime = calendar.getTimeInMillis() / 1000;
+        Date selectedDate = calendar.getTime();
+        long selectedTime = selectedDate.getTime();
+        Log.i(TAG, String.valueOf(selectedTime));
         carpoolInfoObject.setSelectedTime(selectedTime);
     }
 
@@ -238,6 +234,8 @@ public class CreateRide_Initial extends AppCompatActivity implements View.OnClic
                 now.get(Calendar.MONTH),
                 now.get(Calendar.DAY_OF_MONTH)
         );
+
+
         datePickerDialog.show(getFragmentManager(), "Datepickerdialog");
         isDateAlreadySelected = true;
     }
@@ -297,14 +295,13 @@ public class CreateRide_Initial extends AppCompatActivity implements View.OnClic
         timeCheckBox.setVisibility(View.VISIBLE);
         timeCheckBox.setChecked(true, true);
         timeCheckBox.setClickable(false);
-       if(hourOfDay>12) {
-           int tempHour=hourOfDay-12;
-           timeSelectButton.setText(tempHour + " " + minute+" pm");
-       }
-       else{
-           timeSelectButton.setText(hourOfDay + " " + minute+" am");
-       }
-       hour = hourOfDay;
+        if (hourOfDay > 12) {
+            int tempHour = hourOfDay - 12;
+            timeSelectButton.setText(tempHour + " " + minute + " pm");
+        } else {
+            timeSelectButton.setText(hourOfDay + " " + minute + " am");
+        }
+        hour = hourOfDay;
         this.minute = minute;
         this.second = second;
 
@@ -315,7 +312,7 @@ public class CreateRide_Initial extends AppCompatActivity implements View.OnClic
         dateCheckBox.setVisibility(View.VISIBLE);
         dateCheckBox.setChecked(true, true);
         dateCheckBox.setClickable(false);
-        dateSelectButton.setText(dayOfMonth+" "+(monthOfYear+1)+" "+year);//TODO CHANGE DATE TO MONTH NAME
+        dateSelectButton.setText(dayOfMonth + " " + (monthOfYear + 1) + " " + year);//TODO CHANGE DATE TO MONTH NAME
         this.year = year;
         month = monthOfYear;
         day = dayOfMonth;
@@ -324,54 +321,16 @@ public class CreateRide_Initial extends AppCompatActivity implements View.OnClic
 
     private HashMap<String, Boolean> setDays() {
 
-   if (monday.isChecked()) {
-            daysMap.put("Monday", true);
-        } else {
-            daysMap.put("Monday", false);
-        }
+
+        daysMap.put("Monday", monday.isChecked());
+        daysMap.put("Tuesday", tuesday.isChecked());
+        daysMap.put("Wednesday", wednesday.isChecked());
+        daysMap.put("Thursday", thursday.isChecked());
+        daysMap.put("Friday", friday.isChecked());
+        daysMap.put("Saturday", saturday.isChecked());
+        daysMap.put("Sunday", sunday.isChecked());
 
 
-        if (tuesday.isChecked()) {
-            daysMap.put("Tuesday", true);
-        } else {
-            daysMap.put("Tuesday", false);
-        }
-
-
-        if (wednesday.isChecked()) {
-            daysMap.put("Wednesday", true);
-        } else {
-            daysMap.put("Wednesday", false);
-        }
-
-
-        if (thursday.isChecked()) {
-            daysMap.put("Thursday", true);
-        } else {
-            daysMap.put("Thursday", false);
-
-
-            if (friday.isChecked()) {
-                daysMap.put("Friday", true);
-            } else {
-                daysMap.put("Friday", false);
-            }
-
-
-            if (saturday.isChecked()) {
-                daysMap.put("Saturday", true);
-            } else {
-                daysMap.put("Saturday", false);
-            }
-
-
-            if (sunday.isChecked()) {
-                daysMap.put("Sunday", true);
-            } else {
-                daysMap.put("Sunday", false);
-            }
-
-        }
-    return daysMap;
+        return daysMap;
     }
 }

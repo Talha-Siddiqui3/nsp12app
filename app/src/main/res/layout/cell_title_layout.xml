@@ -55,6 +55,7 @@
             android:text="Muhammad Talha Siddiqui"
             android:textAlignment="textStart"
             android:textColor="@android:color/white"
+            android:textSize="14sp"
             android:textStyle="bold" />
 
         <de.hdodenhof.circleimageview.CircleImageView

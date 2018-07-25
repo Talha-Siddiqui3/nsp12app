@@ -42,7 +42,6 @@ public class CreateRide_Continued extends AppCompatActivity {
         Map<String, Object> data = new HashMap<>();
         data.put("destination", "24.8114006657596,67.0217330098016 ");
         data.put("origin", "24.8114006657596,67.021733009801");
-        data.put("apikey", "AIzaSyB1XK0m166UakTKoWlhPLoYK5AMgIQmcjM");
         Log.i(TAG, "method executed123");
 
         mFunctions
