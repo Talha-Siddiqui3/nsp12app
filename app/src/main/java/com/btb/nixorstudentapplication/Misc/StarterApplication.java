@@ -16,7 +16,6 @@ import android.os.Build;
 import android.support.multidex.MultiDex;
 
 import com.btb.nixorstudentapplication.R;
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;

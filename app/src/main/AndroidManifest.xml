@@ -102,8 +102,18 @@
         </activity>
         <activity
             android:name=".Carpool.Main_Activity_Carpool_Tab"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Carpool.CreateRide_Initial"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".Carpool.CreateRide_Initial"></activity>
+        <activity android:name=".Carpool.CreateRide_Continued"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
