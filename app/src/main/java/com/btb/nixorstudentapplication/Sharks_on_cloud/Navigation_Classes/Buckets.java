@@ -183,7 +183,7 @@ public class Buckets implements View.OnClickListener {
     }
 
 
-    public void handleNonInitialData(final List<DocumentChange> documentChanges, final int I) {
+    public void handleNonInitialData(final List<DocumentChange> documentChanges, final int I, String photoUrl) {
         //checking data change and dealing with it accordingly.
         String id = documentChanges.get(I).getDocument().getId();
         ArrayList<String> temparray = new ArrayList();
@@ -221,19 +221,20 @@ public class Buckets implements View.OnClickListener {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     String photoUrl;
+                    String id=documentChanges.get(I).getDocument().getId();
                     if (task.getResult().get("photourl") != null) {
                         photoUrl = task.getResult().get("photourl").toString();
                     } else {
                         photoUrl = null;
                     }
                     //if data is initial add all of it without any check as there will be no duplicates
-                    if (initialdata) {
-                        bucketsObject.setName(documentChanges.get(I).getDocument().getId());
+                    if (initialdata && containsData(allBuckets,id).get(0).equals("false")) {
+                        bucketsObject.setName(id);
                         bucketsObject.setPhotoUrl(photoUrl);
                         allBuckets.add(bucketsObject);
                     } else {
                         //handlig data if it is not initial
-                        handleNonInitialData(documentChanges, I);
+                        handleNonInitialData(documentChanges, I, photoUrl);
                     }
 
 

@@ -1,9 +1,350 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aigestudio="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context=".Carpool.CreateRide_Initial">
 
-</android.support.constraint.ConstraintLayout>
+
+    <RelativeLayout
+        android:id="@+id/days_realtiveLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/segmented_rideInitial_rideType"
+        android:visibility="gone">
+
+        <net.igenius.customcheckbox.CustomCheckBox
+            android:id="@+id/tuesday_CheckBox"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="false"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="28dp"
+            app:color_checked="@color/colorPrimary"
+            app:color_tick="@android:color/white"
+            app:color_unchecked_stroke="@color/colorAccent"
+            app:small_tick="false" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentTop="false"
+            android:layout_alignStart="@+id/tuesday_CheckBox"
+            android:layout_below="@+id/Monday_Checkbox"
+            android:layout_marginStart="-1dp"
+            android:layout_marginTop="15dp"
+            android:text="Tue" />
+
+        <net.igenius.customcheckbox.CustomCheckBox
+            android:id="@+id/Monday_Checkbox"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="false"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="28dp"
+            app:color_checked="@color/colorPrimary"
+            app:color_tick="@android:color/white"
+            app:color_unchecked_stroke="@color/colorAccent"
+            app:small_tick="false" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentTop="false"
+            android:layout_alignStart="@+id/Monday_Checkbox"
+            android:layout_below="@+id/Monday_Checkbox"
+            android:layout_marginStart="-1dp"
+            android:layout_marginTop="15dp"
+            android:text="Mon" />
+
+    </RelativeLayout>
+
+    <info.hoang8f.android.segmented.SegmentedGroup
+        android:id="@+id/segmented_rideInitial_contactNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_alignStart="@+id/textView12"
+        android:layout_below="@+id/textView12"
+        android:layout_marginTop="3dp"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        app:sc_border_width="1dp"
+        app:sc_corner_radius="4dp"
+        app:sc_tint_color="#808080">
+
+
+        <RadioButton
+            android:id="@+id/contactNumber_rideInitial"
+            style="@style/RadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:text="03121758980"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+
+    </info.hoang8f.android.segmented.SegmentedGroup>
+
+    <info.hoang8f.android.segmented.SegmentedGroup
+        android:id="@+id/segmented_rideInitial_carType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/imageView10"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="false"
+        android:layout_below="@+id/imageView10"
+        android:layout_marginTop="40dp"
+        android:checkedButton="@+id/Taxi_Button"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        app:sc_border_width="2dp"
+        app:sc_corner_radius="4dp"
+        app:sc_tint_color="@color/colorPrimary"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="169dp">
+
+        <RadioButton
+            android:id="@+id/Taxi_Button"
+            style="@style/RadioButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Taxi"
+            android:textAlignment="center"
+
+            android:textSize="13sp" />
+
+        <RadioButton
+            android:id="@+id/PrivateCarButton"
+            style="@style/RadioButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Private Car"
+            android:textAlignment="center"
+            android:textSize="13sp" />
+
+
+    </info.hoang8f.android.segmented.SegmentedGroup>
+
+    <info.hoang8f.android.segmented.SegmentedGroup
+        android:id="@+id/segmented_rideInitial_DriverType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/segmented_rideInitial_carType"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="false"
+        android:layout_below="@+id/segmented_rideInitial_carType"
+        android:layout_marginTop="10dp"
+        android:checkedButton="@+id/iAmDriver_Button"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:visibility="visible"
+        app:sc_border_width="2dp"
+        app:sc_corner_radius="4dp"
+        app:sc_tint_color="@color/colorPrimary"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="169dp">
+
+        <RadioButton
+            android:id="@+id/iAmDriver_Button"
+            style="@style/RadioButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="I am the driver"
+            android:textAlignment="center"
+
+            android:textSize="13sp" />
+
+        <RadioButton
+            android:id="@+id/differentDriverButton"
+            style="@style/RadioButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Different driver"
+            android:textAlignment="center"
+            android:textSize="13sp" />
+
+
+    </info.hoang8f.android.segmented.SegmentedGroup>
+
+    <info.hoang8f.android.segmented.SegmentedGroup
+        android:id="@+id/segmented_rideInitial_rideType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/segmented_rideInitial_DriverType"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="false"
+        android:layout_below="@+id/segmented_rideInitial_DriverType"
+        android:layout_marginTop="20dp"
+        android:checkedButton="@+id/Once_Button"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        app:sc_border_width="2dp"
+        app:sc_corner_radius="4dp"
+        app:sc_tint_color="@color/colorPrimary"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="169dp">
+
+        <RadioButton
+            android:id="@+id/Once_Button"
+            style="@style/RadioButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Once"
+            android:textAlignment="center"
+
+            android:textSize="13sp" />
+
+        <RadioButton
+            android:id="@+id/Repeated_Button"
+            style="@style/RadioButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Repeated"
+            android:textAlignment="center"
+            android:textSize="13sp" />
+
+
+    </info.hoang8f.android.segmented.SegmentedGroup>
+
+
+    <ImageView
+        android:id="@+id/imageView10"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="19dp"
+        app:srcCompat="@drawable/student_mode" />
+
+    <TextView
+        android:id="@+id/name_createRide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imageView10"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="101dp"
+        android:layout_marginTop="23dp"
+        android:text="name"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/student_id_rideInitial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/name_createRide"
+        android:layout_alignParentTop="false"
+        android:layout_below="@+id/name_createRide"
+        android:layout_marginTop="5dp"
+        android:text="id"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/name_createRide"
+        android:layout_marginEnd="18dp"
+        android:text="Contact number:"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/segmented_rideInitial_rideType"
+        android:layout_marginTop="22dp"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <com.aigestudio.wheelpicker.WheelPicker
+            android:id="@+id/wheel_hour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            aigestudio:wheel_atmospheric="true"
+            aigestudio:wheel_curved="true"
+            aigestudio:wheel_indicator="true"
+            aigestudio:wheel_indicator_color="@android:color/black"
+            aigestudio:wheel_indicator_size="1dp"
+            aigestudio:wheel_item_text_color="@android:color/white"
+            aigestudio:wheel_item_text_size="25sp"
+            aigestudio:wheel_selected_item_text_color="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.aigestudio.wheelpicker.WheelPicker
+            android:id="@+id/wheel_minute"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/wheel_hour"
+            android:layout_gravity="center"
+            android:layout_toEndOf="@+id/wheel_hour"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            aigestudio:layout_constraintBottom_toBottomOf="parent"
+            aigestudio:layout_constraintLeft_toLeftOf="parent"
+            aigestudio:layout_constraintRight_toRightOf="parent"
+            aigestudio:layout_constraintTop_toTopOf="parent"
+            aigestudio:wheel_atmospheric="true"
+            aigestudio:wheel_curved="true"
+            aigestudio:wheel_indicator="true"
+            aigestudio:wheel_indicator_color="@android:color/black"
+            aigestudio:wheel_indicator_size="1dp"
+            aigestudio:wheel_item_text_color="@android:color/white"
+            aigestudio:wheel_item_text_size="25sp"
+            aigestudio:wheel_selected_item_text_color="@android:color/white" />
+
+        <com.aigestudio.wheelpicker.WheelPicker
+            android:id="@+id/wheel_time_suffix"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/wheel_hour"
+            android:layout_gravity="center"
+            android:layout_toEndOf="@+id/wheel_minute"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            aigestudio:layout_constraintBottom_toBottomOf="parent"
+            aigestudio:layout_constraintLeft_toLeftOf="parent"
+            aigestudio:layout_constraintRight_toRightOf="parent"
+            aigestudio:layout_constraintTop_toTopOf="parent"
+            aigestudio:wheel_atmospheric="true"
+            aigestudio:wheel_curved="true"
+            aigestudio:wheel_indicator="true"
+            aigestudio:wheel_indicator_color="@android:color/black"
+            aigestudio:wheel_indicator_size="1dp"
+            aigestudio:wheel_item_text_color="@android:color/white"
+            aigestudio:wheel_item_text_size="25sp"
+            aigestudio:wheel_selected_item_text_color="@android:color/white" />
+
+    </LinearLayout>
+    "/>
+
+</RelativeLayout>

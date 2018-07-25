@@ -1,5 +1,6 @@
 package com.btb.nixorstudentapplication.Carpool.Fragments_For_Tabs;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.btb.nixorstudentapplication.Carpool.CreateRide_Initial;
 import com.btb.nixorstudentapplication.R;
 
 public class MyRides_Fragment extends Fragment {
@@ -23,6 +25,12 @@ public class MyRides_Fragment extends Fragment {
         rvAdaptor = new RV_Adaptor_2(DisplayRequest());
          \rv.setAdapter(rvAdaptor);*/
         createRide = view.findViewById(R.id.create_ride);
+        createRide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), CreateRide_Initial.class ));
+            }
+        });
         return view;
 
     }

@@ -186,7 +186,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:checkedButton="@+id/AllButton_PastPapers"
+                android:checkedButton="@+id/Taxi_Button"
                 android:orientation="horizontal"
                 segmentedgroup:sc_border_width="2dp"
                 segmentedgroup:sc_corner_radius="10dp"
@@ -195,7 +195,7 @@
                 tools:layout_editor_absoluteY="169dp">
 
                 <RadioButton
-                    android:id="@+id/AllButton_PastPapers"
+                    android:id="@+id/Taxi_Button"
                     style="@style/RadioButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
