@@ -7,6 +7,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".Misc.StarterApplication"
@@ -17,6 +21,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
         <meta-data
             android:name="firebase_performance_collection_deactivated"
             android:value="true" />
@@ -105,14 +115,14 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Carpool.CreateRide_Initial"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".Carpool.CreateRide_Continued"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Carpool.CreateRide_Continued"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        </activity>
+        <activity android:name=".testFunc.Test_Activity">
+
         </activity>
     </application>
 

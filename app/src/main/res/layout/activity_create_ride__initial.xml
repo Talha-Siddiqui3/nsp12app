@@ -28,8 +28,7 @@
             android:paddingEnd="10dp"
             android:text="Next"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="18sp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -552,5 +551,9 @@
         aigestudio:color_tick="@android:color/white"
         aigestudio:color_unchecked_stroke="@color/colorAccent"
         aigestudio:small_tick="false" />
+
+
+
+
 
 </RelativeLayout>

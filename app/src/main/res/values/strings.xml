@@ -257,4 +257,8 @@
     //ImageViewer
     //Java
     <string name="lastImageSelected">No more images</string>
+
+
+    //api key
+    <string name="google_maps_key">AIzaSyB3vVOtFvwUR47jxjDws1_BEUQxuH7EDo8</string>
 </resources>
