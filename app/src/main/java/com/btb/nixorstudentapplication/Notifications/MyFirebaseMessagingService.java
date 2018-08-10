@@ -31,32 +31,39 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.i(TAG, "From: " + remoteMessage.getFrom());
 
+        //Log.i(TAG, "Message data payload: " + remoteMessage.getNotification().getBody());
+
+
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.i(TAG, "Message data payload: " + remoteMessage.getData());
 
-
-            // Check if message contains a notification payload.
-            if (remoteMessage.getNotification() != null) {
-                Log.i(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, null);
-                mBuilder.setVibrate(new long[]{500,500,500,500});
-                mBuilder.setSmallIcon(R.drawable.shark_image);
-                mBuilder.setColor(getResources().getColor(R.color.colorPrimaryDark));
-                mBuilder.setContentTitle(remoteMessage.getNotification().getTitle());
-                mBuilder.setContentText(remoteMessage.getNotification().getBody());
-                mBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-// notificationId is a unique int for each notification that you must define
-                notificationManager.notify(Main_Activity_Ta_Tab.i, mBuilder.build());
-                Main_Activity_Ta_Tab.i += 1;
-                Log.i(TAG, String.valueOf(Main_Activity_Ta_Tab.i));
-            }
-
-            // Also if you intend on generating your own notifications as a result of a received FCM
-            // message, here is where that should be initiated. See sendNotification
         }
+        // Check if message contains a notification payload.
+        if (remoteMessage.getNotification() != null) {
+            Log.i(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, null);
+            mBuilder.setVibrate(new long[]{500, 500, 500, 500});
+            mBuilder.setSmallIcon(R.drawable.shark_image);
+            mBuilder.setColor(getResources().getColor(R.color.colorPrimaryDark));
+            if (remoteMessage.getNotification().getTitle().equals("")) {
+                mBuilder.setContentTitle("Nixor Student Application");
+            } else {
+                mBuilder.setContentTitle(remoteMessage.getNotification().getTitle());
+            }
+            mBuilder.setContentText(remoteMessage.getNotification().getBody());
+            mBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+// notificationId is a unique int for each notification that you must define
+            notificationManager.notify(Main_Activity_Ta_Tab.i, mBuilder.build());
+            Main_Activity_Ta_Tab.i += 1;
+            Log.i(TAG, String.valueOf(Main_Activity_Ta_Tab.i));
+        }
+
+        // Also if you intend on generating your own notifications as a result of a received FCM
+        // message, here is where that should be initiated. See sendNotification
+
     }
 
 }

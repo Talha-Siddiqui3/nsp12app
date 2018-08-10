@@ -130,7 +130,7 @@ public class AccountType extends AppCompatActivity implements View.OnClickListen
 
         tokenForMessageing = FirebaseInstanceId.getInstance().getToken();
         StudentFirebaseTokens = new ArrayList<>();
-        dr = FirebaseFirestore.getInstance().collection("/users").document("talha-siddiqui");
+        dr = FirebaseFirestore.getInstance().collection("/users").document("talha-siddiqui");//TODO:IMPORTANT CHANGE THIS
         final Map<String, Object> uploadData = new HashMap<>();
 
         dr.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

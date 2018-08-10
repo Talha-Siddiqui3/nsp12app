@@ -1,7 +1,6 @@
 package com.btb.nixorstudentapplication.Sharks_on_cloud;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,33 +8,34 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ProgressBar;
 
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.Misc.imageHelper;
 import com.btb.nixorstudentapplication.Misc.permission_util;
-import com.btb.nixorstudentapplication.Nsp_Portal.NspPortalPdf;
 import com.btb.nixorstudentapplication.R;
-import com.btb.nixorstudentapplication.Sharks_on_cloud.Adaptors.BucketData_Adaptor;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.Adaptors.BucketDataGridView_Adaptor;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.Misc.ASync_Listener;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.Misc.checkedListener;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.Misc.image_upload_Async;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes.Buckets;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes.Subjects_homescreen;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Objects.BucketDataObject;
-import com.btb.nixorstudentapplication.Sharks_on_cloud.Objects.BucketsObject;
+import com.btb.nixorstudentapplication.GeneralLayout.activity_header;
 import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
 import com.darsh.multipleimageselect.helpers.Constants;
 import com.darsh.multipleimageselect.models.Image;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.github.jlmd.animatedcircleloadingview.AnimatedCircleLoadingView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -43,111 +43,161 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import static com.btb.nixorstudentapplication.Application_Home.home_screen.db;
 import static com.btb.nixorstudentapplication.Misc.UriToPath.getPathFromUri;
 import static com.btb.nixorstudentapplication.Misc.imageHelper.compressScaledBitmap;
 
-public class MyBucket extends AppCompatActivity {
+public class MyBucket extends AppCompatActivity implements View.OnClickListener {
     private CollectionReference bucketCr;
     private DocumentReference usernameCr;
     private common_util cu;
     private String year;
     private String subject;
     private String username;
-    private Intent i;
-    private RecyclerView rv;
+    private Intent intent;
+    private GridView gv;
     private FloatingActionButton newFolder;
     private FloatingActionButton uploadFile;
     private FloatingActionMenu menu;
     private ProgressBar loading;
-    public static final int GALLERY_INTENT = 2;
+    private AnimatedCircleLoadingView circleLoading;
+    public final int GALLERY_INTENT = 2;
     private StorageReference mstorage;
-    private ArrayList<BucketDataObject> bucketDataObjects;
-    private ArrayList<String> photoUrlsImageViewver;
+    private ArrayList<BucketDataObject> bucketDataObjects = new ArrayList<>();
+    private ArrayList<String> folderNames = new ArrayList<>();
+    private ArrayList<String> bucketIds = new ArrayList<>();
+    private ArrayList<String> photoUrlsImageViewver = new ArrayList<>();
     private BucketDataObject bucketDataObject;
-    private BucketData_Adaptor bucketData_adaptor;
+    private BucketDataGridView_Adaptor bucketDataGridView_adaptor;
     private Boolean isInitialData = false;
     private Handler mHandler = new Handler();
-    DocumentReference foldersdoc;
-    DocumentReference folderNamesdoc;
-    boolean isDataRemoved = false;
-    boolean isDataAdded = false;
-    public static Activity context;
-    NotificationManagerCompat notificationManager;
-    NotificationCompat.Builder mBuilder;
-    static HashMap<Integer, Boolean> notificationsMap;
-    static int notificationCounter = -1;
-    permission_util pm = new permission_util();
+    private DocumentReference foldersdoc;
+    private DocumentReference folderNamesdoc;
+    private Activity context;
+    private boolean myBucket = false;
+    private activity_header activity_header;
+    private Button trashButton;
+    /* NotificationManagerCompat notificationManager;
+     NotificationCompat.Builder mBuilder;
+     HashMap<Integer, Boolean> notificationsMap;
+     int notificationCounter = -1;*/
+    private permission_util pm = new permission_util();
+    private WriteBatch writeBatchFiles = db.batch();
+    private WriteBatch writeBatchFolders = db.batch();
+    private String currentCollectionReferenece;
+    private String bucketType;
+    private boolean isWriteBatchFilesTrue = false;
+    private boolean isWriteBatchFoldersTrue = false;
+
 
     //ImageSelector
-    private int imageLimit = 6;
+    private int imageLimit = 50;
     private String TAG = "MYBUCKET";
-    private int imageWidthCompressed = 800;
-    private int imageWidthThumbnail = 200;
+    private final int imageWidthCompressed = 800;
+    private final int imageWidthThumbnail = 200;
     private ArrayList<String> imagesUri = new ArrayList<String>();
     private ArrayList<String> imagesFilesNames = new ArrayList<String>();
     private int countImagesUploaded = 0;
     private HashMap<String, Integer> imagesMap;
     private HashMap<String, String> imagesTypeUrls;
+    private int countImagesBatched = 0;
+    private int countImagesFailedToUpload = 0;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_bucket);
+        activity_header = findViewById(R.id.toolbar_top_BucketData);
         context = this;
+        cu = new common_util();
+        getIntentInfo();
+        gv = findViewById(R.id.GridView_MyBucket);
         loading = findViewById(R.id.progressBar_myBucket);
+        isInitialData = true;
+        getPermissions();
+        setFirebaseReferences();
+        getBucketData();
+
+
+    }
+
+    private void getIntentInfo() {
+        intent = getIntent();
+        subject = intent.getStringExtra("subject");
+        year = intent.getStringExtra("year");
+        bucketType = intent.getStringExtra("type");
+        if (bucketType.equals("myBucket")) {
+            setMyBucket();
+            username = cu.getUserDataLocally(this, "username");//TODO: CHANGE THIS
+        } else {
+            username = intent.getStringExtra("username");
+            activity_header.setActivityname(username + "'s" + " bucket");
+        }
+    }
+
+    private void setMyBucket() {
+        activity_header.setActivityname("My Bucket");
         newFolder = findViewById(R.id.newFolder);
         uploadFile = findViewById(R.id.uploadFile);
         menu = findViewById(R.id.floating_menu);
+        circleLoading = findViewById(R.id.circle_loading_view);
+        trashButton = findViewById(R.id.trash_button_BucketData);
+        trashButton.setOnClickListener(this);
         mstorage = FirebaseStorage.getInstance().getReference();
-        rv = (RecyclerView) findViewById(R.id.mybucket_recyclerview);
-        rv.setLayoutManager(new LinearLayoutManager(this));
-        rv.setHasFixedSize(true);
-        rv.setItemViewCacheSize(20);
-        rv.setDrawingCacheEnabled(true);
-        rv.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-        isInitialData = true;
-        cu = new common_util();
+        setLoadingAnimationListener();
+        setListeners();
+        myBucket = true;
+    }
 
-        String[] permissions = {android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        pm.getPermissions(this, permissions);
+    private void setLoadingAnimationListener() {
+        circleLoading.setAnimationListener(new AnimatedCircleLoadingView.AnimationListener() {
+            @Override
+            public void onAnimationEnd(boolean success) {
+                circleLoading.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
 
 
-        year = cu.getUserDataLocally(this, "year");
-        setYear();
-        username = cu.getUserDataLocally(this, "username");
-        i = getIntent();
-        subject = i.getStringExtra("subject");
-        bucketCr = FirebaseFirestore.getInstance().collection("SharksOnCloud").document(year).collection("Subjects").document(subject)
-                .collection("Users").document(username).collection("Buckets");
+    private void setFirebaseReferences() {
+        bucketCr = generateBucketReference();
         usernameCr = FirebaseFirestore.getInstance().collection("SharksOnCloud").document(year).collection("Subjects").document(subject)
                 .collection("Users").document(username);
         foldersdoc = bucketCr.document("Folders");
         folderNamesdoc = bucketCr.document("Folder Names");
-        getBucketData();
-        setListeners();
+    }
 
+
+    private void getPermissions() {
+        String[] permissions = {android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        pm.getPermissions(this, permissions);
 
     }
 
@@ -216,7 +266,7 @@ public class MyBucket extends AppCompatActivity {
 
     //MARK: Method to upload each individual image to firebase storage
     private void uploadImageToFirebaseStorage(final String filename, Bitmap bmThumb, Bitmap bmCompressed) {
-        final NotificationClass nc = new NotificationClass(context, notificationCounter);
+        //final NotificationClass nc = new NotificationClass(context, notificationCounter);
         final String uniqueFileName = FirebaseDatabase.getInstance().getReference().child("SOCPushIDS").push().getKey();
         FirebaseDatabase.getInstance().getReference().child("SOCPushIDS").push().setValue("USED");
         imagesMap.put(uniqueFileName, 0);
@@ -272,7 +322,6 @@ public class MyBucket extends AppCompatActivity {
 
                         errorUploadingImage(exception, filenameThumb);
 
-
                     }
                 });
     }
@@ -281,6 +330,8 @@ public class MyBucket extends AppCompatActivity {
     //MARK: Error handling for failed upload
     private void errorUploadingImage(Exception e, String filename) {
         //TODO: Display alert
+        countImagesFailedToUpload++;
+        Log.i("FAILED", String.valueOf(countImagesFailedToUpload));
     }
 
 
@@ -306,7 +357,7 @@ public class MyBucket extends AppCompatActivity {
     private void prepareUrls(HashMap<String, String> imagesTypeUrls, String uniqueFileName) {
         String thumbName = uniqueFileName + "_thumb";
         String compressedName = uniqueFileName + "_compressed";
-        if (imagesMap.get(uniqueFileName) == 2 && imagesTypeUrls.containsKey(thumbName) && imagesTypeUrls.containsKey(thumbName)) {
+        if (imagesMap.get(uniqueFileName) == 2 && imagesTypeUrls.containsKey(thumbName) && imagesTypeUrls.containsKey(compressedName)) {
             uploadUrls(imagesTypeUrls.get(compressedName), imagesTypeUrls.get(thumbName), uniqueFileName);
         }
 
@@ -319,23 +370,33 @@ public class MyBucket extends AppCompatActivity {
         map.put("PhotoUrlImageViewver", compUrl);
         map.put("PhotoUrlThumbnail", thumbUrl);
         map.put("Date", FieldValue.serverTimestamp());
-        bucketCr.document(name).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                countImagesUploaded++;
-                if (countImagesUploaded == (imagesUri.size() * 2)) {
-                    allImagesUploaded();
+        writeBatchFiles.set(bucketCr.document(name), map);
+        countImagesBatched++;
+        float currentPercent = ((float) countImagesBatched / (imagesUri.size() - countImagesFailedToUpload)) * 100;
+        circleLoading.setPercent((int) currentPercent);
+        if (countImagesBatched == imagesUri.size() - countImagesFailedToUpload) {
+            writeBatchFiles.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    countImagesUploaded++;
+                    if (countImagesUploaded == (imagesUri.size() * 2)) {
+                        allImagesUploaded();
+                    }
+
+                    // loading.setVisibility(View.INVISIBLE);
+                    writeBatchFiles = db.batch();
                 }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
 
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
+                    //TODO: Add alert for failed upload
+                    cu.ToasterLong(MyBucket.this, "UNFORTUNATELY UPLOAD FAILED");
+                }
+            });
 
-                //TODO: Add alert for failed upload
-                cu.ToasterLong(MyBucket.this, "UNFORTUNATELY UPLOAD FAILED");
-            }
-        });
+        }
+
     }
 
 
@@ -343,6 +404,10 @@ public class MyBucket extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == GALLERY_INTENT && resultCode == RESULT_OK && data != null) {
             closeMenu();
+            //loading.setVisibility(View.VISIBLE);
+            circleLoading.setVisibility(View.VISIBLE);
+            circleLoading.startDeterminate();
+            circleLoading.setPercent(0);
             ArrayList<Image> images = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
 
 
@@ -350,6 +415,9 @@ public class MyBucket extends AppCompatActivity {
             imagesFilesNames = new ArrayList<String>();
             imagesMap = new HashMap<>();
             imagesTypeUrls = new HashMap<>();
+            countImagesBatched = 0;
+            countImagesFailedToUpload = 0;
+            countImagesUploaded = 0;
 
 
             //We are basically getting the URI of each image the user has selected
@@ -362,10 +430,20 @@ public class MyBucket extends AppCompatActivity {
             //Image has been selected
             if (imagesUri.size() != 0) {
                 //TODO:Display uploading images and add a cancel button
+                image_upload_Async task = new image_upload_Async();
+                task.imagesFilesNames = imagesFilesNames;
+                task.imagesUri = imagesUri;
+                task.context = new WeakReference<Activity>(context);
+                task.aSync_listener = new ASync_Listener() {
+                    @Override
+                    public void onResponseReceive(String filename, Bitmap compressedImage, Bitmap thumbnailImage) {
+                        uploadImageToFirebaseStorage(filename, thumbnailImage, compressedImage);
+                        Log.i(TAG, "DONE");
+                    }
+                };
+                task.execute();
 
-                //TODO: Add an upload button
-                uploadSelectedImages();
-
+                //uploadSelectedImages();
 
             }
         }
@@ -424,6 +502,7 @@ public class MyBucket extends AppCompatActivity {
     private void uploadFolder(final String folderName) {
         final Map<String, Object> map = new HashMap<>();
 
+
         folderNamesdoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -432,66 +511,21 @@ public class MyBucket extends AppCompatActivity {
                     folderNamesList = (ArrayList<String>) task.getResult().get("FolderNames");
                     folderNamesList.add(folderName);
                     map.put("FolderNames", folderNamesList);
-                    folderNamesdoc.set(map);
+                    folderNamesdoc.set(map, SetOptions.merge());
+
 
                 } else {
                     ArrayList<String> folderNamesList = new ArrayList<>();
                     folderNamesList.add(folderName);
                     map.put("FolderNames", folderNamesList);
-                    folderNamesdoc.set(map);
+                    Timestamp tempTimestamp = new Timestamp(new Date(1754424836000L));
+                    map.put("Date", tempTimestamp);
+                    folderNamesdoc.set(map, SetOptions.merge());
                 }
             }
         });
 
     }
-
-
-//
-//
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == GALLERY_INTENT && resultCode == RESULT_OK) {
-//            notificationCounter+=1;
-//            notificationsMap.put(notificationCounter,true);
-//            closeMenu();
-//            final Uri uri = data.getData();
-//            final StorageReference ref = mstorage.child("SOC").child(year).child(subject).child(username).child(uri.getLastPathSegment());
-//            final UploadTask uploadTask = ref.putFile(uri);
-//            uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-//                @Override
-//                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-//                    boolean done = false;
-//                    double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-//                    if (progress >= 100) {
-//                        done = true;
-//                    }
-//                    uploadNotification(uri.getLastPathSegment(), (int) progress, done,notificationCounter,notificationsMap.get(notificationCounter));
-//                   notificationsMap.put(notificationCounter,false);
-//                }
-//            })
-//                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                        @Override
-//                        public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
-//                            ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-//                                @Override
-//                                public void onComplete(@NonNull Task<Uri> task) {
-//                                    if (task.isSuccessful()) {
-//                                        prepareUrls(task.getResult().toString(), uri.getLastPathSegment());
-//                                    } else {
-//                                        cu.ToasterLong(MyBucket.this, "Upload Failed");
-//                                    }
-//                                }
-//                            });
-//                        }
-//                    }).addOnFailureListener(new OnFailureListener() {
-//                @Override
-//                public void onFailure(@NonNull Exception e) {
-//                    cu.ToasterLong(MyBucket.this, "Upload Failed");
-//                }
-//            });
-//        }
-//    }
 
 
     private void checkIfDummyFieldExists() {
@@ -502,8 +536,8 @@ public class MyBucket extends AppCompatActivity {
         //            DocumentSnapshot document = task.getResult();
         //          if (document.exists()) {
         //            //cu.ToasterLong(MyBucket.this, "Upload Completed Succesfully");
-        //          loading.setVisibility(View.INVISIBLE);
-        //        menu.setVisibility(View.VISIBLE);
+        // loading.setVisibility(View.INVISIBLE);
+        //menu.setVisibility(View.VISIBLE);
         //  } else {
         AddDummyField();
         //}
@@ -517,6 +551,8 @@ public class MyBucket extends AppCompatActivity {
     private void AddDummyField() {
         Map<String, Object> dummyMap = new HashMap<>();
         dummyMap.put("Dummy", "DUMMY");
+        dummyMap.put("student_name",cu.getUserDataLocally(this,"name"));
+        dummyMap.put("className",getStudentClass());
         usernameCr.set(dummyMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -526,58 +562,39 @@ public class MyBucket extends AppCompatActivity {
         });
     }
 
-    private void setYear() {
-        if (year.equals("2020")) {
-            year = "AS";
-        } else {
-            year = "A2";
-        }
+    private String getStudentClass() {
+        String studentClass="";
+        List<String> subjects=new ArrayList<String>(cu.getUserDataLocallyHashSet(this,"student_subjects"));
+        List<String> classes=new ArrayList<String>(cu.getUserDataLocallyHashSet(this,"student_classes"));
+        Log.i("CHECK KR LOU",subjects.toString());
+        Log.i("CHECK KR LOU",classes.toString());
+        int classPos=subjects.indexOf(subject);
+        studentClass=classes.get(classPos).substring(3);
+        return  studentClass;
     }
 
 
-    //Any way to not copy paste this? xD
     private void getBucketData() {
-        bucketDataObjects = new ArrayList<>();
-        photoUrlsImageViewver = new ArrayList<>();
 
-        bucketCr.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        bucketCr.orderBy("Date", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 Log.i("IMPORTANT", queryDocumentSnapshots.getMetadata().toString());
                 if (e != null || queryDocumentSnapshots.isEmpty()) {
-                    checkIfDummyFieldExists();
-                } /*else if (queryDocumentSnapshots.getDocuments().isEmpty()) {
-                    deleteBucket(username, context);
-                }*/ else {
-
-                    for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
-                        if (isInitialData) {
-                            genericGetData(dc);
-                            loading.setVisibility(View.INVISIBLE);
-                            menu.setVisibility(View.VISIBLE);
-                        } else {
-                            Log.i(TAG,dc.getDocument().getMetadata().toString());
-                            switch (dc.getType()) {
-                                case ADDED:
-                                    Log.i(TAG, "Added Called");
-                                    genericGetData(dc);
-                                    break;
-                                case MODIFIED:
-                                    Log.i(TAG, "Modified Called");
-                                    genericGetData(dc);
-                                    break;
-                                case REMOVED:
-                                    Log.i(TAG, "REMOVE Called");
-                                    genericRemoveData(dc);
-                                    break;
-                            }
-                        }
+                    if (myBucket) {
+                        checkIfDummyFieldExists();
+                    }
+                } else {
+                    bucketDataObjects.clear();
+                    photoUrlsImageViewver.clear();
+                    bucketIds.clear();
+                    folderNames.clear();
+                    for (DocumentSnapshot dc : queryDocumentSnapshots.getDocuments()) {
+                        genericGetData(dc);
                     }
                 }
 
-
                 initializeAdaptorBucketData(bucketDataObjects, photoUrlsImageViewver, isInitialData);
-
                 isInitialData = false;
             }
         });
@@ -598,16 +615,27 @@ public class MyBucket extends AppCompatActivity {
     }
 
 
-    private void genericRemoveData(DocumentChange dc) {
-
+    private void deleteItems() {
         for (int i = 0; i < bucketDataObjects.size(); i++) {
-            if (bucketDataObjects.get(i).getName() == dc.getDocument().get("Name")) {
-                bucketDataObjects.remove(i);
+            if (bucketDataGridView_adaptor.getCheckedItem(i) == true) {
+                Log.i("123", "CHECKED HAI");
+                if (bucketDataObjects.get(i).isFolder()) {
+                    isWriteBatchFoldersTrue = true;
+                    HashMap<String, Object> tempmap = new HashMap<>();
+                    folderNames.remove(bucketDataObjects.get(i).getName());
+                    tempmap.put("FolderNames", folderNames);
+                    writeBatchFolders.set(folderNamesdoc, tempmap, SetOptions.merge());
+                } else {
+                    isWriteBatchFilesTrue = true;
+                    writeBatchFiles.delete(bucketCr.document(bucketDataObjects.get(i).getID()));
+                }
+            } else {
+                Log.i("123", "CHECKED NHI");
             }
         }
-if(bucketDataObjects.size()==1){
-        showLastItemWarning();
-}
+        /*if (bucketDataObjects.size() == 1) {
+            showLastItemWarning();
+        }*///TODO: ASK HASSASN WHAT TO DO WHEN ALL ITEMS DELETED
 
     }
 
@@ -634,101 +662,84 @@ if(bucketDataObjects.size()==1){
     }
 
 
-    private void genericGetData(DocumentChange dc) {
-        bucketDataObject = new BucketDataObject();
-        if (dc.getDocument().getId().equals("Folders") || dc.getDocument().getId().equals("Folder Names")) {
-            if (dc.getDocument().getId().equals("Folder Names")) {
-                ArrayList<String> tempArray = new ArrayList<>();
-                tempArray = (ArrayList<String>) dc.getDocument().get("FolderNames");
-                for (int j = 0; j < tempArray.size(); j++) {
+    private void genericGetData(DocumentSnapshot documentSnapshot) {
+
+        if (documentSnapshot.getId().equals("Folder Names")) {
+            ArrayList<String> tempArray = new ArrayList<>();
+            tempArray = (ArrayList<String>) documentSnapshot.get("FolderNames");
+            for (int j = 0; j < tempArray.size(); j++) {
+                if (!folderNames.contains(tempArray.get(j))) {
                     bucketDataObject = new BucketDataObject();
                     bucketDataObject.setName(tempArray.get(j));
                     bucketDataObject.setFolder(true);
-                    if (isInitialData) {
-                        bucketDataObjects.add(bucketDataObject);
-                        photoUrlsImageViewver.add(null);
-                    } else {
-                        boolean found = false;
-                        int k = 0;
-                        int folderCount = 0;
-                        while (k < bucketDataObjects.size() && found == false) {
-                            if (bucketDataObjects.get(k).getName().equals(bucketDataObject.getName()) && bucketDataObjects.get(k).isFolder()) {
-                                found = true;
-                            }
-                            if (bucketDataObjects.get(k).isFolder()) {
-                                folderCount += 1;
-                            }
-                            k += 1;
-                        }
-                        if (found == false || folderCount == 0) {
-                            bucketDataObjects.add(bucketDataObject);
-                            photoUrlsImageViewver.add(null);
-
-                        }
-                    }
-                }
-            }
-        } else {
-            bucketDataObject.setName(dc.getDocument().get("Name").toString());
-            if (dc.getDocument().getTimestamp("Date") != null) {
-                Timestamp timestamp = dc.getDocument().getTimestamp("Date");
-                bucketDataObject.setDate(timestamp.toDate());
-
-            }
-            if (dc.getDocument().get("PhotoUrlThumbnail") != null) {
-                bucketDataObject.setPhotoUrlThumbnail(dc.getDocument().get("PhotoUrlThumbnail").toString());
-            } else {
-                bucketDataObject.setPhotoUrlThumbnail(null);
-
-            }
-            bucketDataObject.setFolder(false);
-            if (isInitialData) {
-                bucketDataObjects.add(bucketDataObject);
-                if (dc.getDocument().get("PhotoUrlImageViewver") != null) {
-                    photoUrlsImageViewver.add(dc.getDocument().get("PhotoUrlImageViewver").toString());
-                } else {
+                    folderNames.add(tempArray.get(j));
+                    bucketDataObjects.add(bucketDataObject);
                     photoUrlsImageViewver.add(null);
                 }
-            } else {
-                boolean found = false;
-                int k = 0;
-                int fileCount = 0;
-                while (k < bucketDataObjects.size() && found == false) {
-                    if (bucketDataObjects.get(k).getName().equals(bucketDataObject.getName()) && !bucketDataObjects.get(k).isFolder()) {
-                        found = true;
-                        bucketDataObjects.get(k).setPhotoUrlThumbnail(bucketDataObject.getPhotoUrlThumbnail());
-                        if (dc.getDocument().get("PhotoUrlImageViewver") != null) {
-                            photoUrlsImageViewver.set(k, dc.getDocument().get("PhotoUrlImageViewver").toString());
-                        } else {
-                            photoUrlsImageViewver.add(null);
-                        }
-                    }
-                    if (!bucketDataObjects.get(k).isFolder()) {
-                        fileCount = fileCount + 1;
-                    }
-                    k += 1;
-                }
-                if (found == false || fileCount == 0) {
-                    bucketDataObjects.add(bucketDataObject);
-                    if (dc.getDocument().get("PhotoUrlImageViewver") != null) {
-                        photoUrlsImageViewver.add(dc.getDocument().get("PhotoUrlImageViewver").toString());
-                    } else {
-                        photoUrlsImageViewver.add(null);
-                    }
-                }
+            }
+
+        } else {
+            if (!bucketIds.contains(documentSnapshot.getId()) && documentSnapshot.getTimestamp("Date") != null) {
+                bucketDataObject = new BucketDataObject();
+                bucketDataObject.setName(setName(documentSnapshot));
+                bucketDataObject.setDateTimeStamp(documentSnapshot.getTimestamp("Date"));
+                bucketDataObject.setPhotoUrlThumbnail((String) documentSnapshot.get("PhotoUrlThumbnail"));
+                bucketDataObject.setFolder(false);
+                bucketDataObject.setID(documentSnapshot.getId());
+                bucketDataObjects.add(bucketDataObject);
+                photoUrlsImageViewver.add((String) documentSnapshot.get("PhotoUrlImageViewver"));
+                bucketIds.add(documentSnapshot.getId());
             }
         }
 
+
+    }
+
+    private String setName(DocumentSnapshot documentSnapshot) {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("d/MM/yyyy");
+        Date dateValue = documentSnapshot.getTimestamp("Date").toDate();
+        String dateString = dateFormatter.format(dateValue);
+        return dateString;
     }
 
     private void initializeAdaptorBucketData(ArrayList<BucketDataObject> bucketDataObjects, ArrayList<String> photoUrls, Boolean isInitialData) {
         if (isInitialData) {
-            bucketData_adaptor = new BucketData_Adaptor(bucketDataObjects, photoUrls, context);
-            rv.setAdapter(bucketData_adaptor);
+            bucketDataGridView_adaptor = new BucketDataGridView_Adaptor(bucketDataObjects, photoUrls, context, currentCollectionReferenece,
+                    year, subject, bucketType, username);
+            bucketDataGridView_adaptor.checkedListener = new checkedListener() {
+                @Override
+                public void onChecked(boolean checkedState) {
+                    if (checkedState == true) {
+                        trashButton.setVisibility(View.VISIBLE);
+                    }
+                }
+            };
+            gv.setAdapter(bucketDataGridView_adaptor);
         } else {
-            bucketData_adaptor.notifyDataSetChanged();
+            bucketDataGridView_adaptor.notifyDataSetChanged();
+        }
+        loading.setVisibility(View.INVISIBLE);
+        if (myBucket) {
+            menu.setVisibility(View.VISIBLE);
         }
     }
+
+
+    private CollectionReference generateBucketReference() {
+      /*  CollectionReference cr=FirebaseFirestore.getInstance().collection("SharksOnCloud").document(year).collection("Subjects").document(subject)
+                .collection("Users").document(username).collection("Buckets");
+      */
+        CollectionReference cr;
+        if (intent.getStringExtra("collectionReference") == null) {
+            currentCollectionReferenece = "SharksOnCloud" + "/" + year + "/" + "Subjects" + "/" + subject + "/" + "Users" + "/" + username + "/" + "Buckets";
+            cr = FirebaseFirestore.getInstance().collection(currentCollectionReferenece);
+        } else {
+            cr = FirebaseFirestore.getInstance().collection(intent.getStringExtra("collectionReference"));
+            currentCollectionReferenece = intent.getStringExtra("collectionReference");
+        }
+        return cr;
+    }
+
 
     public void closeMenu() {
         mHandler.postDelayed(new Runnable() {
@@ -738,7 +749,84 @@ if(bucketDataObjects.size()==1){
         }, 350);
     }
 
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.trash_button_BucketData) {
+            showDeleteItemsWarning();
+            cu.alterDialogListener = new common_util.alterDialogListener() {
+                @Override
+                public void getResult(String buttonClicked) {
+                    handleDeletionAfterWarning(buttonClicked);
+                }
+            };
+
+
+        }
+    }
+
+    private void handleDeletionAfterWarning(String buttonClicked) {
+        if (buttonClicked.equals("pos")) {
+            deleteItems();
+            clearSelections();
+            if (isWriteBatchFilesTrue) {
+                Log.i("123", "Commiting files");
+                writeBatchFiles.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            cu.ToasterShort(MyBucket.this, "Deleted Files Successfully");
+                        } else {
+                            cu.ToasterShort(MyBucket.this, "Failed to delete files please try again");
+                        }
+                        writeBatchFiles = db.batch();
+                        isWriteBatchFilesTrue = false;
+                    }
+                });
+            }
+            if (isWriteBatchFoldersTrue) {
+                writeBatchFolders.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            cu.ToasterShort(MyBucket.this, "Deleted Folders Successfully");
+                        } else {
+                            cu.ToasterShort(MyBucket.this, "Failed to delete files please try again");
+                        }
+                        writeBatchFolders = db.batch();
+                        isWriteBatchFoldersTrue = false;
+                    }
+
+                });
+            }
+
+        }
+
+    }
+
+    private void showDeleteItemsWarning() {
+        cu.showAlertDialogue("Yes", "null", "Cancel", this, "Warning", "Are you sure you want to delete all the selected items.?");
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (trashButton==null) {
+            super.onBackPressed();
+        }
+
+        else {
+            if(trashButton.getVisibility() == View.VISIBLE) {
+                clearSelections();
+            }
+            else{
+                super.onBackPressed();
+            }
+
+        }
+    }
+
+    private void clearSelections() {
+        bucketDataGridView_adaptor.resetCheckedItems();
+        trashButton.setVisibility(View.GONE);
+    }
 }
-//TODO:FIX ALREADY EXIST UPLOADS.
-//TODO:FIX IMAGEVIEW DISPLAY(eg remove deafult Economics Notes...etc.
-//TODO:Add Remove Button.
+

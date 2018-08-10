@@ -27,7 +27,7 @@
         android:background="@color/colorPrimary">
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/subjectName_ImageViewer"
             style="@style/sub_headings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -72,11 +72,11 @@
             android:background="@drawable/share_icon" />
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/name_ImageViewer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView5"
+            android:layout_below="@+id/subjectName_ImageViewer"
             android:layout_marginLeft="14dp"
             android:layout_marginTop="5dp"
             android:text="Hassan Abbasi's Bucket"
@@ -84,11 +84,11 @@
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/date_imageViewer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/name"
+            android:layout_below="@+id/name_ImageViewer"
             android:layout_marginLeft="14dp"
             android:layout_marginTop="5dp"
             android:text="12th June 2018"

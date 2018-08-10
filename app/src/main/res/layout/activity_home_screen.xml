@@ -64,17 +64,17 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/idStudent_textView"
-        android:layout_marginTop="30dp"
-        android:columnWidth="100dp"
+        android:layout_marginTop="@dimen/_28sdp"
+        android:columnWidth="@dimen/_80sdp"
         android:divider="@android:color/transparent"
-        android:dividerHeight="12.0sp"
+        android:dividerHeight="10dp"
         android:gravity="center"
         android:horizontalSpacing="10dp"
         android:numColumns="auto_fit"
         android:paddingTop="20dp"
         android:scrollbarThumbVertical="@android:color/transparent"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="10dp" />
+        android:verticalSpacing="@dimen/_25sdp" />
 
     <TextView
         android:id="@+id/nameStudent_textView"
@@ -98,7 +98,7 @@
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/imageView6"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="@dimen/_68sdp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:src="@drawable/bubbles" />
@@ -106,8 +106,8 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/student_photo"
         style="main_studentphoto"
-        android:layout_width="@dimen/main_studentphoto"
-        android:layout_height="@dimen/main_studentphoto"
+        android:layout_width="@dimen/_65sdp"
+        android:layout_height="@dimen/_60sdp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="35dp"

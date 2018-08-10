@@ -18,15 +18,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -34,29 +37,45 @@ import javax.annotation.Nullable;
 import info.hoang8f.android.segmented.SegmentedGroup;
 
 public class Buckets implements View.OnClickListener {
-    private static ArrayList<String> myClassBuckets;
-    private static ArrayList<BucketsObject> allBuckets;
+    private static ArrayList<String> myClassBuckets;//TODO: ADD THIS
+    private static ArrayList<BucketsObject> allBuckets = new ArrayList<>();
+    private ArrayList<String> bucketIds = new ArrayList<>();
     private static Buckets_Adaptor bucketsAdaptor;
-    private static BucketsObject bucketsObject;
+    private BucketsObject bucketsObject;
     public static SegmentedGroup bucketsButtons;// so that BucketData class can turn on/off these buttons.
     private Button myClasses;
     private Button mostRecent;
     private Button topRated;
     public static RelativeLayout my_Bucket;//// so that BucketData class can turn on/off this.
-    public static String subjectName;// need to access it in BucketDclass
-    Activity context;
+    public static String subjectName;// need to access it in BucketDataclass
+    private Activity context;
     private Boolean isInitialData;
+    private Boolean showMyBucket = false;
+    private HashMap<String, String> photoUrls = new HashMap<>();
+    private CollectionReference crUsers = FirebaseFirestore.getInstance().collection("/users");
+    public static String yearSelected;
 
     common_util cu = new common_util();
 
-    public Buckets(Activity context, View v, String subjectName) {
+    public Buckets(Activity context, View v, String subjectName, String yearSelected) {
         Soc_Main.ShowLoading();
         this.context = context;
+        this.yearSelected = yearSelected;
         RemovePreviousButtons(v);
         this.subjectName = subjectName;
+        checkIfMyBucket();
         GetAllBuckets(v);
         isInitialData = true;
 
+    }
+
+    private void checkIfMyBucket() {
+        Log.i("123456", subjectName);
+        if (Subjects_homescreen.mySubjectsWithYears.containsKey(subjectName)) {
+            if (Subjects_homescreen.mySubjectsWithYears.get(subjectName).equals(yearSelected)) {
+                showMyBucket = true;
+            }
+        }
     }
 
 
@@ -80,8 +99,10 @@ public class Buckets implements View.OnClickListener {
         bucketsButtons = v.findViewById(R.id.segmented_soc_classes);
         my_Bucket = v.findViewById(R.id.my_bucket_layout);
         bucketsButtons.setVisibility(View.VISIBLE);
-        my_Bucket.setVisibility(View.VISIBLE);
-        my_Bucket.setOnClickListener(this);
+        if (showMyBucket) {
+            my_Bucket.setVisibility(View.VISIBLE);
+            my_Bucket.setOnClickListener(this);
+        }
         myClasses.setOnClickListener(this);
         mostRecent.setOnClickListener(this);
         topRated.setOnClickListener(this);
@@ -90,29 +111,23 @@ public class Buckets implements View.OnClickListener {
 
     //MARK: It gets current Students's classes only
     private void GetAllBuckets(final View v) {
-        allBuckets = new ArrayList<>();
 
-        Soc_Main.socRoot.document(Subjects_homescreen.button_Selected).collection("Subjects").document(subjectName)
+        Soc_Main.socRoot.document(yearSelected).collection("Subjects").document(subjectName)
                 .collection("Users").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable final QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
-                if (queryDocumentSnapshots.isEmpty() && queryDocumentSnapshots != null) {
-                    bucketsObject = new BucketsObject();
-                    bucketsObject.setPhotoUrl(null);
-                    bucketsObject.setName("Empty List");
-                    allBuckets.add(0, bucketsObject);
+                if (queryDocumentSnapshots.isEmpty() && e != null) {
+                    setEmpty();
 
                     if (Soc_Main.isCurrentlyRunning.equals("Buckets")) {
                         initializeAdaptorAllBuckets(isInitialData);
-                        initializeButtons(v);
                         isInitialData = false;
                     }
 
                 } else {
-                    if (e == null) {
-                        int i = 0;
-                        genericGetData(allBuckets, queryDocumentSnapshots.getDocumentChanges(), isInitialData, v, i);
+                    if (e == null && Soc_Main.isCurrentlyRunning.equals("Buckets")) {
+                        getPhotoUrls(queryDocumentSnapshots.getDocuments(), v);
 
                     } else {
                         cu.ToasterLong(context, "Error retrieving data form Server");
@@ -121,6 +136,27 @@ public class Buckets implements View.OnClickListener {
 
             }
         });
+    }
+
+    private void setEmpty() {
+        bucketsObject = new BucketsObject();
+        bucketsObject.setPhotoUrl(null);
+        bucketsObject.setName("Empty List");
+        allBuckets.add(0, bucketsObject);
+    }
+
+    private void getPhotoUrls(final List<DocumentSnapshot> documents, final View v) {
+        crUsers.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for (int i = 0; i < task.getResult().getDocuments().size(); i++) {
+                    photoUrls.put(task.getResult().getDocuments().get(i).getId(), (String) task.getResult().getDocuments().get(i).get("photourl"));
+                }
+                genericGetData(documents, v);
+            }
+        });
+
+
     }
 
 
@@ -150,6 +186,8 @@ public class Buckets implements View.OnClickListener {
             case R.id.my_bucket_layout:
                 Intent i = new Intent(Soc_Main.context, MyBucket.class);
                 i.putExtra("subject", subjectName);
+                i.putExtra("year",yearSelected);
+                i.putExtra("type","myBucket");
                 Soc_Main.context.startActivity(i);
         }
     }
@@ -158,7 +196,11 @@ public class Buckets implements View.OnClickListener {
     public static void OnBackPressed(View v) {
         Soc_Main.isCurrentlyRunning = "Subjects_homescreen";//Providing back functionality for OnBackPressed in Soc_Main class(mainactvity).
         AddPreviousButtons(v);
-        Subjects_homescreen.initializeAdaptorMySubjects();
+        if (Subjects_homescreen.button_Selected.equals("AS") || Subjects_homescreen.button_Selected.equals("A2")) {
+            Subjects_homescreen.initializeAdaptorAllSubjects();
+        } else {
+            Subjects_homescreen.initializeAdaptorMySubjects();
+        }
         return;
     }
 
@@ -167,7 +209,7 @@ public class Buckets implements View.OnClickListener {
     //positon 0 holds true or false(exists or not exists)
     //position 1 holds the position of item in allbuckets only if the docuemnt exists in allbuckets
     //otherwise position 1 hold -1(indicating not exists so no available position in allbuckets array)
-    public static ArrayList<String> containsData(ArrayList<BucketsObject> bucketsObjects, String id) {
+   /* public static ArrayList<String> containsData(ArrayList<BucketsObject> bucketsObjects, String id) {
         ArrayList<String> arr = new ArrayList<>();
         Log.i("AFSAF", id);
         for (int i = 0; i < bucketsObjects.size(); i++) {
@@ -180,9 +222,9 @@ public class Buckets implements View.OnClickListener {
         arr.add(0, "false");
         arr.add(1, String.valueOf(-1));//-1 means false(just an additional way to know if it is false)
         return arr;
-    }
+    }*/
 
-
+/*
     public void handleNonInitialData(final List<DocumentChange> documentChanges, final int I, String photoUrl) {
         //checking data change and dealing with it accordingly.
         String id = documentChanges.get(I).getDocument().getId();
@@ -209,51 +251,37 @@ public class Buckets implements View.OnClickListener {
                 }
                 break;
         }
-    }
+    }*/
 
 
-    public void genericGetData(final ArrayList<BucketsObject> allBuckets, final List<DocumentChange> documentChanges, final boolean initialdata, final View v, int i) {
+    public void genericGetData(List<DocumentSnapshot> documents, View v) {
+        allBuckets.clear();
+        bucketIds.clear();
         if (Soc_Main.isCurrentlyRunning.equals("Buckets")) {
             bucketsObject = new BucketsObject();
-            final int I = i;//just a temp final variable so i can access it in inner class methods
-            //TODO:CHANGE SOURCE CACHE.
-            Soc_Main.usersRoot.document(documentChanges.get(i).getDocument().getId()).get(Source.CACHE).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    String photoUrl;
-                    String id=documentChanges.get(I).getDocument().getId();
-                    if (task.getResult().get("photourl") != null) {
-                        photoUrl = task.getResult().get("photourl").toString();
-                    } else {
-                        photoUrl = null;
-                    }
-                    //if data is initial add all of it without any check as there will be no duplicates
-                    if (initialdata && containsData(allBuckets,id).get(0).equals("false")) {
-                        bucketsObject.setName(id);
-                        bucketsObject.setPhotoUrl(photoUrl);
-                        allBuckets.add(bucketsObject);
-                    } else {
-                        //handlig data if it is not initial
-                        handleNonInitialData(documentChanges, I, photoUrl);
-                    }
-
-
-//simple check that whther this class is running and the loop is completed then load the adadptor with this new data.
-                    //this prevents for eg 5 items changed so adadptor will refresh 5 times(inefficient)
-                    if (Soc_Main.isCurrentlyRunning.equals("Buckets") && I == (documentChanges.size() - 1)) {
-                        initializeAdaptorAllBuckets(isInitialData);
-                        initializeButtons(v);
-                        isInitialData = false;
-//simple check that if loop not complete call function again(recursive function, very useful :p)
-                    } else if (I < documentChanges.size()) {
-                        int index = I;
-                        index += 1;
-                        genericGetData(allBuckets, documentChanges, initialdata, v, index);
-                    }
-
+            for (int i = 0; i < documents.size(); i++) {
+                String ID = documents.get(i).getId();
+                if (!bucketIds.contains(ID) && !cu.getUserDataLocally(context, "username").equals(ID)) {
+                    bucketsObject.setName(documents.get(i).get("student_name").toString());
+                    bucketsObject.setID(ID);
+                    bucketsObject.setPhotoUrl(photoUrls.get(ID));
+                    bucketsObject.setClassName(documents.get(i).get("className").toString());
+                    allBuckets.add(bucketsObject);
+                    bucketIds.add(ID);
                 }
-            });
+            }
+            if (isInitialData) {
+                initializeButtons(v);
+            }
+            if (!showMyBucket && allBuckets.size() == 0) {
+                setEmpty();
+            }
+
+            initializeAdaptorAllBuckets(isInitialData);
+            isInitialData = false;
         }
+
+
     }
 }
 

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/backgroundColor"
+    android:paddingBottom="@dimen/_5sdp"
+    android:paddingLeft="@dimen/_5sdp"
+    android:paddingRight="@dimen/_5sdp">
+
+    <RelativeLayout
+        android:id="@+id/rl_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/rl_left"
+        android:background="@drawable/relative_layout_curved_white_only_right"
+        android:paddingBottom="@dimen/_2sdp"
+        android:paddingTop="@dimen/_2sdp">
+
+        <ImageView
+            android:id="@+id/displayPhoto_foldingTitle"
+            android:layout_width="@dimen/_46sdp"
+            android:layout_height="@dimen/_46sdp"
+            android:layout_marginTop="@dimen/_7sdp"
+            app:srcCompat="@drawable/newprofile" />
+
+        <TextView
+            android:id="@+id/name_foldingTitle"
+            android:layout_width="@dimen/_130sdp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_1sdp"
+            android:layout_toEndOf="@+id/displayPhoto_foldingTitle"
+            android:text="Muhammad Talha Siddiqui"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/time_foldingTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/date_folding_title"
+            android:layout_below="@+id/date_folding_title"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:text="9:45 PM"
+            android:textSize="@dimen/_11ssp" />
+
+        <TextView
+            android:id="@+id/date_folding_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/name_foldingTitle"
+            android:layout_below="@+id/name_foldingTitle"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:text="Tomorrow, July 12, 2018"
+            android:textSize="@dimen/_11ssp" />
+
+        <TextView
+            android:id="@+id/campus_type_foldingTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/time_foldingTitle"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="@dimen/_2sdp"
+            android:paddingRight="@dimen/_2sdp"
+            android:text="Main Campus"
+            android:textSize="@dimen/_10ssp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/student_id_foldingTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="@dimen/_2sdp"
+            android:paddingRight="@dimen/_2sdp"
+            android:text="2019185"
+            android:textSize="@dimen/_10ssp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/rl_main"
+        android:layout_alignTop="@+id/rl_main"
+        android:background="@drawable/relative_layout_curved_red_only_left"
+        android:paddingBottom="@dimen/_2sdp"
+        android:paddingLeft="@dimen/_4sdp"
+        android:paddingRight="@dimen/_3sdp"
+        android:paddingTop="@dimen/_2sdp">
+
+        <TextView
+            android:id="@+id/ride_id_foldingTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="#2021458"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_12ssp" />
+
+        <TextView
+            android:id="@+id/seats_foldingTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ride_id_foldingTitle"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:text="8 seats"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_11ssp" />
+
+        <TextView
+            android:id="@+id/price_foldingTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/seats_foldingTitle"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:text="RS 00.0"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_11ssp" />
+    </RelativeLayout>
+</RelativeLayout>

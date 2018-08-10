@@ -29,8 +29,8 @@
 
     <Button
         android:id="@+id/studentmode_button"
-        android:layout_width="150dp"
-        android:layout_height="180dp"
+        android:layout_width="@dimen/_116sdp"
+        android:layout_height="@dimen/_138sdp"
         android:layout_below="@+id/textView3"
         android:layout_centerHorizontal="true"
         android:background="@drawable/student_mode" />

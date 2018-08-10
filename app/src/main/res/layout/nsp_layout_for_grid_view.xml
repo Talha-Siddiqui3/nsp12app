@@ -21,18 +21,18 @@
         android:text="Gate Attendance"
         android:textAlignment="center"
         android:textColor="#000"
-        android:textSize="12sp"
+        android:textSize="@dimen/_10ssp"
         android:textStyle="bold"
         android:typeface="sans" />
 
     <ImageView
         android:id="@+id/iconimage_nsp_portal"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/_60sdp"
+        android:layout_height="@dimen/_60sdp"
         android:layout_below="@+id/icon_text_nsp_portal"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:padding="5dp" />
+        android:padding="@dimen/_4sdp" />
 
     <!-- Artist Name -->
 

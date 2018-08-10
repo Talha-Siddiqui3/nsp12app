@@ -5,18 +5,29 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="0dp"
-    android:layout_marginTop="10dp"
-    android:background="@color/colorPrimary"
-    android:paddingBottom="2dp">
+    android:layout_marginLeft="@dimen/_4sdp"
+    android:layout_marginRight="@dimen/_4sdp"
+    android:layout_marginTop="@dimen/_9sdp"
+    android:background="@drawable/relative_layout_curved_white"
+    android:paddingBottom="@dimen/_5sdp">
 
+
+    <RelativeLayout
+        android:id="@+id/rl_topBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_12sdp"
+        android:background="@drawable/relative_layout_curved_red_only_top">
+
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/student_imgae_soc"
-        android:layout_width="45dp"
-        android:layout_height="50dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="5dp"
+        android:layout_width="40dp"
+        android:layout_height="45dp"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="false"
+        android:layout_below="@+id/rl_topBar"
+        android:layout_margin="@dimen/_4sdp"
         android:scaleType="fitXY"
         app:srcCompat="@drawable/student_mode" />
 
@@ -24,21 +35,61 @@
     <TextView
         android:id="@+id/student_name_soc"
         style="@style/headings"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/student_imgae_soc"
-        android:layout_marginLeft="80dp"
-        android:layout_marginTop="10dp"
+        android:layout_alignTop="@+id/student_imgae_soc"
+        android:layout_marginLeft="@dimen/_45sdp"
+        android:layout_marginTop="@dimen/_1sdp"
         android:text="talha-siddiqui"
         android:textAlignment="textStart"
-        android:textColor="@android:color/white" />
+        android:textSize="@dimen/_13ssp" />
 
     <ProgressBar
         android:id="@+id/progressBar_buckets"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="5dp"
-        android:indeterminateTint="@android:color/white" />
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="false"
+        android:layout_alignTop="@+id/student_imgae_soc"
+        android:layout_marginLeft="@dimen/_2sdp"
+        android:indeterminateTint="@android:color/holo_red_light" />
+
+    <TextView
+        android:id="@+id/textView5"
+        style="@style/headings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentStart="false"
+        android:layout_alignStart="@+id/student_name_soc"
+        android:layout_below="@+id/student_name_soc"
+        android:text="Class:"
+        android:textSize="@dimen/_13ssp" />
+
+    <TextView
+        android:id="@+id/class_textView_buckets"
+        style="@style/headings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/student_name_soc"
+        android:layout_marginLeft="@dimen/_4sdp"
+        android:layout_toEndOf="@+id/textView5"
+        android:text="200"
+        android:textSize="@dimen/_13ssp" />
+
+    <TextView
+        android:id="@+id/bucket_points"
+        style="@style/headings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/student_name_soc"
+        android:layout_centerVertical="false"
+        android:layout_marginRight="@dimen/_5sdp"
+        android:text="200 points"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="@dimen/_13ssp" />
 </RelativeLayout>

@@ -5,19 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="0dp"
-    android:layout_marginTop="10dp"
-    android:background="@color/colorPrimary"
-    android:paddingBottom="10dp">
+    android:layout_marginLeft="@dimen/_4sdp"
+    android:layout_marginRight="@dimen/_4sdp"
+    android:layout_marginTop="@dimen/_8sdp"
+    android:background="@drawable/relative_layout_curved_red_only_left"
+    android:paddingBottom="@dimen/_8sdp">
+
+    <ImageView
+        android:id="@+id/imageView11"
+        android:layout_width="@dimen/_25sdp"
+        android:layout_height="@dimen/_25sdp"
+        android:layout_alignBottom="@+id/subjectname_textView"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/subjectname_soc_textview"
+        android:layout_marginEnd="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_minus5sdp"
+        app:srcCompat="@drawable/heart_white" />
 
     <TextView
         android:id="@+id/subjectname_soc_textview"
-        style="@style/sub_headings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:text="Physics"
         android:textAlignment="textStart"
         android:textColor="@android:color/white"
-        android:textSize="12sp" />
+        android:textSize="@dimen/_13ssp" />
 </RelativeLayout>

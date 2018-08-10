@@ -171,7 +171,7 @@ public class Nsp_Adaptor extends BaseAdapter implements View.OnClickListener {
         Map<String, Object> dataToSend = new HashMap<>();
         dataToSend.put("name", data);
         dataToSend.put("guid", GUID);
-        Log.i("123", "method executed");
+        Log.i(TAG, "method executed");
 
         mFunctions
                 .getHttpsCallable("DocumentAccessFunc")
@@ -180,7 +180,7 @@ public class Nsp_Adaptor extends BaseAdapter implements View.OnClickListener {
                     @Override
                     public void onSuccess(HttpsCallableResult httpsCallableResult) {
                         String encodedPdf = (String) httpsCallableResult.getData();
-                        Log.i("123465789",encodedPdf);
+                        Log.i(TAG,encodedPdf);
                        if(encodedPdf==null || encodedPdf.equals("Error")){
                            showError(file1, data);
                        }

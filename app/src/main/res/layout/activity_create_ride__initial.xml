@@ -28,7 +28,7 @@
             android:paddingEnd="10dp"
             android:text="Next"
             android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            android:textSize="@dimen/_15ssp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -40,12 +40,13 @@
 
         <net.igenius.customcheckbox.CustomCheckBox
             android:id="@+id/tuesday_CheckBox"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_alignParentTop="true"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_alignParentTop="false"
+            android:layout_alignTop="@+id/monday_Checkbox"
             android:layout_centerHorizontal="false"
-            android:layout_marginLeft="85dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginLeft="@dimen/_18sdp"
+            android:layout_toEndOf="@+id/monday_Checkbox"
             app:color_checked="@color/colorPrimary"
             app:color_tick="@android:color/white"
             app:color_unchecked_stroke="@color/colorAccent"
@@ -53,12 +54,13 @@
 
         <net.igenius.customcheckbox.CustomCheckBox
             android:id="@+id/wednesday_CheckBox"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_alignParentTop="true"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_alignParentTop="false"
+            android:layout_alignTop="@+id/tuesday_CheckBox"
             android:layout_centerHorizontal="false"
-            android:layout_marginLeft="135dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginLeft="@dimen/_18sdp"
+            android:layout_toEndOf="@+id/tuesday_CheckBox"
             aigestudio:color_checked="@color/colorPrimary"
             aigestudio:color_tick="@android:color/white"
             aigestudio:color_unchecked_stroke="@color/colorAccent"
@@ -66,12 +68,13 @@
 
         <net.igenius.customcheckbox.CustomCheckBox
             android:id="@+id/thursday_Checkbox"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_alignParentTop="true"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_alignParentTop="false"
+            android:layout_alignTop="@+id/wednesday_CheckBox"
             android:layout_centerHorizontal="false"
-            android:layout_marginLeft="185dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginLeft="@dimen/_18sdp"
+            android:layout_toEndOf="@+id/wednesday_CheckBox"
             aigestudio:color_checked="@color/colorPrimary"
             aigestudio:color_tick="@android:color/white"
             aigestudio:color_unchecked_stroke="@color/colorAccent"
@@ -79,12 +82,13 @@
 
         <net.igenius.customcheckbox.CustomCheckBox
             android:id="@+id/friday_Checkbox"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_alignParentTop="true"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_alignParentTop="false"
+            android:layout_alignTop="@+id/thursday_Checkbox"
             android:layout_centerHorizontal="false"
-            android:layout_marginLeft="235dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginLeft="@dimen/_18sdp"
+            android:layout_toEndOf="@+id/thursday_Checkbox"
             aigestudio:color_checked="@color/colorPrimary"
             aigestudio:color_tick="@android:color/white"
             aigestudio:color_unchecked_stroke="@color/colorAccent"
@@ -92,12 +96,13 @@
 
         <net.igenius.customcheckbox.CustomCheckBox
             android:id="@+id/saturday_CheckBox"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_alignParentTop="true"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_alignParentTop="false"
+            android:layout_alignTop="@+id/friday_Checkbox"
             android:layout_centerHorizontal="false"
-            android:layout_marginLeft="285dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginLeft="@dimen/_18sdp"
+            android:layout_toEndOf="@+id/friday_Checkbox"
             aigestudio:color_checked="@color/colorPrimary"
             aigestudio:color_tick="@android:color/white"
             aigestudio:color_unchecked_stroke="@color/colorAccent"
@@ -105,12 +110,13 @@
 
         <net.igenius.customcheckbox.CustomCheckBox
             android:id="@+id/sunday_Checkbox"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_alignParentTop="true"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_alignParentTop="false"
+            android:layout_alignTop="@+id/saturday_CheckBox"
             android:layout_centerHorizontal="false"
-            android:layout_marginLeft="335dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginLeft="@dimen/_18sdp"
+            android:layout_toEndOf="@+id/saturday_CheckBox"
             aigestudio:color_checked="@color/colorPrimary"
             aigestudio:color_tick="@android:color/white"
             aigestudio:color_unchecked_stroke="@color/colorAccent"
@@ -118,12 +124,12 @@
 
         <net.igenius.customcheckbox.CustomCheckBox
             android:id="@+id/monday_Checkbox"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="false"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginLeft="@dimen/_11sdp"
+            android:layout_marginTop="@dimen/_25sdp"
             app:color_checked="@color/colorPrimary"
             app:color_tick="@android:color/white"
             app:color_unchecked_stroke="@color/colorAccent"
@@ -233,42 +239,13 @@
     </RelativeLayout>
 
     <info.hoang8f.android.segmented.SegmentedGroup
-        android:id="@+id/segmented_rideInitial_contactNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:layout_alignStart="@+id/textView12"
-        android:layout_below="@+id/textView12"
-        android:layout_marginTop="3dp"
-        android:orientation="horizontal"
-        android:visibility="visible"
-        app:sc_border_width="1dp"
-        app:sc_corner_radius="4dp"
-        app:sc_tint_color="#808080">
-
-
-        <RadioButton
-            android:id="@+id/contactNumber_rideInitial"
-            style="@style/RadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:text="03121758980"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:visibility="visible" />
-
-
-    </info.hoang8f.android.segmented.SegmentedGroup>
-
-    <info.hoang8f.android.segmented.SegmentedGroup
         android:id="@+id/segmented_rideInitial_carType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/imageView10"
+        android:layout_alignBaseline="@+id/display_photo_ride_initial"
         android:layout_alignParentStart="false"
         android:layout_alignParentTop="false"
-        android:layout_below="@+id/imageView10"
+        android:layout_below="@+id/display_photo_ride_initial"
         android:layout_marginTop="45dp"
         android:checkedButton="@+id/Taxi_Button"
         android:orientation="horizontal"
@@ -289,7 +266,7 @@
             android:text="Taxi"
             android:textAlignment="center"
 
-            android:textSize="17sp" />
+            android:textSize="@dimen/_12ssp" />
 
         <RadioButton
             android:id="@+id/PrivateCarButton"
@@ -299,7 +276,7 @@
             android:layout_weight="1"
             android:text="Private Car"
             android:textAlignment="center"
-            android:textSize="17sp" />
+            android:textSize="@dimen/_12ssp" />
 
 
     </info.hoang8f.android.segmented.SegmentedGroup>
@@ -376,7 +353,7 @@
             android:text="Once"
             android:textAlignment="center"
 
-            android:textSize="17sp" />
+            android:textSize="@dimen/_12ssp" />
 
         <RadioButton
             android:id="@+id/Repeated_Button"
@@ -387,32 +364,32 @@
             android:checked="false"
             android:text="Repeated"
             android:textAlignment="center"
-            android:textSize="17sp" />
+            android:textSize="@dimen/_12ssp" />
 
 
     </info.hoang8f.android.segmented.SegmentedGroup>
 
 
     <ImageView
-        android:id="@+id/imageView10"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:id="@+id/display_photo_ride_initial"
+        android:layout_width="@dimen/_70sdp"
+        android:layout_height="@dimen/_70sdp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="62dp"
+        android:layout_marginStart="@dimen/_3sdp"
+        android:layout_marginTop="@dimen/_55sdp"
         app:srcCompat="@drawable/student_mode" />
 
     <TextView
         android:id="@+id/name_createRide"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/_100sdp"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/imageView10"
+        android:layout_alignLeft="@+id/display_photo_ride_initial"
         android:layout_alignParentStart="true"
-        android:layout_marginLeft="100dp"
-        android:layout_marginTop="64dp"
-        android:text="name"
-        android:textSize="20sp"
+        android:layout_marginLeft="@dimen/_76sdp"
+        android:layout_marginTop="@dimen/_60sdp"
+        android:text="Muhammad Talha Siddiqui"
+        android:textSize="@dimen/_13ssp"
         android:textStyle="bold" />
 
     <TextView
@@ -422,9 +399,9 @@
         android:layout_alignLeft="@+id/name_createRide"
         android:layout_alignParentTop="false"
         android:layout_below="@+id/name_createRide"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="@dimen/_11sdp"
         android:text="id"
-        android:textSize="20sp"
+        android:textSize="@dimen/_13sdp"
         android:textStyle="bold" />
 
     <TextView
@@ -433,9 +410,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/name_createRide"
-        android:layout_marginEnd="18dp"
+        android:layout_marginEnd="@dimen/_14sdp"
         android:text="Contact number:"
-        android:textSize="20sp"
+        android:textSize="@dimen/_13sdp"
         android:textStyle="bold" />
 
     <LinearLayout
@@ -455,10 +432,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/days_realtiveLayout"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="45dp"
+        android:layout_marginLeft="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_45sdp"
         android:text="Date:"
-        android:textSize="20sp"
+        android:textSize="@dimen/_13sdp"
         android:textStyle="bold" />
 
     <TextView
@@ -467,71 +444,71 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/Date_Titile"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="38dp"
+        android:layout_marginLeft="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_45sdp"
         android:text="Time:"
-        android:textSize="20sp"
+        android:textSize="@dimen/_13sdp"
         android:textStyle="bold" />
 
     <Button
         android:id="@+id/timeSelect"
-        android:layout_width="102dp"
-        android:layout_height="34dp"
-        android:layout_alignLeft="@+id/dateSelect"
-        android:layout_alignStart="@+id/segmented_rideInitial_contactNumber"
+        android:layout_width="@dimen/_77sdp"
+        android:layout_height="@dimen/_24sdp"
+        android:layout_alignLeft="@+id/textView12"
         android:layout_alignTop="@+id/textView15"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="-5dp"
+        android:layout_marginTop="-7dp"
         android:background="@color/colorPrimary"
-        android:text="Not Selected"
+        android:text="Select Time"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
-        android:textSize="16sp"
+        android:textSize="@dimen/_12ssp"
         android:textStyle="bold" />
 
     <Button
         android:id="@+id/dateSelect"
-        android:layout_width="102dp"
-        android:layout_height="34dp"
+        android:layout_width="@dimen/_77sdp"
+        android:layout_height="@dimen/_24sdp"
         android:layout_alignLeft="@+id/textView12"
         android:layout_alignParentStart="false"
         android:layout_alignTop="@+id/Date_Titile"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="-5dp"
+        android:layout_marginTop="-7dp"
         android:background="@color/colorPrimary"
-        android:text="Not Selected"
+        android:text="Select Date"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
-        android:textSize="16sp"
+        android:textSize="@dimen/_12ssp"
         android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/dateCross"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="@dimen/_23sdp"
+        android:layout_height="@dimen/_23sdp"
         android:layout_alignParentEnd="false"
         android:layout_alignTop="@+id/dateSelect"
-        android:layout_marginLeft="6dp"
+        android:layout_marginTop="1dp"
         android:layout_toRightOf="@+id/dateSelect"
         android:visibility="visible"
         aigestudio:srcCompat="@drawable/wrong_icon_primarydark" />
 
     <ImageView
         android:id="@+id/timeCross"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="@dimen/_23sdp"
+        android:layout_height="@dimen/_23sdp"
         android:layout_alignParentEnd="false"
         android:layout_alignTop="@+id/timeSelect"
-        android:layout_marginLeft="6dp"
+        android:layout_marginTop="1dp"
         android:layout_toRightOf="@+id/timeSelect"
         aigestudio:srcCompat="@drawable/wrong_icon_primarydark" />
 
     <net.igenius.customcheckbox.CustomCheckBox
         android:id="@+id/date_checkbox"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="@dimen/_23sdp"
+        android:layout_height="@dimen/_23sdp"
         android:layout_alignTop="@+id/dateSelect"
-        android:layout_marginLeft="6dp"
+        android:layout_marginLeft="@dimen/_1sdp"
+        android:layout_marginTop="1dp"
         android:layout_toRightOf="@+id/dateSelect"
         android:visibility="gone"
         aigestudio:color_checked="@color/colorPrimary"
@@ -541,10 +518,11 @@
 
     <net.igenius.customcheckbox.CustomCheckBox
         android:id="@+id/time_checkbox"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="@dimen/_23sdp"
+        android:layout_height="@dimen/_23sdp"
         android:layout_alignTop="@+id/timeSelect"
-        android:layout_marginLeft="6dp"
+        android:layout_marginLeft="@dimen/_1sdp"
+        android:layout_marginTop="1dp"
         android:layout_toRightOf="@+id/timeSelect"
         android:visibility="gone"
         aigestudio:color_checked="@color/colorPrimary"
@@ -552,8 +530,40 @@
         aigestudio:color_unchecked_stroke="@color/colorAccent"
         aigestudio:small_tick="false" />
 
+    <Button
+        android:id="@+id/contact_number_ride_initial"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_23sdp"
+        android:layout_alignEnd="@+id/textView12"
+        android:layout_alignTop="@+id/student_id_rideInitial"
+        android:layout_marginTop="-5dp"
+        android:background="@drawable/button_outline"
+        android:text="03125786521"
+        android:textAllCaps="false"
+        android:textSize="@dimen/_13ssp"
+        android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/date_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/Date_Titile"
+        android:layout_marginLeft="@dimen/_3sdp"
+        android:layout_toEndOf="@+id/textView15"
+        android:text="Not Selected"
+        android:textSize="@dimen/_13sdp"
+        android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/time_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView15"
+        android:layout_marginLeft="@dimen/_3sdp"
+        android:layout_toEndOf="@+id/textView15"
+        android:text="Not Selected"
+        android:textSize="@dimen/_13sdp"
+        android:textStyle="bold" />
 
 
 </RelativeLayout>

@@ -8,6 +8,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,43 +28,34 @@ public class Test_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_);
-        MakePath();
-        UpdateRequest();
+        common_util cu=new common_util();
+        String guid= cu.getUserDataLocally(this,"GUID");
+        String username=cu.getUserDataLocally(this,"username");
+
+        UpdateRequest(guid,username);
     }
     //CALLING CLOUD FUNCTION
-    public void UpdateRequest() {
+    public void UpdateRequest(String guid, String username) {
         // Create the arguments to the callable function.
 
         Map<String, Object> data = new HashMap<>();
         Log.i("123", "method executed");
+        data.put("GUID",guid);
+        data.put("username",username);
+
 
         mFunctions
-                .getHttpsCallable("DocumentAccessFunc")
-                .call()
+                .getHttpsCallable("pdfExtract")
+                .call(data)
                 .addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
                     @Override
                     public void onSuccess(HttpsCallableResult httpsCallableResult) {
-                        Map<String, Object> recieveddata = new HashMap<>();
-                        String s = (String) httpsCallableResult.getData();
-                        File file1 = new File(Environment.getExternalStorageDirectory() + "/nixorapp/NspDocuments/" + "123" +".pdf");
-                        Log.i("Encoded String", s+"123");
-                        byte[] pdfAsBytes = Base64.decode(s, 0);
-                        FileOutputStream os;
-
-                        try {
-                            os = new FileOutputStream(file1, false);
-                            os.write(pdfAsBytes);
-                            os.flush();
-                            os.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        if(httpsCallableResult.getData()!=null) {
+                            Log.i("123456", httpsCallableResult.getData().toString());
                         }
-
-
-
-
-
-
+                        else{
+                            Log.i("123456","null");
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -71,18 +63,11 @@ public class Test_Activity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
                         Log.i("123", "FAIlED");
 
-
                     }
                 });
 
 
     }
 
-    public void MakePath() {
-        File path = new File(Environment.getExternalStorageDirectory() + "/nixorapp/NspDocuments/");
-        if (!path.exists())
-            path.mkdirs();
-
-    }
 
 }

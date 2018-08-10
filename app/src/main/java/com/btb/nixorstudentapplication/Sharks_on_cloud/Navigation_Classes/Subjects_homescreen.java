@@ -17,6 +17,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
 
@@ -30,12 +31,13 @@ public class Subjects_homescreen implements View.OnClickListener {
     public static SegmentedGroup subjectButtons;//so that Classes class can turn on//off buttons
     public static String button_Selected;
     private String myYear;
+    public static HashMap<String,String> mySubjectsWithYears;//made this static because static mehtods cannot access non static field so cant access it in adadptor
     common_util cu = new common_util();
 
-    public Subjects_homescreen(Activity context, View v, String year) {
+    public Subjects_homescreen(Activity context, View v, HashMap<String,String> mySubjectsWithYears) {
         GetUserSubjects(v, context);
-        myYear=year;
-        button_Selected=year;
+        this.mySubjectsWithYears=mySubjectsWithYears;
+        button_Selected="MySubjects";
     }
 
 
@@ -52,8 +54,8 @@ public class Subjects_homescreen implements View.OnClickListener {
 
 
     private void GetUserSubjects(final View v, final Context context) {
-        MySubjectNames = new ArrayList<>();
-        Soc_Main.usersRoot.document(Soc_Main.username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        MySubjectNames = new ArrayList<>(cu.getUserDataLocallyHashSet(context,"student_subjects"));
+       /* Soc_Main.usersRoot.document(Soc_Main.username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
@@ -67,10 +69,11 @@ public class Subjects_homescreen implements View.OnClickListener {
 
                 }
             }
-        });
+        });*/
+        GetAllSubjects(v, context);
     }
 
-
+//using a2 because btih as and a2 subjects are same.
     private void GetAllSubjects(final View v, final Context context) {
         AllSubjectNames = new ArrayList<>();
         Soc_Main.socRoot.document("A2").collection("Subjects").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -106,7 +109,7 @@ public class Subjects_homescreen implements View.OnClickListener {
         Soc_Main.setAdaptor_Generic(subject_adaptor);
     }
 
-    private static void initializeAdaptorAllSubjects() {
+    public static void initializeAdaptorAllSubjects() {
         subject_adaptor = new Subject_Adaptor_SOC(AllSubjectNames);
         Soc_Main.setAdaptor_Generic(subject_adaptor);
 
@@ -118,7 +121,7 @@ public class Subjects_homescreen implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.MySubjects_Button:
                 initializeAdaptorMySubjects();
-                button_Selected=myYear;
+                button_Selected="MySubjects";
                 break;
             case R.id.AS_Button:
                 button_Selected = "AS";

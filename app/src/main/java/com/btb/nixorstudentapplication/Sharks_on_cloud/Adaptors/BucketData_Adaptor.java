@@ -56,30 +56,29 @@ public class BucketData_Adaptor extends RecyclerView.Adapter<BucketData_Adaptor.
                     .into(holder.contentImage, new com.squareup.picasso.Callback() {
                         @Override
                         public void onSuccess() {
-                            holder.loading.setVisibility(View.INVISIBLE);
+                          //  holder.loading.setVisibility(View.INVISIBLE);
                         }
 
                         @Override
                         public void onError(Exception e) {
-                            holder.loading.setVisibility(View.INVISIBLE);
+                            //holder.loading.setVisibility(View.INVISIBLE);
 
                         }
                     });
         } else {
 
-               Picasso.get().setLoggingEnabled(true);
                 Picasso.get()
                         .load(bucketDataObjects.get(position).getPhotoUrlThumbnail())
                         .error(R.drawable.ic_error_outline)
                         .into(holder.contentImage, new com.squareup.picasso.Callback() {
                             @Override
                             public void onSuccess() {
-                                holder.loading.setVisibility(View.INVISIBLE);
+                             //   holder.loading.setVisibility(View.INVISIBLE);
                             }
 
                             @Override
                             public void onError(Exception e) {
-                                holder.loading.setVisibility(View.INVISIBLE);
+                                //holder.loading.setVisibility(View.INVISIBLE);
                                 Log.i("123", e.toString());
                             }
                         });
@@ -107,14 +106,14 @@ public class BucketData_Adaptor extends RecyclerView.Adapter<BucketData_Adaptor.
             super(itemView);
             contentName = itemView.findViewById(R.id.content_name_soc);
             contentImage = itemView.findViewById(R.id.content_image_soc);
-            loading = itemView.findViewById(R.id.progressBar_bucketdata_eachitem);
+            //loading = itemView.findViewById(R.id.progressBar_bucketdata_eachitem);
             relativeLayout = itemView.findViewById(R.id.BucketDataLayout);
             relativeLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (photoUrlsForImageViewver.get(getAdapterPosition()) != null) {
-                        ImageViewer imageViewer = new ImageViewer(photoUrlsForImageViewver, getAdapterPosition());
-                        imageViewer.startActivity(context);
+                       /* ImageViewer imageViewer = new ImageViewer(photoUrlsForImageViewver, getAdapterPosition(),bucketDataObjects);
+                        imageViewer.startActivity(context);*/
                     }
                 }
             });

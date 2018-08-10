@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/backgroundColor">
+
+
+    <RelativeLayout
+        android:id="@+id/search_filter"
+        tools:targetApi="honeycomb"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_margin="1dp"
+        android:background="@android:drawable/dialog_holo_light_frame">
+
+        <ImageView
+            android:id="@+id/filterButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/searchfield"
+            android:padding="10dp"
+            android:src="@drawable/filter_icon" />
+
+
+        <EditText
+            android:id="@+id/searchfield"
+            style="@style/text_entry"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="50dp"
+            android:backgroundTint="@android:color/transparent"
+            android:drawableLeft="@drawable/search_icon"
+            android:drawablePadding="5dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:padding="5dp" />
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/loading_avaialbleRides"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+    <info.hoang8f.android.segmented.SegmentedGroup
+        android:id="@+id/segmnetedGroup_CampusType_AvaialbleRides"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_20sdp"
+        android:layout_below="@+id/search_filter"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:visibility="invisible"
+        app:sc_border_width="1dp"
+        app:sc_corner_radius="4dp"
+        app:sc_tint_color="@color/colorPrimary">
+
+
+        <RadioButton
+            android:id="@+id/MainCampus_Button_AvailableRides"
+            style="@style/RadioButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="Main Campus"
+            android:textAlignment="center"
+            android:textSize="@dimen/_12ssp" />
+
+        <RadioButton
+            android:id="@+id/NCFP_Button_AvaialbleRides"
+            style="@style/RadioButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="NCFP Campus"
+            android:textAlignment="center"
+            android:textSize="@dimen/_12ssp" />
+
+
+    </info.hoang8f.android.segmented.SegmentedGroup>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rides_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="false"
+        android:layout_below="@+id/segmnetedGroup_CampusType_AvaialbleRides"
+        android:layout_marginTop="@dimen/_10sdp">
+
+
+    </android.support.v7.widget.RecyclerView>
+
+
+</RelativeLayout>
+

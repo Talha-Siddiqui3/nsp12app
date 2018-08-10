@@ -1,9 +1,11 @@
 package com.btb.nixorstudentapplication.Carpool;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -13,6 +15,9 @@ import android.widget.TextView;
 import com.btb.nixorstudentapplication.Carpool.Objects.CarpoolInfoObject;
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.R;
+import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -52,9 +57,11 @@ public class CreateRide_Initial extends AppCompatActivity implements View.OnClic
     private CustomCheckBox friday;
     private CustomCheckBox saturday;
     private CustomCheckBox sunday;
-    private TextView Name;
+    private TextView name;
     private TextView ID;
     private TextView contactNumber;
+    private TextView timeTextView;
+    private TextView dateTextView;
 
     //DataObject
     private CarpoolInfoObject carpoolInfoObject = new CarpoolInfoObject();
@@ -78,11 +85,31 @@ public class CreateRide_Initial extends AppCompatActivity implements View.OnClic
 
     //FirebaseRef
     private CollectionReference cr = FirebaseFirestore.getInstance().collection("/Carpool").document("Rides").collection("AvailableRides");
+    FirebaseUser user;
+
+    //Userphoto
+    private String photoUrl;
+    private ImageView userPhoto;
+
+    //checkIfFinsihed
+    public static boolean isFinished = false;
+
+//animation
+private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isFinished) {
+            finish();
+        }
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_ride__initial);
+        isFinished = false;
         driverType_segmented = findViewById(R.id.segmented_rideInitial_DriverType);
         daysSelector = findViewById(R.id.days_realtiveLayout);
         dateTitle = findViewById(R.id.Date_Titile);
@@ -105,6 +132,12 @@ public class CreateRide_Initial extends AppCompatActivity implements View.OnClic
         friday = findViewById(R.id.friday_Checkbox);
         saturday = findViewById(R.id.saturday_CheckBox);
         sunday = findViewById(R.id.sunday_Checkbox);
+        name = findViewById(R.id.name_createRide);
+        ID = findViewById(R.id.student_id_rideInitial);
+        contactNumber = findViewById(R.id.contact_number_ride_initial);
+        userPhoto = findViewById(R.id.display_photo_ride_initial);
+        timeTextView = findViewById(R.id.time_textview);
+        dateTextView = findViewById(R.id.date_textview);
         next.setOnClickListener(this);
         driverType_segmented.setOnClickListener(this);
         daysSelector.setOnClickListener(this);
@@ -116,7 +149,12 @@ public class CreateRide_Initial extends AppCompatActivity implements View.OnClic
         differentDriverButton.setOnClickListener(this);
         onceButton.setOnClickListener(this);
         repeatedButton.setOnClickListener(this);
-
+        name.setText(cu.getUserDataLocally(this, "name"));
+        ID.setText(cu.getUserDataLocally(this, "student_id"));
+        photoUrl = cu.getUserDataLocally(this, "photourl");
+        Glide.with(this).load(photoUrl).into(userPhoto);
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        contactNumber.setText(user.getPhoneNumber());
 
     }
 
@@ -140,10 +178,6 @@ public class CreateRide_Initial extends AppCompatActivity implements View.OnClic
                 showDays();
                 hideDate();
                 break;
-            case (R.id.iAmDriver_Button):
-                break;
-            case (R.id.differentDriverButton):
-                break;
             case R.id.dateSelect:
                 getDate();
                 break;
@@ -151,9 +185,13 @@ public class CreateRide_Initial extends AppCompatActivity implements View.OnClic
                 getTime();
                 break;
             case R.id.next_Ride_Initial:
+                view.startAnimation(buttonClick);
                 setDays();
                 if (isAllDataComplete()) {
                     setDataToObject();
+                    Intent intent = new Intent(this, CreateRide_Continued.class);
+                    intent.putExtra("carpoolObject", carpoolInfoObject);
+                    startActivity(intent);
                 } else {
                     cu.showAlertDialogue(this, "Information Incomplete", "Please make sure all field are filled.").show();
                 }
@@ -162,14 +200,22 @@ public class CreateRide_Initial extends AppCompatActivity implements View.OnClic
     }
 
     private void setDataToObject() {
+        carpoolInfoObject.setStudent_name(name.getText().toString());
+        carpoolInfoObject.setStudent_number(contactNumber.getText().toString());
+        carpoolInfoObject.setStudent_username(cu.getUserDataLocally(this, "username"));
+        carpoolInfoObject.setStudent_id(ID.getText().toString());
+
+
         if (taxiButton.isChecked()) {
             carpoolInfoObject.setPrivateCarOrTaxi("taxi");
         } else if (privateCarButton.isChecked()) {
             carpoolInfoObject.setPrivateCarOrTaxi("privateCar");
             if (iAmTheDriverButton.isChecked()) {
                 carpoolInfoObject.setiAmTheDriver(true);
+                Log.i(TAG, "SEttinh true");
             } else {
                 carpoolInfoObject.setiAmTheDriver(false);
+                Log.i(TAG, "SEttinh false");
             }
         }
         if (onceButton.isChecked()) {
@@ -185,9 +231,7 @@ public class CreateRide_Initial extends AppCompatActivity implements View.OnClic
     private void setTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day, hour, minute, second);
-        //long selectedTime = calendar.getTimeInMillis() / 1000;
-        Date selectedDate = calendar.getTime();
-        long selectedTime = selectedDate.getTime();
+        double selectedTime = calendar.getTimeInMillis() / 1000;
         Log.i(TAG, String.valueOf(selectedTime));
         carpoolInfoObject.setSelectedTime(selectedTime);
     }
@@ -255,12 +299,14 @@ public class CreateRide_Initial extends AppCompatActivity implements View.OnClic
 
     private void hideDate() {
         dateTitle.setVisibility(View.GONE);
+        dateTextView.setVisibility(View.GONE);
         dateCheckBox.setVisibility(View.GONE);
         dateSelectButton.setVisibility(View.GONE);
         dateCross.setVisibility(View.GONE);
     }
 
     private void showDate() {
+        dateTextView.setVisibility(View.VISIBLE);
         dateTitle.setVisibility(View.VISIBLE);
         dateSelectButton.setVisibility(View.VISIBLE);
         if (isDateAlreadySelected) {
@@ -295,11 +341,15 @@ public class CreateRide_Initial extends AppCompatActivity implements View.OnClic
         timeCheckBox.setVisibility(View.VISIBLE);
         timeCheckBox.setChecked(true, true);
         timeCheckBox.setClickable(false);
+        String add = "";
+        if (minute < 10) {
+            add = "0";
+        }
         if (hourOfDay > 12) {
             int tempHour = hourOfDay - 12;
-            timeSelectButton.setText(tempHour + " " + minute + " pm");
+            timeTextView.setText(tempHour + " " + add + +minute + " pm");
         } else {
-            timeSelectButton.setText(hourOfDay + " " + minute + " am");
+            timeTextView.setText(hourOfDay + " " + add + minute + " am");
         }
         hour = hourOfDay;
         this.minute = minute;
@@ -312,7 +362,7 @@ public class CreateRide_Initial extends AppCompatActivity implements View.OnClic
         dateCheckBox.setVisibility(View.VISIBLE);
         dateCheckBox.setChecked(true, true);
         dateCheckBox.setClickable(false);
-        dateSelectButton.setText(dayOfMonth + " " + (monthOfYear + 1) + " " + year);//TODO CHANGE DATE TO MONTH NAME
+        dateTextView.setText(dayOfMonth + " " + (monthOfYear + 1) + " " + year);//TODO CHANGE DATE TO MONTH NAME
         this.year = year;
         month = monthOfYear;
         day = dayOfMonth;

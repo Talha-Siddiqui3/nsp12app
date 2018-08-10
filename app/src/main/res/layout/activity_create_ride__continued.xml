@@ -8,6 +8,28 @@
     tools:context=".Carpool.CreateRide_Continued">
 
 
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/segmented_campusType">
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_225sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
+
+        <ProgressBar
+            android:id="@+id/loading_map_createRideContinued"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
     <RelativeLayout
         android:id="@+id/createownride_rl"
         android:layout_width="wrap_content"
@@ -17,7 +39,7 @@
         android:paddingTop="8dp">
 
         <TextView
-            android:id="@+id/create_Ride"
+            android:id="@+id/create_Ride_RideContinued"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -88,7 +110,7 @@
         android:id="@+id/segmented_routes"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_18sdp"
-        android:layout_below="@+id/map"
+        android:layout_below="@+id/frameLayout"
         android:layout_marginBottom="@dimen/_1sdp"
         android:layout_marginTop="@dimen/_5sdp"
         android:orientation="horizontal"
@@ -101,16 +123,6 @@
 
     </info.hoang8f.android.segmented.SegmentedGroup>
 
-
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_225sdp"
-        android:layout_below="@+id/segmented_campusType"
-        android:layout_marginTop="@dimen/_4sdp"
-        tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
 
     <TextView
         android:id="@+id/textView23"
@@ -178,7 +190,7 @@
         android:textStyle="bold" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/duration_createRide"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_16sdp"
         android:layout_alignEnd="@+id/segmented_campusType"
@@ -192,7 +204,7 @@
         android:textSize="@dimen/_12ssp" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/distance_createRide"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_16sdp"
         android:layout_alignEnd="@+id/segmented_campusType"
@@ -206,7 +218,7 @@
         android:textSize="@dimen/_12ssp" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/estimatedCost_createRide"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_16sdp"
         android:layout_alignEnd="@+id/segmented_campusType"
@@ -220,7 +232,7 @@
         android:textSize="@dimen/_12ssp" />
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/costPerHead_CreateRide"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_16sdp"
         android:layout_alignEnd="@+id/segmented_campusType"
@@ -234,7 +246,7 @@
         android:textSize="@dimen/_12ssp" />
 
     <Button
-        android:id="@+id/button7"
+        android:id="@+id/number_Of_Seats_createRide"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_16sdp"
         android:layout_alignEnd="@+id/segmented_campusType"
@@ -243,14 +255,14 @@
         android:layout_marginTop="-2dp"
         android:background="@drawable/button_outline"
         android:clickable="false"
-        android:text="0"
+        android:text="1"
         android:textAllCaps="false"
         android:textSize="@dimen/_12ssp" />
 
     <Button
         android:id="@+id/minus_button"
-        android:layout_width="@dimen/_35sdp"
-        android:layout_height="@dimen/_17sdp"
+        android:layout_width="@dimen/_36sdp"
+        android:layout_height="@dimen/_18sdp"
         android:layout_alignLeft="@+id/segmented_campusType"
         android:layout_below="@+id/textView27"
         android:layout_marginLeft="@dimen/_9sdp"
@@ -264,9 +276,10 @@
 
     <Button
         android:id="@+id/plus_button"
-        android:layout_width="@dimen/_35sdp"
-        android:layout_height="@dimen/_17sdp"
+        android:layout_width="@dimen/_36sdp"
+        android:layout_height="@dimen/_18sdp"
         android:layout_below="@+id/textView27"
+        android:layout_marginLeft="@dimen/_1sdp"
         android:layout_marginTop="@dimen/_5sdp"
         android:layout_toEndOf="@+id/minus_button"
         android:background="@drawable/button_outline_redbackground"

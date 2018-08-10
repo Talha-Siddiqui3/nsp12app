@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.HttpsCallableResult;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -88,7 +89,7 @@ else{
         }
     }
 
-    public void cloudFuncExtractData(String email, String passoword, String username) {
+    public void cloudFuncExtractData(String email, String passoword, final String username) {
         // Create the arguments to the callable function.
         FirebaseFunctions mFunctions = FirebaseFunctions.getInstance();
         Map<String, Object> sendData = new HashMap<>();
@@ -106,25 +107,68 @@ else{
                     public void onSuccess(HttpsCallableResult httpsCallableResult) {
                         Log.i(TAG, "Success");
                         Log.i(TAG, httpsCallableResult.getData().toString());
-                        Map<String, Object> returnedData = new HashMap<>();
-                        returnedData = (Map<String, Object>) httpsCallableResult.getData();
-                        if (returnedData.containsKey("Error") || returnedData.get("Error") != null) {
-                            common_util.showAlertDialogue(portal_login.this, "Error", returnedData.get("Error").toString()).show();
+                        Map<String, Object> returnedDataTemp = new HashMap<>();
+                        returnedDataTemp = (Map<String, Object>) httpsCallableResult.getData();
+                        if (returnedDataTemp.containsKey("Error") || returnedDataTemp.get("Error") != null) {
+                            common_util.showAlertDialogue(portal_login.this, "Error", returnedDataTemp.get("Error").toString()).show();
                             hideLoading();
                         } else {
-                            saveStudentDetails(returnedData);
+                            dataExtractStudentSubAndClass(returnedDataTemp,username);
+                            Log.i("porta","SUCCESS");
                         }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.i(TAG, "FAIlED");
+                        Log.i(TAG, "FAIlED1"+e);
                         common_util.showAlertDialogue(portal_login.this,
                                 "Error", "Cant Connect to Server, Please make sure you are connected to Internet.").show();
                         hideLoading();
                     }
                 });
+
+
+    }
+
+    private void dataExtractStudentSubAndClass(final Map<String, Object> returnedDataInitial, String username) {
+        FirebaseFunctions mFunctions = FirebaseFunctions.getInstance();
+        Map<String, Object> sendData = new HashMap<>();
+        sendData.put("username", username);
+        sendData.put("GUID", returnedDataInitial.get("GUID").toString());
+Log.i(TAG,"DATA MEHTOD EXECUTED");
+        mFunctions
+                .getHttpsCallable("pdfExtractSubAndClass")
+                .call(sendData)
+                .addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
+                    @Override
+                    public void onSuccess(HttpsCallableResult httpsCallableResult) {
+                        Map<String, Object> returnedDataTemp = new HashMap<>();
+                        returnedDataTemp = (Map<String, Object>) httpsCallableResult.getData();
+                        if (returnedDataTemp.containsKey("Error") || returnedDataTemp.get("Error") != null) {
+                            common_util.showAlertDialogue(portal_login.this, "Error", returnedDataTemp.get("Error").toString()).show();
+                            hideLoading();
+                        } else {
+                            Map<String, Object> returnedDataFinal = new HashMap<>();
+                            returnedDataFinal.putAll(returnedDataInitial);
+                            returnedDataFinal.putAll(returnedDataTemp);
+                            saveStudentDetails(returnedDataFinal);
+
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i(TAG, "FAIlED2"+e);
+                        common_util.showAlertDialogue(portal_login.this,
+                                "Error", "Cant Connect to Server, Please make sure you are connected to Internet.").show();
+                        hideLoading();
+                    }
+                });
+
+
+
 
 
     }
@@ -152,6 +196,8 @@ else{
         studentDetails.setStudent_email(studentDataHashmap.get("studentEmail").toString());
         studentDetails.setStudent_profileUrl(studentDataHashmap.get("profile_url").toString());
         studentDetails.setStudent_guid(studentDataHashmap.get("GUID").toString());
+        studentDetails.setStudentSubjects((ArrayList<String>) studentDataHashmap.get("student_subjects"));
+        studentDetails.setStudentClasses((ArrayList<String>) studentDataHashmap.get("student_classes"));
         return studentDetails;
     }
 

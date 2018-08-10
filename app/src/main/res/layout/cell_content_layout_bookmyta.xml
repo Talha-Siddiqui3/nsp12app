@@ -132,7 +132,7 @@
                 android:layout_width="75dp"
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/Ta_Id_FoldingVIew"
-                android:layout_alignTop="@+id/Teaches_Title_FoldingVIew"
+                android:layout_alignTop="@+id/Teaches_Title_FoldingView_Unfolded"
                 android:text="ID"
                 android:textAlignment="textStart"
                 android:textColor="@android:color/white" />
@@ -142,7 +142,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_alignStart="@+id/Teaches_Title_FoldingVIew"
+                android:layout_alignStart="@+id/Teaches_Title_FoldingView_Unfolded"
                 android:layout_marginTop="30dp"
                 android:text="Physics"
                 android:textColor="@android:color/white"
@@ -150,7 +150,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/Teaches_Title_FoldingVIew"
+                android:id="@+id/Teaches_Title_FoldingView_Unfolded"
                 android:layout_width="78dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"

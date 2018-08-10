@@ -5,24 +5,79 @@
     android:layout_height="match_parent"
     xmlns:fab="http://schemas.android.com/apk/res-auto">
 
-
-    <ProgressBar
-        android:id="@+id/progressBar_myBucket"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/mybucket_recyclerview"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar_top_BucketData">
 
-    </android.support.v7.widget.RecyclerView>
+        <ProgressBar
+            android:id="@+id/progressBar_myBucket"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:progress="0"
+            android:visibility="visible" />
+
+        <com.github.jlmd.animatedcircleloadingview.AnimatedCircleLoadingView
+            android:id="@+id/circle_loading_view"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+
+            android:layout_centerInParent="true"
+            android:background="@android:color/white"
+            android:visibility="invisible"
+            fab:mainColor="@color/colorPrimary"
+            fab:secondaryColor="@android:color/white"
+            fab:textColor="@color/colorPrimary" />
+
+        <GridView
+            android:id="@+id/GridView_MyBucket"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/toolbar_top_BucketData"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginLeft="@dimen/_4sdp"
+            android:layout_marginRight="@dimen/_4sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:columnWidth="@dimen/_70sdp"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="12.0sp"
+            android:gravity="center"
+            android:horizontalSpacing="10dp"
+            android:numColumns="auto_fit"
+            android:paddingTop="@dimen/_12sdp"
+            android:scrollbarThumbVertical="@android:color/transparent"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="10dp">
+
+
+        </GridView>
+    </RelativeLayout>
+
+    <com.btb.nixorstudentapplication.GeneralLayout.activity_header
+        android:id="@+id/toolbar_top_BucketData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+
+        >
+
+    </com.btb.nixorstudentapplication.GeneralLayout.activity_header>
+
+    <Button
+        android:id="@+id/trash_button_BucketData"
+        android:layout_width="@dimen/_27sdp"
+        android:layout_height="@dimen/_27sdp"
+        android:layout_alignBottom="@+id/floating_menu"
+        android:layout_alignParentEnd="false"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:layout_marginLeft="@dimen/_8sdp"
+        android:background="@drawable/trash_icon"
+        android:visibility="gone" />
 
 
     <com.github.clans.fab.FloatingActionMenu
@@ -31,9 +86,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:layout_marginLeft="@dimen/_8sdp"
+        android:layout_marginRight="@dimen/_8sdp"
         android:visibility="invisible"
         fab:menu_animationDelayPerItem="50"
         fab:menu_backgroundColor="@android:color/transparent"
@@ -88,7 +143,6 @@
 
 
     </com.github.clans.fab.FloatingActionMenu>
-
 
 
 </RelativeLayout>

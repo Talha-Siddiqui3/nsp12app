@@ -2,7 +2,6 @@ package com.btb.nixorstudentapplication.Sharks_on_cloud.Adaptors;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +10,14 @@ import android.widget.TextView;
 
 import com.btb.nixorstudentapplication.R;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes.Buckets;
+import com.btb.nixorstudentapplication.Sharks_on_cloud.Navigation_Classes.Subjects_homescreen;
 import com.btb.nixorstudentapplication.Sharks_on_cloud.Soc_Main;
 
 import java.util.ArrayList;
 
 
 public class Subject_Adaptor_SOC extends RecyclerView.Adapter<Subject_Adaptor_SOC.Rv_ViewHolder> implements View.OnClickListener {
-    ArrayList<String> SubjectNames;
+    private ArrayList<String> SubjectNames;
 
 
     public Subject_Adaptor_SOC(ArrayList<String> SubjectNames) {
@@ -48,24 +48,30 @@ public class Subject_Adaptor_SOC extends RecyclerView.Adapter<Subject_Adaptor_SO
 
     @Override
     public void onClick(View view) {
-        Soc_Main.isCurrentlyRunning="Buckets";//To provide functionality for OnBackPressed;
-        Soc_Main.ClearData();// cleaing previous data of adadptor
-        RelativeLayout tempRL=(RelativeLayout) view;
-        TextView tempSubjectName = (TextView)tempRL.getChildAt(0);
-       Log.i("123456",tempSubjectName.getText().toString());
-       Buckets buckets = new Buckets(Soc_Main.context, Soc_Main.v, tempSubjectName.getText().toString());//naviagating to new page through a new class and passing clicked subject name
+        Soc_Main.isCurrentlyRunning = "Buckets";//To provide functionality for OnBackPressed;
+        Soc_Main.ClearDataRv();// cleaing previous data of adadptor
+        RelativeLayout tempRL = (RelativeLayout) view;
+        String yearSelected;
+        TextView tempSubjectName = (TextView) tempRL.getChildAt(1);
+        if( !Subjects_homescreen.button_Selected.equals("AS") && !Subjects_homescreen.button_Selected.equals("A2")) {
+           yearSelected= Subjects_homescreen.mySubjectsWithYears.get(tempSubjectName.getText().toString());
+        }
+        else{
+            yearSelected=Subjects_homescreen.button_Selected;
+        }
+        Buckets buckets = new Buckets(Soc_Main.context, Soc_Main.v, tempSubjectName.getText().toString(),yearSelected);//naviagating to new page through a new class and passing clicked subject name
 
     }
 
 
     class Rv_ViewHolder extends RecyclerView.ViewHolder {
         TextView subjectname;
-RelativeLayout subjectRL;
+        RelativeLayout subjectRL;
 
         public Rv_ViewHolder(View itemView) {
             super(itemView);
             subjectname = itemView.findViewById(R.id.subjectname_soc_textview);
-subjectRL=itemView.findViewById(R.id.rl_subject_soc);
+            subjectRL = itemView.findViewById(R.id.rl_subject_soc);
 
         }
 

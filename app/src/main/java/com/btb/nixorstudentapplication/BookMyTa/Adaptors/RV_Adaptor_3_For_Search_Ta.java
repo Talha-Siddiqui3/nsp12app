@@ -150,7 +150,7 @@ public class RV_Adaptor_3_For_Search_Ta extends RecyclerView.Adapter<RV_Adaptor_
             wednesdayTime = itemView.findViewById(R.id.Wednesday_Time);
             thursdayTime = itemView.findViewById(R.id.Thursday_Time);
             fridayTime = itemView.findViewById(R.id.Friday_Time);
-            // relativeLayoutLayout = itemView.findViewById(R.id.cell_title_layout);
+            // relativeLayoutLayout = itemView.findViewById(R.id.cell_title_layout_bookmyta);
             context = itemView.getContext();
             fc = itemView.findViewById(R.id.cell);
             map = new HashMap<>();

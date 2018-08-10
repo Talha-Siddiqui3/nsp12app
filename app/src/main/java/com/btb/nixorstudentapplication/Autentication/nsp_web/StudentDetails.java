@@ -1,5 +1,7 @@
 package com.btb.nixorstudentapplication.Autentication.nsp_web;
 
+import java.util.ArrayList;
+
 /**
  * Created by Hassan Abbasi on 25/05/2018.
  */
@@ -12,6 +14,8 @@ public class StudentDetails {
     String student_house;
     String student_profileUrl;
     String student_guid;
+    ArrayList<String> studentSubjects;
+    ArrayList<String> studentClasses;
 
     public String getStudent_guid() {
         return student_guid;
@@ -80,5 +84,21 @@ public class StudentDetails {
 
     public void setStudent_profileUrl(String student_profileUrl) {
         this.student_profileUrl = student_profileUrl;
+    }
+
+    public ArrayList<String> getStudentSubjects() {
+        return studentSubjects;
+    }
+
+    public void setStudentSubjects(ArrayList<String> studentSubjects) {
+        this.studentSubjects = studentSubjects;
+    }
+
+    public ArrayList<String> getStudentClasses() {
+        return studentClasses;
+    }
+
+    public void setStudentClasses(ArrayList<String> studentClasses) {
+        this.studentClasses = studentClasses;
     }
 }
