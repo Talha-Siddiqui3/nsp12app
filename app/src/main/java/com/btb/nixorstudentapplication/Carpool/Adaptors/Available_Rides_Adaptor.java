@@ -97,32 +97,24 @@ public class Available_Rides_Adaptor extends RecyclerView.Adapter<Available_Ride
 
 
         Glide.with(context).load(photoUrlMap.get(newCarpoolInfoObjects.get(position).getStudent_username())).into(holder.displayPicFoldingContent);
-        int availableSeatsTemp = newCarpoolInfoObjects.get(position).getNumberOfSeats() - newCarpoolInfoObjects.get(position).getOccupiedSeats();
-        int tempPrice = (int) Math.ceil(newCarpoolInfoObjects.get(position).getEstimatedCost() / (newCarpoolInfoObjects.get(position).getOccupiedSeats() + 1));
-        SimpleDateFormat timeFormatter = new SimpleDateFormat("hh.mm aa");
-        Date timeValue = new Date(((long) newCarpoolInfoObjects.get(position).getSelectedTime() * 1000L));
-        String timeString = timeFormatter.format(timeValue);
-        holder.availableSeatsFoldingContent.setText(String.valueOf(availableSeatsTemp));
-        holder.priceFoldingContent.setText("RS:" + String.valueOf(tempPrice));
+        holder.availableSeatsFoldingContent.setText(newCarpoolInfoObjects.get(position).getAvailableSeatsString());
+        holder.priceFoldingContent.setText(newCarpoolInfoObjects.get(position).getPriceString());
         holder.nameFoldingContent.setText(newCarpoolInfoObjects.get(position).getStudent_name());
         holder.studentIDFoldingContent.setText(newCarpoolInfoObjects.get(position).getStudent_id());
         holder.campusTypeFoldingContent.setText(newCarpoolInfoObjects.get(position).getMainCampusOrNcfp() + " Campus");
-        holder.timeFoldingContent.setText(timeString);
+        holder.timeFoldingContent.setText(newCarpoolInfoObjects.get(position).getTimeString());
 
         if (newCarpoolInfoObjects.get(position).getOneTimeOrScheduled().equals("once")) {
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("EEEE, MMMM d, yyyy");
-            Date dateValue = new Date(((long) newCarpoolInfoObjects.get(position).getSelectedTime() * 1000L));
-            ///  String dateString = dateFormatter.format(new Date(Double.doubleToLongBits(originalCarpoolInfoObjects.get(position).getSelectedTime()) * 1000L));
-            String dateString = dateFormatter.format(dateValue);
-            holder.dateFoldingContent.setText(dateString);
-            currentData += dateString;
+            holder.dateFoldingContent.setText(newCarpoolInfoObjects.get(position).getDateString());
+
         } else {
             holder.dateFoldingContent.setText(newCarpoolInfoObjects.get(position).getDaysAvailableString());
-            currentData += (newCarpoolInfoObjects.get(position).getDaysAvailableString());
         }
         if (newCarpoolInfoObjects.get(position).getPrivateCarOrTaxi().equals("privateCar")) {
-            holder.driverType.setText("Me");
-            currentData += "Me";
+            if(newCarpoolInfoObjects.get(position).getiAmTheDriver() == true) {
+                holder.driverType.setText("Me");
+                currentData += "Me";
+            }
         } else {
             holder.driverType.setText("Other");
             currentData += "Other";
@@ -130,6 +122,8 @@ public class Available_Rides_Adaptor extends RecyclerView.Adapter<Available_Ride
         holder.occupiedSeats.setText(String.valueOf(newCarpoolInfoObjects.get(position).getOccupiedSeats()));
         holder.totalSeats.setText(String.valueOf(newCarpoolInfoObjects.get(position).getNumberOfSeats()));
         holder.contact.setText(String.valueOf(newCarpoolInfoObjects.get(position).getStudent_number()));
+        holder.vehicleType.setText(newCarpoolInfoObjects.get(position).getPrivateCarOrTaxi().substring(0,1).toUpperCase()+
+                newCarpoolInfoObjects.get(position).getPrivateCarOrTaxi().substring(1));
 
 
     }
@@ -168,37 +162,6 @@ public class Available_Rides_Adaptor extends RecyclerView.Adapter<Available_Ride
         return newCarpoolInfoObjects.size();
     }
 
-  /*  public String getDays(HashMap<String, Boolean> dayArray) {
-
-        String daysAvailable = "";
-
-        if (dayArray.get("Monday")) {
-            daysAvailable += ", Mon";
-        }
-        if (dayArray.get("Tuesday")) {
-            daysAvailable += ", Tue";
-        }
-        if (dayArray.get("Wednesday")) {
-            daysAvailable += ", Wed";
-        }
-        if (dayArray.get("Thursday")) {
-            daysAvailable += ", Thu";
-        }
-        if (dayArray.get("Friday")) {
-            daysAvailable += ", Fri";
-        }
-        if (dayArray.get("Saturday")) {
-            daysAvailable += ", Sat";
-        }
-        if (dayArray.get("Sunday")) {
-            daysAvailable += ", Sun";
-        }
-        daysAvailable = daysAvailable.substring(1).trim();
-        return daysAvailable;
-
-
-    }
-*/
 
     public void FilterResult(String searchQuery) {
         unfoldedIndexes.clear();
@@ -227,21 +190,21 @@ public class Available_Rides_Adaptor extends RecyclerView.Adapter<Available_Ride
         boolean show = true;
         int i = 0;
         while (i < searchQueryArray.size() && show == true) {
-            show=getContains(tempDataArray,searchQueryArray,i);
-            i+=1;
+            show = getContains(tempDataArray, searchQueryArray, i);
+            i += 1;
         }
         return show;
     }
 
 
-    public boolean getContains(List<String> tempDataArray, List<String> searchQueryArray,int i){
+    public boolean getContains(List<String> tempDataArray, List<String> searchQueryArray, int i) {
         int j = 0;
-        boolean contains=false;
+        boolean contains = false;
         while (j < tempDataArray.size() && contains == false) {
             if (tempDataArray.get(j).contains(searchQueryArray.get(i))) {
-                contains=true;
+                contains = true;
             }
-            j+=1;
+            j += 1;
         }
         return contains;
     }
@@ -278,6 +241,7 @@ public class Available_Rides_Adaptor extends RecyclerView.Adapter<Available_Ride
         private TextView totalSeats;
         private TextView driverType;
         private TextView contact;
+        private TextView vehicleType;
         private FoldingCell fc;
         private GoogleMap myMap;
         private MapView mapView;
@@ -306,6 +270,7 @@ public class Available_Rides_Adaptor extends RecyclerView.Adapter<Available_Ride
             totalSeats = itemView.findViewById(R.id.totalseats_textview_FoldingContent);
             driverType = itemView.findViewById(R.id.drivertype_textview_foldingContent);
             contact = itemView.findViewById(R.id.contact_Textview_FoldingCOntent);
+            vehicleType=itemView.findViewById(R.id.vehicle_Type_textview_foldingContent);
 
             fc = itemView.findViewById(R.id.folding_cell_availableRides);
             mapView = (MapView) itemView.findViewById(R.id.map_FoldingView);
@@ -376,8 +341,8 @@ public class Available_Rides_Adaptor extends RecyclerView.Adapter<Available_Ride
 
 
         private Bitmap getNixorMarkerIcon() {
-            int height = 150;
-            int width = 150;
+            int height = context.getResources().getDimensionPixelSize(R.dimen._37sdp);
+            int width = context.getResources().getDimensionPixelSize(R.dimen._37sdp);
             BitmapDrawable bitmapdraw = (BitmapDrawable) context.getResources().getDrawable(R.drawable.nixor_marker);
             Bitmap b = bitmapdraw.getBitmap();
             Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
@@ -447,7 +412,6 @@ public class Available_Rides_Adaptor extends RecyclerView.Adapter<Available_Ride
             mHandler.postDelayed(new Runnable() {
                 public void run() {
                     setIsRecyclable(true);
-                    fc.fold(false);
                 }
             }, 1400);
         }

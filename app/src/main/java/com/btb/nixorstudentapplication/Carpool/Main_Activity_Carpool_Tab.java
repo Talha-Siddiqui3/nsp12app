@@ -36,8 +36,8 @@ public class Main_Activity_Carpool_Tab extends AppCompatActivity {
         tablayout = findViewById(R.id.tablayout_carpool);
         viewPager = findViewById(R.id.viewpager_carpool);
         ViewPage_Adaptor adaptor = new ViewPage_Adaptor(this.getSupportFragmentManager());
-        adaptor.AddFragment(new MyRides_Fragment(), "Available_rides");
-        adaptor.AddFragment(new Available_Rides(), "Rides");
+        adaptor.AddFragment(new MyRides_Fragment(), "My rides");
+        adaptor.AddFragment(new Available_Rides(), "Available Rides");
         adaptor.AddFragment(new Ride_Requests(), "Ride requests");
         viewPager.setAdapter(adaptor);
         viewPager.setCurrentItem(1);

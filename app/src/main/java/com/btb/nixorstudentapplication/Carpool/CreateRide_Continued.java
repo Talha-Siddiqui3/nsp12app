@@ -183,8 +183,8 @@ public class CreateRide_Continued extends AppCompatActivity implements OnMapRead
     }
 
     private Bitmap getNixorMarkerIcon() {
-        int height = 150;
-        int width = 150;
+        int height = getResources().getDimensionPixelSize(R.dimen._37sdp);
+        int width = getResources().getDimensionPixelSize(R.dimen._37sdp);
         BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.nixor_marker);
         Bitmap b = bitmapdraw.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);

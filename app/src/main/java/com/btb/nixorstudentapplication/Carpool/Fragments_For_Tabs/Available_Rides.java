@@ -2,6 +2,7 @@ package com.btb.nixorstudentapplication.Carpool.Fragments_For_Tabs;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -20,11 +21,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 
 import com.btb.nixorstudentapplication.Carpool.Adaptors.Available_Rides_Adaptor;
 import com.btb.nixorstudentapplication.Carpool.Objects.CarpoolInfoObject;
+import com.btb.nixorstudentapplication.Carpool.Rides_Filter;
+import com.btb.nixorstudentapplication.Carpool.queryListener;
 import com.btb.nixorstudentapplication.Misc.common_util;
 import com.btb.nixorstudentapplication.Misc.permission_util;
 import com.btb.nixorstudentapplication.R;
@@ -55,7 +59,8 @@ import info.hoang8f.android.segmented.SegmentedGroup;
 
 public class Available_Rides extends Fragment implements View.OnClickListener {
     private View view;
-    private CollectionReference ridesCr;
+  public static CollectionReference ridesCr;
+    public static Query initialQuery;
     private boolean isInitialData = true;
     private ArrayList docIds;
     private ArrayList<CarpoolInfoObject> carpoolInfoObjectsMain = new ArrayList<>();
@@ -75,6 +80,7 @@ public class Available_Rides extends Fragment implements View.OnClickListener {
     private Location origin;
     private boolean gotLocation = false;
     private boolean gotProfileImages = false;
+    private String CurrentButtonSelected = "MAIN";
 
 
     //xml
@@ -84,11 +90,13 @@ public class Available_Rides extends Fragment implements View.OnClickListener {
     private SegmentedGroup segmentedGroup;
     private ProgressBar loading;
     private EditText searchField;
+    private ImageView filterButton;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.available_rides, container, false);
         ridesCr = FirebaseFirestore.getInstance().collection("/Carpool/Rides/AvailableRides");
+        initialQuery = ridesCr;
         rv = (RecyclerView) view.findViewById(R.id.rides_rv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setMeasurementCacheEnabled(false);
@@ -104,9 +112,21 @@ public class Available_Rides extends Fragment implements View.OnClickListener {
         segmentedGroup = view.findViewById(R.id.segmnetedGroup_CampusType_AvaialbleRides);
         loading = view.findViewById(R.id.loading_avaialbleRides);
         searchField = view.findViewById(R.id.searchfield);
+        filterButton = view.findViewById(R.id.filterButton);
+        filterButton.setOnClickListener(this);
         addSearchListener();
+        addQueryListener();
         return view;
 
+    }
+
+    private void addQueryListener() {
+        Rides_Filter.queryListener = new queryListener() {
+            @Override
+            public void getQuery(Query query) {
+                getAvailableRides(query);
+            }
+        };
     }
 
     private void addSearchListener() {
@@ -150,18 +170,18 @@ public class Available_Rides extends Fragment implements View.OnClickListener {
                             // Logic to handle location object
                             origin = location;
                             gotLocation = true;
-                            getAvailableRides();
+                            getAvailableRides(initialQuery);
                             Log.i(TAG, "Got it");
                         } else {
                             Log.i(TAG, "NULL");
-                            cu.showAlertDialogue(getActivity(), "ERROR", "Cant access location, please make sure your location is turned on and you are connected to intenet");
+                            cu.showAlertDialogue(getActivity(), "ERROR", "Cant access location, please make sure your location is turned on and you are connected to intenet").show();
                             loading.setVisibility(View.INVISIBLE);
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                cu.showAlertDialogue(getActivity(), "ERROR", "Cant access location, please make sure your location is turned on and you are connected to intenet");
+                cu.showAlertDialogue(getActivity(), "ERROR", "Cant access location, please make sure your location is turned on and you are connected to intenet").show();
                 loading.setVisibility(View.INVISIBLE);
             }
         });
@@ -184,20 +204,20 @@ public class Available_Rides extends Fragment implements View.OnClickListener {
                     photoUrlMap.put(task.getResult().getDocuments().get(i).getId(), (String) task.getResult().getDocuments().get(i).get("photourl"));
                 }
                 gotProfileImages = true;
-                getAvailableRides();
+                getAvailableRides(initialQuery);
             }
         });
     }
 
 
-    private void getAvailableRides() {
+    private void getAvailableRides(Query query) {
         if (gotLocation && gotProfileImages) {
-            ridesCr.orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            query.addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
                     if (e != null) {
-                        cu.showAlertDialogue(getActivity(), "ERROR", "Error retrieving data form server, if problem persists please contact support.");
-
+                        cu.showAlertDialogue(getActivity(), "ERROR", "Error retrieving data form server, if problem persists please contact support.").show();
+                        Log.i(TAG, e.toString());
                     } else {
                         docIds = new ArrayList();
                         carpoolInfoObjectsMain.clear();
@@ -207,7 +227,11 @@ public class Available_Rides extends Fragment implements View.OnClickListener {
                             getDataGeneric(documentSnapshot);
                         }
                         sortData();
-                        setAdaptor(isInitialData, carpoolInfoObjectsMain);
+                        if (CurrentButtonSelected.equals("MAIN")) {
+                            setAdaptor(isInitialData, carpoolInfoObjectsMain);
+                        } else {
+                            setAdaptor(isInitialData, carpoolInfoObjectsNCFP);
+                        }
                         isInitialData = false;
 
                     }
@@ -279,21 +303,23 @@ public class Available_Rides extends Fragment implements View.OnClickListener {
             carpoolInfoObject.setPriceString("RS:" + String.valueOf(tempPrice));
             carpoolInfoObject.setAvailableSeatsString(String.valueOf(availableSeatsTemp) + " seats");
 
-            currentData = String.valueOf(carpoolInfoObject.getAvailableSeatsString())+";"+ carpoolInfoObject.getPriceString()+";"+ carpoolInfoObject.getStudent_name()+";"+
-                    carpoolInfoObject.getStudent_id()+";"+
-                    timeString+";" ;
+            currentData = String.valueOf(carpoolInfoObject.getAvailableSeatsString()) + ";" + carpoolInfoObject.getPriceString() + ";" + carpoolInfoObject.getStudent_name() + ";" +
+                    carpoolInfoObject.getStudent_id() + ";" +
+                    timeString + ";";
 
             //imp values for if else
             carpoolInfoObject.setPrivateCarOrTaxi(documentSnapshot.get("privateCarOrTaxi").toString());
             carpoolInfoObject.setOneTimeOrScheduled(documentSnapshot.get("oneTimeOrScheduled").toString());
             if (carpoolInfoObject.getPrivateCarOrTaxi().equals("privateCar")) {
-                carpoolInfoObject.setiAmTheDriver((Boolean) documentSnapshot.get("iAmtheDriver"));
-                currentData += "Me"+";";
+                carpoolInfoObject.setiAmTheDriver((Boolean) documentSnapshot.get("iAmTheDriver"));
+                currentData += "Me" + ";";
             } else {
-                currentData += "Other"+";";
+                currentData += "Other" + ";";
             }
             if (carpoolInfoObject.getOneTimeOrScheduled().equals("scheduled")) {
                 carpoolInfoObject.setSelectedDays((HashMap<String, Boolean>) documentSnapshot.get("selectedDays"));
+                carpoolInfoObject.setDaysAvailableString(getDays(carpoolInfoObject.getSelectedDays()).get("daysAvailableShort"));
+                currentData += (getDays(carpoolInfoObject.getSelectedDays())).get("daysAvailableFull") + ";";
             }
             if (carpoolInfoObject.getOneTimeOrScheduled().equals("once")) {
                 SimpleDateFormat dateFormatter = new SimpleDateFormat("EEEE, MMMM d, yyyy");
@@ -301,14 +327,9 @@ public class Available_Rides extends Fragment implements View.OnClickListener {
                 ///  String dateString = dateFormatter.format(new Date(Double.doubleToLongBits(originalCarpoolInfoObjects.get(position).getSelectedTime()) * 1000L));
                 String dateString = dateFormatter.format(dateValue);
                 carpoolInfoObject.setDateString(dateString);
-                currentData += dateString+";";
-            } else {
-                carpoolInfoObject.setDaysAvailableString(getDays(carpoolInfoObject.getSelectedDays()).get("daysAvailableShort"));
-                currentData +=(getDays(carpoolInfoObject.getSelectedDays()).get("daysAvailableFull"))+";";
+                currentData += dateString + ";";
             }
-           /* currentData += String.valueOf(carpoolInfoObject.getOccupiedSeats()) +";"+ String.valueOf(carpoolInfoObject.getNumberOfSeats())+";"+
-                     String.valueOf(carpoolInfoObject.getStudent_number());*/
-Log.i("5465465465465",currentData);
+
             carpoolInfoObject.setDistanceFromMyLocation(getDistanceFromMyLocation(carpoolInfoObject));
             carpoolInfoObject.setStringifiedCurrentData(currentData);
             return carpoolInfoObject;
@@ -318,44 +339,44 @@ Log.i("5465465465465",currentData);
     }
 
 
-    public HashMap<String,String> getDays(HashMap<String, Boolean> dayArray) {
+    public HashMap<String, String> getDays(HashMap<String, Boolean> dayArray) {
 
         String daysAvailableShort = "";
-        String daysAvailableFull="";
+        String daysAvailableFull = "";
 
         if (dayArray.get("Monday")) {
             daysAvailableShort += ", Mon";
-            daysAvailableFull+=", Monday";
+            daysAvailableFull += ", Monday";
         }
         if (dayArray.get("Tuesday")) {
             daysAvailableShort += ", Tue";
-            daysAvailableFull+=", Tuesday";
+            daysAvailableFull += ", Tuesday";
         }
         if (dayArray.get("Wednesday")) {
             daysAvailableShort += ", Wed";
-            daysAvailableFull+=", Wednesday";
+            daysAvailableFull += ", Wednesday";
         }
         if (dayArray.get("Thursday")) {
             daysAvailableShort += ", Thu";
-            daysAvailableFull+=", Thursday";
+            daysAvailableFull += ", Thursday";
         }
         if (dayArray.get("Friday")) {
             daysAvailableShort += ", Fri";
-            daysAvailableFull+=", Friday";
+            daysAvailableFull += ", Friday";
         }
         if (dayArray.get("Saturday")) {
             daysAvailableShort += ", Sat";
-            daysAvailableFull+=", Saturday";
+            daysAvailableFull += ", Saturday";
         }
         if (dayArray.get("Sunday")) {
             daysAvailableShort += ", Sun";
-            daysAvailableFull+=", Sunday";
+            daysAvailableFull += ", Sunday";
         }
         daysAvailableShort = daysAvailableShort.substring(1).trim();
         daysAvailableFull = daysAvailableFull.substring(1).trim();
-        HashMap<String,String> map=new HashMap<>();
-        map.put("daysAvailableShort",daysAvailableShort);
-        map.put("daysAvailableFull",daysAvailableFull);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("daysAvailableShort", daysAvailableShort);
+        map.put("daysAvailableFull", daysAvailableFull);
 
         return map;
 
@@ -391,11 +412,14 @@ Log.i("5465465465465",currentData);
     public void onClick(View view) {
 
         if (view.getId() == R.id.MainCampus_Button_AvailableRides) {
+            CurrentButtonSelected = "MAIN";
             setAdaptor(false, carpoolInfoObjectsMain);
-            Log.i("CLICKED", "main");
+
         } else if (view.getId() == R.id.NCFP_Button_AvaialbleRides) {
             setAdaptor(false, carpoolInfoObjectsNCFP);
-            Log.i("CLICKED", "NCFP");
+            CurrentButtonSelected = "NCFP";
+        } else if (view.getId() == R.id.filterButton) {
+            startActivity(new Intent(getContext(), Rides_Filter.class));
         }
     }
 }

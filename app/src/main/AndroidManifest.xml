@@ -129,6 +129,9 @@
             </intent-filter>-->
 
         </activity>
+        <activity android:name=".Carpool.Rides_Filter"
+            android:theme="@style/AlertDialogCustom">
+        </activity>
 
     </application>
 

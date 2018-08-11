@@ -35,6 +35,7 @@ public class CarpoolInfoObject implements Serializable {
     private int numberOfSeats;
     private int occupiedSeats;
     private double distanceFromMyLocation;
+
     @ServerTimestamp
     private Timestamp timestamp;
     @Exclude

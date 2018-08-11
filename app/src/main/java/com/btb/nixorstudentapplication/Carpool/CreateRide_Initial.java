@@ -155,7 +155,8 @@ private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
         Glide.with(this).load(photoUrl).into(userPhoto);
         user = FirebaseAuth.getInstance().getCurrentUser();
         contactNumber.setText(user.getPhoneNumber());
-
+        dateCheckBox.setClickable(false);
+        timeCheckBox.setClickable(false);
     }
 
 
@@ -223,6 +224,7 @@ private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
         } else if (repeatedButton.isChecked()) {
             carpoolInfoObject.setOneTimeOrScheduled("scheduled");
             carpoolInfoObject.setSelectedDays(setDays());
+
         }
         setTime();
 
@@ -281,7 +283,7 @@ private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
 
 
         datePickerDialog.show(getFragmentManager(), "Datepickerdialog");
-        isDateAlreadySelected = true;
+
     }
 
     private void getTime() {
@@ -340,7 +342,6 @@ private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
         timeCheckBox.setVisibility(View.VISIBLE);
         timeCheckBox.setChecked(true, true);
-        timeCheckBox.setClickable(false);
         String add = "";
         if (minute < 10) {
             add = "0";
@@ -359,9 +360,9 @@ private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        isDateAlreadySelected = true;
         dateCheckBox.setVisibility(View.VISIBLE);
         dateCheckBox.setChecked(true, true);
-        dateCheckBox.setClickable(false);
         dateTextView.setText(dayOfMonth + " " + (monthOfYear + 1) + " " + year);//TODO CHANGE DATE TO MONTH NAME
         this.year = year;
         month = monthOfYear;

@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:aigestudio="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
+    android:background="#fff">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-5dp"
+            android:background="@android:color/transparent"
+            android:text="Cancel"
+            android:textColor="@color/colorAccent" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="-5dp"
+            android:background="@android:color/transparent"
+            android:text="Reset"
+            android:textColor="@color/colorAccent" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textView4"
+        style="@style/headings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header"
+        android:text="Filter Rides"
+        android:textAlignment="center"
+        android:textSize="@dimen/_18ssp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView4"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            style="@style/sub_headings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Vehicle Type"
+            android:textSize="@dimen/_15ssp" />
+
+        <Spinner
+            android:id="@+id/vehcileType_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp" />
+
+        <RelativeLayout
+            android:id="@+id/driver_rl_filter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/driver_textview"
+                style="@style/sub_headings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Driver"
+                android:textSize="@dimen/_15ssp" />
+
+            <Spinner
+                android:id="@+id/driver_spinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/driver_textview"
+                android:layout_marginBottom="10dp" />
+        </RelativeLayout>
+
+        <TextView
+            style="@style/sub_headings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Gender"
+            android:textSize="@dimen/_15ssp" />
+
+        <Spinner
+            android:id="@+id/gender_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp" />
+
+        <TextView
+            style="@style/sub_headings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rating"
+            android:textSize="@dimen/_15ssp" />
+
+        <Spinner
+            android:id="@+id/rating_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp" />
+
+        <TextView
+            style="@style/sub_headings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RideType"
+            android:textSize="@dimen/_15ssp" />
+
+        <Spinner
+            android:id="@+id/rideType_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp" />
+
+        <RelativeLayout
+            android:id="@+id/date_layout_filter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/dateSelectButton_FilterCarpool"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_alignParentStart="false"
+                android:layout_below="@+id/textView20"
+                android:layout_centerInParent="true"
+                android:background="@color/colorPrimary"
+                android:text="Select Date"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/_12ssp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/days_realtiveLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/segmented_rideInitial_rideType"
+            android:visibility="visible">
+
+            <net.igenius.customcheckbox.CustomCheckBox
+                android:id="@+id/tuesday_CheckBox"
+                android:layout_width="@dimen/_21sdp"
+                android:layout_height="@dimen/_21sdp"
+                android:layout_alignParentTop="false"
+                android:layout_alignTop="@+id/monday_Checkbox"
+                android:layout_centerHorizontal="false"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_toEndOf="@+id/monday_Checkbox"
+                aigestudio:color_checked="@color/colorPrimary"
+                aigestudio:color_tick="@android:color/white"
+                aigestudio:color_unchecked_stroke="@color/colorAccent"
+                app:color_checked="@color/colorPrimary"
+                app:color_tick="@android:color/white"
+                app:color_unchecked_stroke="@color/colorAccent"
+                app:small_tick="false" />
+
+            <net.igenius.customcheckbox.CustomCheckBox
+                android:id="@+id/wednesday_CheckBox"
+                android:layout_width="@dimen/_21sdp"
+                android:layout_height="@dimen/_21sdp"
+                android:layout_alignParentTop="false"
+                android:layout_alignTop="@+id/tuesday_CheckBox"
+                android:layout_centerHorizontal="false"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_toEndOf="@+id/tuesday_CheckBox"
+                aigestudio:color_checked="@color/colorPrimary"
+                aigestudio:color_tick="@android:color/white"
+                aigestudio:color_unchecked_stroke="@color/colorAccent"
+                aigestudio:small_tick="false" />
+
+            <net.igenius.customcheckbox.CustomCheckBox
+                android:id="@+id/thursday_Checkbox"
+                android:layout_width="@dimen/_21sdp"
+                android:layout_height="@dimen/_21sdp"
+                android:layout_alignParentTop="false"
+                android:layout_alignTop="@+id/wednesday_CheckBox"
+                android:layout_centerHorizontal="false"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_toEndOf="@+id/wednesday_CheckBox"
+                aigestudio:color_checked="@color/colorPrimary"
+                aigestudio:color_tick="@android:color/white"
+                aigestudio:color_unchecked_stroke="@color/colorAccent"
+                aigestudio:small_tick="false" />
+
+            <net.igenius.customcheckbox.CustomCheckBox
+                android:id="@+id/friday_Checkbox"
+                android:layout_width="@dimen/_21sdp"
+                android:layout_height="@dimen/_21sdp"
+                android:layout_alignParentTop="false"
+                android:layout_alignTop="@+id/thursday_Checkbox"
+                android:layout_centerHorizontal="false"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_toEndOf="@+id/thursday_Checkbox"
+                aigestudio:color_checked="@color/colorPrimary"
+                aigestudio:color_tick="@android:color/white"
+                aigestudio:color_unchecked_stroke="@color/colorAccent"
+                aigestudio:small_tick="false" />
+
+            <net.igenius.customcheckbox.CustomCheckBox
+                android:id="@+id/saturday_CheckBox"
+                android:layout_width="@dimen/_21sdp"
+                android:layout_height="@dimen/_21sdp"
+                android:layout_alignParentTop="false"
+                android:layout_alignTop="@+id/friday_Checkbox"
+                android:layout_centerHorizontal="false"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_toEndOf="@+id/friday_Checkbox"
+                aigestudio:color_checked="@color/colorPrimary"
+                aigestudio:color_tick="@android:color/white"
+                aigestudio:color_unchecked_stroke="@color/colorAccent"
+                aigestudio:small_tick="false" />
+
+            <net.igenius.customcheckbox.CustomCheckBox
+                android:id="@+id/sunday_Checkbox"
+                android:layout_width="@dimen/_21sdp"
+                android:layout_height="@dimen/_21sdp"
+                android:layout_alignParentTop="false"
+                android:layout_alignTop="@+id/saturday_CheckBox"
+                android:layout_centerHorizontal="false"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_toEndOf="@+id/saturday_CheckBox"
+                aigestudio:color_checked="@color/colorPrimary"
+                aigestudio:color_tick="@android:color/white"
+                aigestudio:color_unchecked_stroke="@color/colorAccent"
+                aigestudio:small_tick="false" />
+
+            <net.igenius.customcheckbox.CustomCheckBox
+                android:id="@+id/monday_Checkbox"
+                android:layout_width="@dimen/_21sdp"
+                android:layout_height="@dimen/_21sdp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="false"
+                android:layout_marginLeft="@dimen/_4sdp"
+                android:layout_marginTop="@dimen/_3sdp"
+                aigestudio:color_checked="@color/colorPrimary"
+                aigestudio:color_tick="@android:color/white"
+                aigestudio:color_unchecked_stroke="@color/colorAccent"
+                app:color_checked="@color/colorPrimary"
+                app:color_tick="@android:color/white"
+                app:color_unchecked_stroke="@color/colorAccent"
+                app:small_tick="false" />
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="@dimen/_28sdp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentTop="false"
+                android:layout_alignStart="@+id/tuesday_CheckBox"
+                android:layout_below="@+id/tuesday_CheckBox"
+                android:layout_marginStart="@dimen/_minus4sdp"
+                android:layout_marginTop="15dp"
+                android:text="Tue"
+                android:textAlignment="center"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="@dimen/_28sdp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentTop="false"
+                android:layout_alignStart="@+id/wednesday_CheckBox"
+                android:layout_below="@+id/wednesday_CheckBox"
+                android:layout_marginStart="@dimen/_minus4sdp"
+                android:layout_marginTop="15dp"
+                android:text="Wed"
+                android:textAlignment="center"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="@dimen/_28sdp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentTop="false"
+                android:layout_alignStart="@+id/thursday_Checkbox"
+                android:layout_below="@+id/thursday_Checkbox"
+                android:layout_marginStart="@dimen/_minus4sdp"
+                android:layout_marginTop="15dp"
+                android:text="Thu"
+                android:textAlignment="center"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="@dimen/_28sdp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentTop="false"
+                android:layout_alignStart="@+id/friday_Checkbox"
+                android:layout_below="@+id/friday_Checkbox"
+                android:layout_marginStart="@dimen/_minus4sdp"
+                android:layout_marginTop="15dp"
+                android:text="Fri"
+                android:textAlignment="center"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="@dimen/_28sdp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentTop="false"
+                android:layout_alignStart="@+id/saturday_CheckBox"
+                android:layout_below="@+id/saturday_CheckBox"
+                android:layout_marginStart="@dimen/_minus4sdp"
+                android:layout_marginTop="15dp"
+                android:text="Sat"
+                android:textAlignment="center"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="@dimen/_28sdp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentTop="false"
+                android:layout_alignStart="@+id/sunday_Checkbox"
+                android:layout_below="@+id/sunday_Checkbox"
+                android:layout_marginStart="@dimen/_minus4sdp"
+                android:layout_marginTop="15dp"
+                android:text="Sun"
+                android:textAlignment="center"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="@dimen/_28sdp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentTop="false"
+                android:layout_alignStart="@+id/monday_Checkbox"
+                android:layout_below="@+id/monday_Checkbox"
+                android:layout_marginStart="@dimen/_minus4sdp"
+                android:layout_marginTop="15dp"
+                android:text="Mon"
+                android:textAlignment="center"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/timeSelectButton_FilterCarpool"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:background="@color/colorPrimary"
+            android:text="Select Time Range"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_15sdp">
+
+            <Button
+                android:id="@+id/apply_button_carpoolfilter"
+                style="@style/auth_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentTop="false"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="false"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:text="@string/apply_button"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
